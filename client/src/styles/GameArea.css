@@ -1,0 +1,15 @@
+.game-area {
+  height: 100vh;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr 15vw;
+}
+
+.side-area {
+  display: grid;
+  grid-template-rows: 10vh repeat(4, 1fr);
+}
+
+.temp {
+  border: 1px solid black;
+}
