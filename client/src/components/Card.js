@@ -4,7 +4,6 @@ import '../styles/Card.css';
 class Card extends React.Component {
 	constructor(props) {
 		super(props);
-		//this.show_image = this.show_image.bind(this);
 	}
 	
 	render() {
