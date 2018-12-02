@@ -8,12 +8,12 @@
 .card-container {
   display: grid;
   grid-template-rows: 1fr 4fr 1fr 2fr 1fr;
-  grid-gap: 0;
+  grid-gap: 10;
   height: 100%;
   width: 100%;
   border: 1vmin solid black;
   border-radius: 2vmin;
-  /*padding: 1vmin 1vmin 1vmin 1vmin;*/
+  padding: 1vmin 1vmin 1vmin 1vmin;
 }
 
 .name-mana-container {
