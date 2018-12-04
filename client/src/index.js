@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import configureStore from './redux/store';
 
-import GameStateContainer from './containers/GameStateContainer';
+import GameContainer from './containers/GameContainer';
 import * as serviceWorker from './serviceWorker';
 
 import './styles/index.css';
 
 const app = (
   <Provider store={configureStore()}>
-    <GameStateContainer />
+    <GameContainer />
   </Provider>);
 
 ReactDOM.render(app, document.getElementById('root'));
