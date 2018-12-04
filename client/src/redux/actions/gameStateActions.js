@@ -2,11 +2,10 @@ const types = {
   DECREMENT_LIFE: 'DECREMENT_LIFE',
 };
 
-const decrementLife = (a = -1) => (dispatch) => {
-  console.log('actions');
+const decrementLife = (amount = -1) => (dispatch) => {
   dispatch({
     type: types.DECREMENT_LIFE,
-    payload: a,
+    payload: amount,
   });
 };
 
