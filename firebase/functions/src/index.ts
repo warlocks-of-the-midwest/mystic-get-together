@@ -26,6 +26,13 @@ const deckList = {
     selvala: selvala
 }
 
+const errorResponseMapper = function(error: createError.HttpError, response: express.Response): void {
+    response.status(error.status)
+        .header(error.headers)
+        .send(error.message);
+}
+
+
 // Import one of the pre-defined decks for a player.
 //
 // Request body format:
@@ -523,9 +530,3 @@ export const determineTurnOrder = functions.https.onRequest((request, response) 
             errorResponseMapper(error, response);
         })
 });
-
-const errorResponseMapper = function(error: createError.HttpError, response: express.Response): void {
-    response.status(error.status)
-        .header(error.headers)
-        .send(error.message);
-}
