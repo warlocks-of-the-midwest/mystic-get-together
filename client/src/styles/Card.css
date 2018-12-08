@@ -13,7 +13,7 @@
   border-radius: 2vmin;
   padding: 1vmin 1vmin 1vmin 1vmin;
   box-sizing: border-box;
-  font-size: 5vmin;
+  font-size: 2.5vmin;
 }
 
 .name-mana-container {
@@ -31,7 +31,7 @@
   grid-column-end: span 1;
   overflow: hidden;
   text-align: left;
-  font-size: 6vmin;
+  font-size: 3vmin;
   font-weight: bold;
 }
 
