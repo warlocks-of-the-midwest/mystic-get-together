@@ -8,6 +8,7 @@ class Card extends React.Component {
 	
 	render() {
 		return (
+			// TODO: Remove card-parent-container
 			<div className="card-parent-container">
 			<div className="card-container">
 				<div className="name-mana-container">

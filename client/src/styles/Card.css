@@ -14,6 +14,7 @@
   border-radius: 2vmin;
   padding: 1vmin 1vmin 1vmin 1vmin;
   box-sizing: border-box;
+  font-size: 1.5vmin;
 }
 
 .name-mana-container {
@@ -27,32 +28,18 @@
 .name {
   grid-column-start: 1;
   grid-column-end: span 1;
-  min-height: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: cover;
   overflow: hidden;
   text-align: left;
-  font-size: 1.5vmin;
 }
 
 .cost {
   grid-column-start: 2;
   grid-column-end: span 1;
-  min-height: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: cover;
   overflow: hidden;
   text-align: right;
-  font-size: 1.5vmin;
 }
 
 .image-container {
-  min-height: 100%;
-  min-width: 100%;
   max-height: 100%;
   max-width: 100%;
   grid-column-start: 1;
@@ -81,25 +68,13 @@
 .type-container {
   grid-column-start: 1;
   grid-column-end: span 1;
-  min-height: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
   text-align: left;
-  font-size: 1.5vmin;
 }
 
 .set-logo-container {
   grid-column-start: 2;
   grid-column-end: span 1;
-  min-height: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
   text-align: right;
-  font-size: 1.5vmin;
 }
 
 .text-container {
@@ -107,23 +82,11 @@
   grid-column-end: -1;
   grid-row-start: 4;
   grid-row-end: 5;
-  min-height: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
   overflow: hidden;
-  font-size: 1.5vmin;
 }
 
 .power-toughness-container {
   grid-column-start: 4;
   grid-column-end: -1;
-  min-height: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
   text-align: right;
-  font-size: 1.5vmin;
 }
