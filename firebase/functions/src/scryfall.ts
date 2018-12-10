@@ -63,3 +63,28 @@ export async function getCardData(params: CardParams): Promise<any> {
         }
     }
 }
+
+/**
+ * Get card data for the card with the given ID.
+ * 
+ * @param id The id of the card
+ */
+export async function getCardDataForID(id: string): Promise<any> {
+    try {
+        // http GET https://api.scryfall.com/cards/3bdbc231-5316-4abd-9d8d-d87cff2c9847
+        const response = await axios.get('https://api.scryfall.com/cards/' + id);
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            console.error('Failed to get card', id);
+            throw createError(500);
+        }
+    } catch (e) {
+        if (e instanceof createError.HttpError) {
+            throw e;
+        } else {
+            console.error('Network request to scryfall failed', e)
+            throw createError(500);
+        }
+    }
+}
