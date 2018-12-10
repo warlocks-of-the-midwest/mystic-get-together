@@ -15,6 +15,14 @@ export function listenToZone(player, zone, callback) {
     });
 }
 
+export function listenToPlayer(player, callback) {
+  db.collection("CardsExample").doc("game1").collection("Players").
+    doc(player)
+    .onSnapshot((doc) => {
+      callback(doc.data())
+    });
+}
+
 export function tap(card) {
   //TODO how will this sdk determine where the card is by id?
   //This is my possibly temporary solution.
@@ -40,5 +48,12 @@ export function untap(card) {
       [card]: {
         "state.tapped": false
       }
+    })
+}
+
+export function updateLife(player, newLife) {
+  db.collection("CardsExample").doc("game1").collection("Players").
+    doc(player).update({
+      life: newLife
     })
 }

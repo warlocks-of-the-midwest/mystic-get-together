@@ -13,6 +13,12 @@ const gameStateReducer = (state = initialState, action) => {
         life: newLife,
       };
     }
+    case gameActions.types.SET_LIFE: {
+      return {
+        ...state,
+        life: action.payload,
+      };
+    }
     default:
       return state;
   }
