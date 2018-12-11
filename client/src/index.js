@@ -1,10 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styles/index.css';
-import GameArea from './components/GameArea';
+import { Provider } from 'react-redux';
+import configureStore from './redux/store';
+
+import GameContainer from './containers/GameContainer';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<GameArea />, document.getElementById('root'));
+import './styles/index.css';
+
+const app = (
+  <Provider store={configureStore()}>
+    <GameContainer />
+  </Provider>);
+
+ReactDOM.render(app, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

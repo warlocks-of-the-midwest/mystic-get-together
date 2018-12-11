@@ -1,25 +1,27 @@
 .card-parent-container {
-  height: 50vmin;
-  max-height: 50vmin;
-  width: 35vmin;
-  max-width: 35vmin;
+  height: 100vh;
+  max-height: 100vh;
+  padding-right: 56.25%;
 }
 
 .card-container {
   display: grid;
   grid-template-rows: 1fr 4fr 1fr 2fr 1fr;
-  grid-gap: 10;
   height: 100%;
   width: 100%;
   border: 1vmin solid black;
   border-radius: 2vmin;
   padding: 1vmin 1vmin 1vmin 1vmin;
+  box-sizing: border-box;
+  font-size: 2.5vmin;
 }
 
 .name-mana-container {
   display: grid;
   grid-row-start: 1;
   grid-row-end: 2;
+  grid-column-start: 1;
+  grid-column-end: span 1;
   overflow: hidden;
   object-fit: cover;
 }
@@ -27,36 +29,24 @@
 .name {
   grid-column-start: 1;
   grid-column-end: span 1;
-  min-height: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: cover;
   overflow: hidden;
   text-align: left;
-  font-size: 1.5vmin;
+  font-size: 3vmin;
+  font-weight: bold;
 }
 
 .cost {
   grid-column-start: 2;
   grid-column-end: span 1;
-  min-height: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: cover;
   overflow: hidden;
   text-align: right;
-  font-size: 1.5vmin;
 }
 
 .image-container {
-  min-height: 100%;
-  min-width: 100%;
   max-height: 100%;
   max-width: 100%;
   grid-column-start: 1;
-  grid-column-end: span 4;
+  grid-column-end: span 1;
   grid-row-start: 2;
   grid-row-end: span 1;
   object-fit: cover;
@@ -81,25 +71,13 @@
 .type-container {
   grid-column-start: 1;
   grid-column-end: span 1;
-  min-height: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
   text-align: left;
-  font-size: 1.5vmin;
 }
 
 .set-logo-container {
   grid-column-start: 2;
   grid-column-end: span 1;
-  min-height: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
   text-align: right;
-  font-size: 1.5vmin;
 }
 
 .text-container {
@@ -107,23 +85,11 @@
   grid-column-end: -1;
   grid-row-start: 4;
   grid-row-end: 5;
-  min-height: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
   overflow: hidden;
-  font-size: 1.5vmin;
 }
 
 .power-toughness-container {
   grid-column-start: 4;
   grid-column-end: -1;
-  min-height: 100%;
-  min-width: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
   text-align: right;
-  font-size: 1.5vmin;
 }
