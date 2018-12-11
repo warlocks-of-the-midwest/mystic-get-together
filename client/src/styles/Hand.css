@@ -1,0 +1,14 @@
+.hand-parent-container {
+  height: 100vmin;
+  max-height: 100vmin;
+  width: 100vw;
+  max-width: 100vw;
+}
+
+.hand-container {
+  display: inline-flex;
+  height: 100%;
+  padding: 1vmin 1vmin 1vmin 1vmin;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
