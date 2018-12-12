@@ -24,30 +24,22 @@ export function listenToPlayer(player, callback) {
 }
 
 export function tap(card) {
-  //TODO how will this sdk determine where the card is by id?
-  //This is my possibly temporary solution.
-  //Find player and zone from map in game document.
-  var playerName = cardZoneData.cardZoneMap[card].player;
-  var zoneName = cardZoneData.cardZoneMap[card].zone;
+  var playerName = card["state.owner"];
+  var zoneName = card["state.zone"];
+  card["state.tapped"] = true
   db.collection("CardsExample").doc("game1").collection("Players").
     doc(playerName).collection("Zones").doc(zoneName).update({
-      [card]: {
-        "state.tapped": true
-      }
+      [card.id]: card
     })
 }
 
 export function untap(card) {
-  //TODO how will this sdk determine where the card is by id?
-  //This is my possibly temporary solution.
-  //Find player and zone from map in game document.
-  var playerName = cardZoneData.cardZoneMap[card].player;
-  var zoneName = cardZoneData.cardZoneMap[card].zone;
+  var playerName = card["state.owner"];
+  var zoneName = card["state.zone"];
+  card["state.tapped"] = false
   db.collection("CardsExample").doc("game1").collection("Players").
     doc(playerName).collection("Zones").doc(zoneName).update({
-      [card]: {
-        "state.tapped": false
-      }
+      [card.id]: card
     })
 }
 

@@ -11,23 +11,23 @@ import '../styles/GameArea.css';
 class GameArea extends Component {
   constructor(props) {
     super(props);
-    this.setLifeCallback = this.setLifeCallback.bind(this);
-    this.zoneCallback = this.zoneCallback.bind(this);
+    this.player1Callback = this.player1Callback.bind(this);
+    this.player1ZoneCallback = this.player1ZoneCallback.bind(this);
     this.increment = this.increment.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
 
-    sdk.listenToPlayer("player1", this.setLifeCallback)
-    sdk.listenToZone("player1", "zone1", this.zoneCallback)
+    sdk.listenToPlayer("player1", this.player1Callback)
+    sdk.listenToZone("player1", "zone1", this.player1ZoneCallback)
   }
 
-  setLifeCallback(docData) {
+  player1Callback(docData) {
     const { gameActions } = this.props;
-    gameActions.setLife(docData.life)
+    gameActions.updatePlayer("player1", docData)
   }
 
-  zoneCallback(docData) {
+  player1ZoneCallback(docData) {
     const { gameActions } = this.props;
-    gameActions.updateZone("zone1", docData)
+    gameActions.updateZone("player1", "zone1", docData)
   }
 
   increment(newLife) {
@@ -35,7 +35,7 @@ class GameArea extends Component {
   }
 
   toggleCard(card) {
-    if (this.props.gameState.zone1[card]["state.tapped"]) {
+    if (card["state.tapped"]) {
       sdk.untap(card)
     }
     else {
@@ -50,9 +50,9 @@ class GameArea extends Component {
 
   render() {
     const { gameState } = this.props;
-    const { life } = gameState;
-    const { card1 } = gameState.zone1;
-    const { card2 } = gameState.zone1;
+    const { life } = gameState.Players.player1;
+    const { card1 } = gameState.Players.player1.Zones.zone1;
+    const { card2 } = gameState.Players.player1.Zones.zone1;
 
     return (
       <div className="game-area">
@@ -60,9 +60,9 @@ class GameArea extends Component {
           Main Board
           <Child life={life} />
           <CardChild card={card1} />
-          <button onClick={ () => this.toggleCard("card1")} type="submit">Click</button>
+          <button onClick={ () => this.toggleCard(card1)} type="submit">Click</button>
           <CardChild card={card2} />
-          <button onClick={ () => this.toggleCard("card2")} type="submit">Click</button>
+          <button onClick={ () => this.toggleCard(card2)} type="submit">Click</button>
         </div>
         <div className="side-area">
           <div className="temp">Life: {life} <button onClick={ () => this.increment((Math.floor(Math.random() * 100)))} type="submit">Click</button></div>

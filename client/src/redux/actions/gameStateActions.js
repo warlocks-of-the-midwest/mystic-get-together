@@ -1,41 +1,31 @@
 const types = {
-  DECREMENT_LIFE: 'DECREMENT_LIFE',
-  SET_LIFE: 'SET_LIFE',
+  UPDATE_PLAYER: 'UPDATE_PLAYER',
   UPDATE_ZONE: 'UPDATE_ZONE'
 };
 
-const decrementLife = (amount = -1) => (dispatch) => {
+const updatePlayer = (playerName, playerData) => (dispatch) => {
   dispatch({
-    type: types.DECREMENT_LIFE,
-    payload: amount,
+    type: types.UPDATE_PLAYER,
+    payload: {
+      playerName: playerName,
+      playerData: playerData
+    },
   });
 };
 
-const setLife = (newLife = 1) => (dispatch) => {
-  dispatch({
-    type: types.SET_LIFE,
-    payload: newLife,
-  });
-};
-
-const updateZone = (zoneName = "zone1", zoneData = {}) => (dispatch) => {
-  zoneData.name = zoneName
+const updateZone = (playerName, zoneName, zoneData) => (dispatch) => {
   dispatch({
     type: types.UPDATE_ZONE,
-    payload: zoneData,
+    payload: {
+      playerName: playerName,
+      zoneName: zoneName,
+      zoneData: zoneData
+    },
   });
 };
-
-/*const untap = (cardName = "card1") => (dispatch) => {
-  dispatch({
-    type: types.UNTAP,
-    payload: cardName,
-  });
-};*/
 
 export default {
   types,
-  decrementLife,
-  setLife,
+  updatePlayer,
   updateZone
 };
