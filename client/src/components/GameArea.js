@@ -43,11 +43,6 @@ class GameArea extends Component {
     }
   }
 
-  /*decrementLife = () => {
-    const { gameActions } = this.props;
-    gameActions.decrementLife();
-  }*/
-
   render() {
     const { gameState } = this.props;
     const { life } = gameState.Players.player1;

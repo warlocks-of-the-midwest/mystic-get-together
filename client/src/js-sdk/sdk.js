@@ -1,12 +1,6 @@
 import db from './fire';
 
-// Track card players and zones in game document
-var cardZoneData;
-db.collection("CardsExample").doc("game1")
-  .onSnapshot((doc) => {
-    cardZoneData = doc.data()
-  });
-
+// Listeners
 export function listenToZone(player, zone, callback) {
   db.collection("CardsExample").doc("game1").collection("Players").
     doc(player).collection("Zones").doc(zone)
@@ -23,6 +17,7 @@ export function listenToPlayer(player, callback) {
     });
 }
 
+// Game functions
 export function tap(card) {
   var playerName = card["state.owner"];
   var zoneName = card["state.zone"];
