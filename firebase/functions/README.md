@@ -37,7 +37,7 @@ startGameFunction() {
 # Clients may want to get Scryfall data for cards in the game
 # The deckId value is set as part of the player document
 populateDeckFunction() {
-    http -v POST "${FIREBASE_FUNCTION_BASE_URL}/${0}" player=eric deckId=?
+    http -v POST "${FIREBASE_FUNCTION_BASE_URL}/${0}" player=eric deckId=? include:='["id"]'
 }
 
 # Of use for a deck editor
