@@ -1,6 +1,6 @@
 import gameActions from '../actions/gameStateActions';
 
-//TODO I don't know if we need this?
+//TODO make a complete initial state
 const initialState = {
   Players: {
     player1: {
