@@ -32,8 +32,12 @@ class GameArea extends Component {
           <div className="temp">
             <h1>Hand</h1>
             <Card 
-
-            />
+            name="Sonic Assault"
+            cost="{1}{U}{R}"
+            image="https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557"
+            type="Instant"
+            set="https://api.scryfall.com/sets/grn"
+            text="Card text here" />
           </div>
           <div className="temp">Library</div>
         </div>
