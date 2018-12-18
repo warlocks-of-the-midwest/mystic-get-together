@@ -8,6 +8,8 @@ import CardChild from './CardChild';
 
 import '../styles/GameArea.css';
 
+import { Jumbotron, Button } from 'reactstrap';
+
 class GameArea extends Component {
   constructor(props) {
     super(props);
