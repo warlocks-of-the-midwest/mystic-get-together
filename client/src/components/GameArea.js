@@ -9,6 +9,9 @@ import CardChild from './CardChild';
 import '../styles/GameArea.css';
 
 import Card from './Card';
+import NavigationBar from './NavigationBar';
+import Sidebar from './Sidebar';
+
 import { Jumbotron,
 	Container,
 	Row,
@@ -33,11 +36,6 @@ class GameArea extends Component {
     this.player1ZoneCallback = this.player1ZoneCallback.bind(this);
     this.increment = this.increment.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
-    this.toggle = this.toggle.bind(this);
-    
-    this.state = {
-      isOpen: false
-    };
 
     sdk.listenToPlayer("player1", this.player1Callback)
     sdk.listenToZone("player1", "zone1", this.player1ZoneCallback)
@@ -66,12 +64,6 @@ class GameArea extends Component {
     }
   }
 
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
-
   render() {
     const { gameState } = this.props;
     const { life } = gameState.Players.player1;
@@ -82,40 +74,7 @@ class GameArea extends Component {
       <Container fluid>
         <Row>
           <Col xs="2">
-            <Navbar color="light" light expand="md">
-              <NavbarBrand href="/">Menu</NavbarBrand>
-                <NavbarToggler onClick={this.toggle} />
-                <Collapse isOpen={this.state.isOpen} navbar>
-                  <Nav className="ml-auto" navbar>
-                    <NavItem>
-                      <NavLink href="/components/">Components</NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
-                    </NavItem>
-                    <UncontrolledDropdown nav inNavbar>
-										<DropdownToggle nav caret>
-											Options
-										</DropdownToggle>
-										<DropdownMenu right>
-                      <DropdownItem>
-                        Anthony
-											</DropdownItem>
-                      <DropdownItem>
-												Option 1
-											</DropdownItem>
-											<DropdownItem>
-												Option 2
-											</DropdownItem>
-											<DropdownItem divider />
-											<DropdownItem>
-												Reset
-											</DropdownItem>
-										</DropdownMenu>
-									</UncontrolledDropdown>
-								</Nav>
-							</Collapse>
-						</Navbar>
+            <NavigationBar></NavigationBar>
           </Col>
           <Col xs="8">
             <div className="game-area">
@@ -126,11 +85,6 @@ class GameArea extends Component {
                     <p className="lead">View of your battlefield.</p>
                   </Container>
                 </Jumbotron>
-                <Child life={life} />
-                <CardChild card={card1} />
-                <button onClick={ () => this.toggleCard(card1)} type="submit">Click</button>
-                <CardChild card={card2} />
-                <button onClick={ () => this.toggleCard(card2)} type="submit">Click</button>
                 <Card 
                   name="Sonic Assault"
                   cost="{1}{U}{R}"
@@ -143,13 +97,7 @@ class GameArea extends Component {
             </div>
           </Col>
           <Col xs="2">
-            <div className="side-area">
-              <div className="temp">Life: {life} <button onClick={ () => this.increment((Math.floor(Math.random() * 100)))} type="submit">Click</button></div>
-              <div className="temp">Exile</div>
-              <div className="temp">Grave</div>
-              <div className="temp">Hand</div>
-              <div className="temp">Library</div>
-            </div>
+            <Sidebar></Sidebar>
           </Col>
         </Row>
     </Container>
