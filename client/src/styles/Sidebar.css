@@ -1,0 +1,41 @@
+html, body {
+  min-height: 100vh;
+  height: 100vh;
+  max-height: 200vh;
+}
+
+.sidebar-container {
+  min-height: 100vh;
+  max-height: 100vh;
+  height: 100vh;
+}
+
+.life-row {
+  min-height: 140px;
+  max-height: 20vh;
+}
+
+.rows-not-life {
+  max-height: 80vh;
+  height: 80vh;
+}
+/* 
+.exile-row {
+  height: 80vh;
+  max-height: 80vh;
+}
+
+.grave-row {
+  height: 80vh;
+  max-height: 80vh;
+}
+
+.hand-row {
+  height: 80vh;
+  max-height: 80vh;
+}
+
+.library-row {
+  height: 80vh;
+  max-height: 80vh;
+} */

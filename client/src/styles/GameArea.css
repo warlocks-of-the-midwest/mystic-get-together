@@ -1,12 +1,41 @@
-.game-area {
+html, body {
+  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+}
+
+.main-container {
+  max-height: 100vh;
+  height: 100vh;
+  min-width: 365px;
+}
+
+.main-row {
+  max-height: 100vh;
   height: 100vh;
 }
 
-.side-area {
-  display: grid;
-  grid-template-rows: 10vh repeat(4, 1fr);
+.top-row-wrapper {
+  height: 12vh;
+  max-height: 12vh;
 }
 
-.temp {
-  border: 1px solid black;
+.nb-col {
+  min-width: 90px;
+}
+
+/* .game-area {
+  height: 1vh;
+  max-height:100vh;
+} */
+
+.battlefield-area {
+  max-height: 90vh;
+  min-height: 400px;
+}
+
+
+.Card {
+  height: 100%;
+  max-height: 100%;
 }

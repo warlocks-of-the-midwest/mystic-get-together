@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import '../styles/NavigationBar.css';
+
 import {
   Button,
   Container,
@@ -36,16 +38,16 @@ class NavigationBar extends Component {
 
   render() {
     return (
-      <div>
-        <Navbar color="light" light expand="md">
+      <div className="nb-wrapper">
+        <Navbar color="light" light expand="lg">
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar vertical pills>
               <NavItem>
-                <NavLink href="/components/">Components</NavLink>
+                <NavLink href="/components/">Hand</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
+                <NavLink href="#">Battlefield</NavLink>
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
