@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import * as sdk from '../js-sdk/sdk'
+import * as sdk from '../js-sdk/sdk';
 
 import '../styles/GameArea.css';
 import Card from './Card.js';
@@ -9,20 +9,6 @@ import Hand from './Hand.js';
 import '../styles/Card.css';
 import '../styles/Hand.css';
 
-import Card from './Card';
-import NavigationBar from './NavigationBar';
-import Sidebar from './Sidebar';
-
-import {
-  Jumbotron,
-  Container,
-  Row,
-  Col,
-  Button,
-  ButtonGroup,
-} from 'reactstrap';
-
-import Card from './Card';
 import NavigationBar from './NavigationBar';
 import Sidebar from './Sidebar';
 
@@ -99,16 +85,16 @@ class GameArea extends Component {
     return (
       <Container fluid className="main-container d-flex flex-wrap vh-100" style={{ "max-height": "100vh" }}>
         <Row className="vh-100 flex-grow-0" style={{ "max-height": '100vh' }}>
-          
+
           <Col xs="12" className="flex-shrink-3 flex-grow-1" style={{ "max-height": '10vh' }}>
             {/* Top row for menu, title, and life. */}
             <NavigationBar className="mh-100" life={this.state.life}></NavigationBar>
           </Col>
-          
+
 
           {/* Main area for cards */}
           <Col xs="10" className="battlefield-col d-flex flex-wrap justify-content-start flex-shrink-1" style={{ "max-height": '90vh' }}>
-            
+
             {/* Top row of cards */}
             <Col xs="12" style={{ "max-height": "45vh", "height": "45vh" }} className="battlefield-top d-inline-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 pr-0">
               <Col className="p-0">
@@ -122,31 +108,31 @@ class GameArea extends Component {
                 </Card>
               </Col>
             </Col>
-          
+
             {/* Bottom row of cards */}
             <Col xs="12" style={{ "max-height": "45vh", "height": "45vh" }} className="battlefield-bottom d-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 pr-0">
-            <Col className="p-0">
-              <Card
-                name="Sonic Assault"
-                cost="{1}{U}{R}"
-                image="https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557"
-                type="Instant"
-                set="https://img.scryfall.com/sets/grn.svg?1545022800"
-                text="Card text here">
-              </Card>
+              <Col className="p-0">
+                <Card
+                  name="Sonic Assault"
+                  cost="{1}{U}{R}"
+                  image="https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557"
+                  type="Instant"
+                  set="https://img.scryfall.com/sets/grn.svg?1545022800"
+                  text="Card text here">
+                </Card>
               </Col>
             </Col>
 
           </Col>
-          
-          
+
+
           <Col xs="2" className="flex-shrink-3" style={{ "max-height": '90vh' }}>
             {/* Sidebar for exile,graveyard,hand,library  */}
             <Col xs="2" className="sidebar-column pl-0">
               <Sidebar></Sidebar>
             </Col>
           </Col>
-        
+
         </Row>
       </Container >
     );
