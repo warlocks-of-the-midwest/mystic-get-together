@@ -27,47 +27,54 @@ class Card extends React.Component {
 
 	render() {
 		return (
-			<Container fluid xs="12" className="card-container mh-100 h-100 mw-50 w-50 border rounded pt-0 pb-0 mb-0">
-				<Row className="card-main-row flex-column">
-					<Col xs="12" className="d-inline-flex text-truncate ">
-						<Col xs="8">
-							<h6>{this.props.name}</h6>
+			<Container fluid xs="12" className="card-container mh-100 h-100 mw-50 border rounded p-0 m-0">
+				<Row className="card-main-row mh-100 mw-50 px-3">
+
+					{/* Card name and mana cost row */}
+					<Col xs="12" className="d-inline-flex px-1 flex-grow-2 flex-shrink-1 justify-content-between" style={{ "max-height": "10%" }}>
+						<Col className="name-col px-0  text-truncate flex-shrink-1 flex-grow-5 justify-content-start">
+							<p style={{ "font-size": "3vmin" }} className="text-left">{this.props.name}</p>
 						</Col>
-						<Col xs="4" className="text-right text-truncate">
-							<p>{this.props.cost}</p>
+						<Col className="cost-col px-0 text-truncate flex-shrink-3 flex-grow-1 justify-content-end">
+							<p style={{ "font-size": "3vmin" }} className="text-right font-weight-light">{this.props.cost}</p>
 						</Col>
 					</Col>
-					<Col xs="12" className="card-image">
-						<Media className="media-image mh-100 h-100">
+
+					{/* Image row */}
+					<Col xs="12" className="card-image-col px-1 mx-auto" style={{ "max-width": "20vmin", "max-height": "40%" }}>
+						<img
+							className="card-art-image img-fluid d-block"
+							style={{ "max-height": "100%" }}
+							alt="Card Art"
+							src={this.props.image}
+						/>
+					</Col>
+
+					{/* Row for type and set logo */}
+					<Col xs="12" className="d-flex px-1 pb-1 flex-shrink-3 flex-grow-1 justify-content-between type-set-col clearfix" style={{ "max-height": "3vmin", "height": "3vmin" }}>
+						<Col xs="8" className="type-col px-0 flex-shrink-1 text-left">
+							<p style={{ "font-size": "3vmin" }} className="text-left font-weight-light">{this.props.type}</p>
+						</Col>
+						<Col xs="4" className="d-flex px-0 flex-shrink-2 float-right align-top ml-auto col-4" style={{ "max-height": "100%" }}>
 							<img
-								className="img-fluid card-image mx-auto d-block mw-auto"
-								alt="Card Art"
-								src={this.props.image}
+								className="set-image img-fluid mh-100"
+								alt="Set Image"
+								src={this.props.set}
 							/>
-						</Media>
-					</Col>
-					<Col xs="12 mh-10 h-10" className="type-set-col clearfix">
-						<Col xs="8" className="float-left mh-100 h-100 text-truncate">
-							<p>{this.props.type}</p>
-						</Col>
-						<Col xs="4" className="float-right align-tofloat-right align-top col-4 mh-100 h-100">
-							<Media className="set-image-media">
-								<img
-									className="set-image img-fluid "
-									alt="Set Image"
-									src={this.props.set}
-								/>
-							</Media>
 						</Col>
 					</Col>
-					<Col xs="12" className="text-truncate">
-						<p>{this.props.text}</p>
+
+					{/* Card text */}
+					<Col xs="12" className="card-text-row px-1 d-flex flex-shrink-1 flex-grow-4 text-left text-truncate" style={{ "max-height": "5vmin", "min-height": "5vmin" }}>
+						<p style={{ "font-size": "3vmin" }}>{this.props.text}</p>
 					</Col>
-					<Col xs="12" className="text-right text-truncate">
-						<p>{this.props.power}{this.props.divider}{this.props.toughness}</p>
+
+					{/* Power and toughness if creature */}
+					<Col xs="12" className="card-power-toughness px-1 d-flex flex-shrink-1 flex-grow-2 text-right" style={{ "max-height": "10%" }}>
+						<p style={{ "font-size": "3vmin" }}>{this.props.power}{this.props.divider}{this.props.toughness}</p>
 					</Col>
 				</Row>
-			</Container >
+			</Container>
 		);
 	}
 }

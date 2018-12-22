@@ -1,4 +1,4 @@
-html, body {
+/* html, body {
   min-height: 100vh;
   height: 100vh;
   max-height: 100vh;
@@ -7,7 +7,6 @@ html, body {
 .main-container {
   max-height: 100vh;
   height: 100vh;
-  min-width: 365px;
 }
 
 .main-row {
@@ -24,18 +23,27 @@ html, body {
   min-width: 90px;
 }
 
-/* .game-area {
+.sidebar-column {
+  max-height: 88vh;
+  height: 88vh;
+}
+
+.game-area {
   height: 1vh;
   max-height:100vh;
-} */
+} 
 
 .battlefield-area {
-  max-height: 90vh;
+  max-height: 88vh;
   min-height: 400px;
+}
+
+.card-row {
+  max-height: 50%;
 }
 
 
 .Card {
   height: 100%;
   max-height: 100%;
-}
+} */

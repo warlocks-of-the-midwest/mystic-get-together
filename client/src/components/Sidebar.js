@@ -33,26 +33,26 @@ class Sidebar extends Component {
   render() {
     return (
       <Container fluid className="sidebar-container mh-100 h-100">
-        <Row className="justify-start d-flex sidebar-row mh-100 h-100">
+        <Row className="justify-start flex-column sidebar-row mh-100 h-100">
           <Col>
             <Row>
               <Col xs="12" className="border">
-                <h3>Exile</h3>
+                <p className="font-weight-bold text-truncate">Exile</p>
               </Col>
             </Row>
             <Row className="mh-25 h-25">
               <Col xs="12" className="border">
-                <h3>Grave</h3>
+                <p className="font-weight-bold text-truncate">Grave</p>
               </Col>
             </Row>
             <Row className="mh-25 h-25">
               <Col xs="12" className="border">
-                <h3>Hand</h3>
+                <p className="font-weight-bold text-truncate">Hand</p>
               </Col>
             </Row>
             <Row className="mh-25 h-25">
               <Col xs="12" className="border">
-                <h3>Library</h3>
+                <p className="font-weight-bold text-truncate">Library</p>
               </Col>
             </Row>
           </Col>
