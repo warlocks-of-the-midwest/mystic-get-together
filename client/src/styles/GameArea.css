@@ -1,15 +1,49 @@
-.game-area {
+/* html, body {
+  min-height: 100vh;
   height: 100vh;
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-columns: 1fr 15vw;
+  max-height: 100vh;
 }
 
-.side-area {
-  display: grid;
-  grid-template-rows: 10vh repeat(4, 1fr);
+.main-container {
+  max-height: 100vh;
+  height: 100vh;
 }
 
-.temp {
-  border: 1px solid black;
+.main-row {
+  max-height: 100vh;
+  height: 100vh;
 }
+
+.top-row-wrapper {
+  height: 12vh;
+  max-height: 12vh;
+}
+
+.nb-col {
+  min-width: 90px;
+}
+
+.sidebar-column {
+  max-height: 88vh;
+  height: 88vh;
+}
+
+.game-area {
+  height: 1vh;
+  max-height:100vh;
+} 
+
+.battlefield-area {
+  max-height: 88vh;
+  min-height: 400px;
+}
+
+.card-row {
+  max-height: 50%;
+}
+
+
+.Card {
+  height: 100%;
+  max-height: 100%;
+} */

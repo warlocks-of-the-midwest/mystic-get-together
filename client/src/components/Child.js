@@ -6,7 +6,7 @@ const Child = (props) => {
   const { life } = props;
 
   return (
-    <div>I'm a child! Life: {life}</div>
+    <div>I'm a life child! Life: {life}</div>
   );
 };
 
