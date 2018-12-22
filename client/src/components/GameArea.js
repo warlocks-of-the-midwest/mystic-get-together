@@ -4,6 +4,23 @@ import PropTypes from 'prop-types';
 import * as sdk from '../js-sdk/sdk'
 
 import '../styles/GameArea.css';
+import Card from './Card.js';
+import Hand from './Hand.js';
+import '../styles/Card.css';
+import '../styles/Hand.css';
+
+import Card from './Card';
+import NavigationBar from './NavigationBar';
+import Sidebar from './Sidebar';
+
+import {
+  Jumbotron,
+  Container,
+  Row,
+  Col,
+  Button,
+  ButtonGroup,
+} from 'reactstrap';
 
 import Card from './Card';
 import NavigationBar from './NavigationBar';
