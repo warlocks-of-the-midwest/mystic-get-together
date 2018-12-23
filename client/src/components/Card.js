@@ -27,7 +27,7 @@ class Card extends React.Component {
           {/* Card name and mana cost row */}
           <Col
             xs="12"
-            className="cardname-manacost-col d-inline-flex flex-grow-2 flex-shrink-1 justify-content-between"
+            className="cardname-manacost-col pb-1 pb-sm-0 d-inline-flex flex-grow-2 flex-shrink-1 justify-content-between"
             style={
               {
                 "max-height": "10%"
@@ -71,7 +71,7 @@ class Card extends React.Component {
           {/* Image row with a col wrapper to control size of image */}
           <Col
             xs="12"
-            className="car-image-col-wrapper px-md-2 px-lg-5"
+            className="car-image-col-wrapper pb-1 pb-sm-0 px-md-2 px-lg-5"
           >
             <Col
               xs="12"
@@ -101,7 +101,7 @@ class Card extends React.Component {
           {/* Row for type and set logo */}
           <Col
             xs="12"
-            className="type-set-col d-inline-flex flex-shrink-3 flex-grow-1 justify-content-between"
+            className="type-set-col d-inline-flex flex-shrink-3 flex-grow-1 justify-content-between pb-1 pb-sm-0"
           >
 
             {/* Card type */}
@@ -121,7 +121,7 @@ class Card extends React.Component {
 
             {/* Card set image */}
             <Media
-              className="card-set-image-col d-flex px-0 py-0 flex-shrink-2 clearfix"
+              className="card-set-image-col d-flex px-0 py-0 flex-shrink-2 clearfix pb-1 pb-sm-0"
               style={
                 {
                   "max-height": "100%",
@@ -149,7 +149,7 @@ class Card extends React.Component {
           {/* Card text */}
           <Col
             xs="12"
-            className="card-text-row px-1 d-flex flex-shrink-1 flex-grow-4"
+            className="card-text-row px-1 d-flex flex-shrink-1 flex-grow-4 pb-1 pb-sm-0"
           >
             <p
               className="text-left text-nowrap mb-0"
