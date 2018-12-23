@@ -83,21 +83,92 @@ class GameArea extends Component {
 
 
     return (
-      <Container fluid className="main-container d-flex flex-wrap vh-100" style={{ "max-height": "100vh" }}>
-        <Row className="vh-100 flex-grow-0" style={{ "max-height": '100vh' }}>
+      <Container
+        fluid
+        className="main-container d-flex flex-wrap vh-100"
+        style={
+          {
+            "max-height": "100vh"
+          }
+        }
+      >
+        
+        <Row
+          className="vh-100 flex-grow-0"
+          style={
+            {
+              "max-height": '100vh'
+            }
+          }
+        >
 
-          <Col xs="12" className="flex-shrink-3 flex-grow-1" style={{ "max-height": '10vh' }}>
-            {/* Top row for menu, title, and life. */}
+          
+          {/* Top row for menu, title, and life. */}
+          <Col
+            xs="12"
+            className="flex-shrink-3 flex-grow-1"
+            style={
+              {
+                "max-height": '10vh'
+              }
+            }
+          >
+            
             <NavigationBar className="mh-100" life={this.state.life}></NavigationBar>
+          
           </Col>
 
 
           {/* Main area for cards */}
-          <Col xs="10" className="battlefield-col d-flex flex-wrap justify-content-start flex-shrink-1" style={{ "max-height": '90vh' }}>
+          <Col
+            xs="10"
+            className="battlefield-col d-flex flex-wrap justify-content-start flex-shrink-1"
+            style={
+              {
+                "max-height": '90vh'
+              }
+            }
+          >
 
             {/* Top row of cards */}
-            <Col xs="12" style={{ "max-height": "45vh", "height": "45vh" }} className="battlefield-top d-inline-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 pr-0">
-              <Col className="p-0">
+            <Col
+              xs="12"
+              style={
+                {
+                  "max-height": "45vh",
+                  "height": "45vh"
+                }
+              }
+              className="battlefield-top d-inline-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 pr-0"
+            >
+              
+              <Col
+                style={
+                  {
+                    "max-width": "25%",
+                    "min-width": "80px"
+                  }
+                }
+                className="p-0"
+              >
+                
+                <Card
+                  name="Sonic Assault" r
+                  cost="{1}{U}{R}"
+                  image="https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557"
+                  type="Instant"
+                  set="https://img.scryfall.com/sets/grn.svg?1545022800"
+                  text="Card text here">
+                </Card>
+              </Col>
+              <Col
+                style={
+                  {
+                    "max-width": "25%",
+                    "min-width": "80px"
+                  }
+                }
+                className="p-0">
                 <Card
                   name="Sonic Assault"
                   cost="{1}{U}{R}"
@@ -110,8 +181,26 @@ class GameArea extends Component {
             </Col>
 
             {/* Bottom row of cards */}
-            <Col xs="12" style={{ "max-height": "45vh", "height": "45vh" }} className="battlefield-bottom d-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 pr-0">
-              <Col className="p-0">
+            <Col
+              xs="12"
+              style={
+                {
+                  "max-height": "45vh", "height": "45vh"
+                }
+              }
+              className="battlefield-bottom d-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 pr-0"
+            >
+
+              <Col
+                style={
+                  {
+                    "max-width": "25%",
+                    "min-width": "80px"
+                  }
+                }
+                className="p-0"
+              >
+
                 <Card
                   name="Sonic Assault"
                   cost="{1}{U}{R}"
@@ -120,17 +209,32 @@ class GameArea extends Component {
                   set="https://img.scryfall.com/sets/grn.svg?1545022800"
                   text="Card text here">
                 </Card>
+
               </Col>
+
             </Col>
 
           </Col>
 
 
-          <Col xs="2" className="flex-shrink-3" style={{ "max-height": '90vh' }}>
+          <Col
+            xs="2"
+            className="flex-shrink-3"
+            style={
+              {
+                "max-height": '90vh'
+              }
+            }
+          >
+
             {/* Sidebar for exile,graveyard,hand,library  */}
-            <Col xs="2" className="sidebar-column pl-0">
+            <Col
+              xs="2"
+              className="gamearea-sidebar-column pl-0 w-100 mw-100 mh-100 h-100"
+            >
               <Sidebar></Sidebar>
             </Col>
+
           </Col>
 
         </Row>

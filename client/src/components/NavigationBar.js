@@ -38,46 +38,106 @@ class NavigationBar extends Component {
 
   render() {
     return (
-      <Container fluid className="h-100 p-0 m-0">
-        <Navbar light expand="md" className="expand-sm mh-100 h-100 m-0 p-1">
-          <NavbarBrand dark className="bg-light">
+      <Container
+        fluid
+        className="h-100 p-0 m-0"
+      >
+        
+        <Navbar
+          light
+          expand="md"
+          className="expand-sm mh-100 h-100 m-0 p-1"
+        >
+        
+          <NavbarBrand
+            dark
+            className="bg-light"
+          >
             Battlefield
           </NavbarBrand>
-          <div className="navbar-text">
+        
+          <div
+            className="navbar-text"
+          >
             Life: {this.props.life}
           </div>
-          <NavbarToggler className="mh-100 h-100 m-0 p-0" onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar horizontal tabs>
+        
+          <NavbarToggler
+            className="mh-100 h-100 m-0 p-0"
+            onClick={this.toggle}
+          />
+        
+          <Collapse
+            isOpen={this.state.isOpen}
+            navbar
+            className="pb-1"
+          >
+        
+            <Nav
+              className="ml-auto"
+              navbar
+              horizontal
+              tabs
+            >
+        
               <NavItem>
-                <NavLink href="/components/">Hand</NavLink>
+                <NavLink href="/components/">
+                  Hand
+                </NavLink>
               </NavItem>
+        
               <NavItem>
-                <NavLink href="#">Battlefield</NavLink>
+                <NavLink href="#">
+                  Battlefield
+                </NavLink>
               </NavItem>
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
+        
+              <UncontrolledDropdown
+                nav
+                inNavbar
+              >
+        
+                <DropdownToggle
+                  nav
+                  caret
+                >
                   Options
 								</DropdownToggle>
-                <DropdownMenu right>
+        
+                <DropdownMenu
+                  right
+                >
+        
                   <DropdownItem>
                     Anthony
 									</DropdownItem>
+        
                   <DropdownItem>
                     Option 1
 									</DropdownItem>
+        
                   <DropdownItem>
                     Option 2
 									</DropdownItem>
-                  <DropdownItem divider />
+        
+                  <DropdownItem
+                    divider
+                  />
+        
                   <DropdownItem>
                     Reset
 							    </DropdownItem>
+        
                 </DropdownMenu>
+        
               </UncontrolledDropdown>
+        
             </Nav>
+        
           </Collapse>
+        
         </Navbar>
+      
       </Container>
     );
   }

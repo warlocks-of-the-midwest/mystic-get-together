@@ -32,31 +32,94 @@ class Sidebar extends Component {
 
   render() {
     return (
-      <Container fluid className="sidebar-container mh-100 h-100">
-        <Row className="justify-start flex-column sidebar-row mh-100 h-100">
-          <Col>
-            <Row>
-              <Col xs="12" className="border">
-                <p className="font-weight-bold text-truncate">Exile</p>
-              </Col>
-            </Row>
-            <Row className="mh-25 h-25">
-              <Col xs="12" className="border">
-                <p className="font-weight-bold text-truncate">Grave</p>
-              </Col>
-            </Row>
-            <Row className="mh-25 h-25">
-              <Col xs="12" className="border">
-                <p className="font-weight-bold text-truncate">Hand</p>
-              </Col>
-            </Row>
-            <Row className="mh-25 h-25">
-              <Col xs="12" className="border">
-                <p className="font-weight-bold text-truncate">Library</p>
-              </Col>
-            </Row>
+      <Container
+        fluid
+        className="sidebar-container mh-100 h-100 mw-100 w-100"
+      >
+        
+        <Row
+          className="justify-start sidebar-row mh-100 h-100"
+        >
+
+          {/* Exile */}
+          <Col
+            xs="12"
+            className="border p-1"
+          >
+            
+            <h6
+              className="font-weight-bold text-wrap"
+              style={
+                {
+                  "font-size": "50%"
+                }
+              }
+            >
+              Hand
+            </h6>
+
           </Col>
+
+          {/* Graveyard */}
+          <Col
+            xs="12"
+            className="border p-1"
+          >
+            
+            <h6
+              className="font-weight-bold text-wrap"
+              style={
+                {
+                  "font-size": "50%"
+                }
+              }
+            >
+              Exile
+            </h6>
+
+          </Col>
+
+          {/* Hand */}
+          <Col
+            xs="12"
+            className="border p-1"
+          >
+            
+            <h6
+              className="font-weight-bold text-wrap"
+              style={
+                {
+                  "font-size": "50%"
+                }
+              }
+            >
+              Grave
+            </h6>
+
+          </Col>
+
+          {/* Library */}
+          <Col
+            xs="12"
+            className="border p-1"
+          >
+            
+            <h6
+              className="font-weight-bold text-wrap"
+              style={
+                {
+                  "font-size": "50%"
+                }
+              }
+            >
+              Library
+            </h6>
+
+          </Col>
+
+
         </Row>
+
       </Container >
     );
   }
