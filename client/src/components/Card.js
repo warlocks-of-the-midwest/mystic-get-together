@@ -15,14 +15,30 @@ class Card extends React.Component {
 
   render() {
     return (
-      <Container fluid xs="12" className="card-container mh-100 h-100 mw-50 border rounded p-0 m-0">
-        <Row className="card-main-row mh-100 mw-50 no-gutters px-1">
+      <Container
+        fluid
+        xs="12"
+        className="card-container mh-100 h-100 mw-50 border rounded p-0 m-0"
+      >
+        <Row
+          className="card-main-row mh-100 mw-50 no-gutters px-1"
+        >
 
           {/* Card name and mana cost row */}
-          <Col xs="12" className="cardname-manacost-col d-inline-flex flex-grow-2 flex-shrink-1 justify-content-between" style={{ "max-height": "10%" }}>
+          <Col
+            xs="12"
+            className="cardname-manacost-col d-inline-flex flex-grow-2 flex-shrink-1 justify-content-between"
+            style={
+              {
+                "max-height": "10%"
+              }
+            }
+          >
 
             {/* Card name */}
-            <Col className="name-cols px-0 flex-shrink-1 flex-grow-5 justify-content-start">
+            <Col
+              className="name-cols px-0 flex-shrink-1 flex-grow-5 justify-content-start"
+            >
               <p
                 style={
                   {
@@ -86,11 +102,6 @@ class Card extends React.Component {
           <Col
             xs="12"
             className="type-set-col d-inline-flex flex-shrink-3 flex-grow-1 justify-content-between"
-            style={
-              {
-                // "max-height": "3%", "height": "3%"
-              }
-            }
           >
 
             {/* Card type */}
@@ -139,11 +150,6 @@ class Card extends React.Component {
           <Col
             xs="12"
             className="card-text-row px-1 d-flex flex-shrink-1 flex-grow-4"
-            style={
-              {
-                // "max-height": "5%", "min-height": "5%"
-              }
-            }
           >
             <p
               className="text-left text-nowrap mb-0"
@@ -158,10 +164,30 @@ class Card extends React.Component {
           </Col>
 
           {/* Power and toughness if creature */}
-          <Col xs="12" className="card-power-toughness px-1 d-flex flex-shrink-1 flex-grow-2" style={{ "max-height": "10%" }}>
-            <p className="text-right text-nowrap" style={{ "font-size": "40%", "text-overflow": "hidden" }}>{this.props.power}{this.props.divider}{this.props.toughness}</p>
+          <Col
+            xs="12"
+            className="card-power-toughness px-1 d-flex flex-shrink-1 flex-grow-2"
+            style={
+              {
+                "max-height": "10%"
+              }
+            }
+          >
+            <p
+              className="text-right text-nowrap"
+              style={
+                {
+                  "font-size": "40%", "text-overflow": "hidden"
+                }
+              }
+            >
+              {/* Don't forget to add the divider when inputting power and toughness */}
+              {this.props.power}{this.props.divider}{this.props.toughness}
+            </p>
           </Col>
+
         </Row>
+
       </Container>
     );
   }
