@@ -52,7 +52,7 @@ class Card extends React.Component {
             </Col>
           </Col>
 
-          {/* Image row with a col wrapper to control size */}
+          {/* Image row with a col wrapper to control size of image */}
           <Col
             xs="12"
             className="car-image-col-wrapper px-md-2 px-lg-5"
