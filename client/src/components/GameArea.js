@@ -76,10 +76,7 @@ class GameArea extends Component {
   addCardToTopBattlefield(name, cost, img, type, set, text, power, toughness) {
     return (
       <Col
-        xs="4"
-        sm="3"
-        md="2"
-        lg="1"
+        xs="2"
         style={
           {
             "min-width": "80px",
@@ -115,7 +112,7 @@ class GameArea extends Component {
     return (
       <Container
         fluid
-        className="main-container d-flex flex-wrap vh-100"
+        className="main-container d-flex flex-column mh-100 vh-100 p-0 m-0"
         style={
           {
             "max-height": "100vh"
@@ -124,183 +121,178 @@ class GameArea extends Component {
       >
 
         <Row
-          className="vh-100 flex-grow-0"
+          className="top-nav-row p-0 m-0"
           style={
             {
-              "max-height": '100vh'
+              "max-height": "9vh",
+              "height": "9vh"
             }
           }
         >
-
-
-          {/* Top row for menu, title, and life. */}
           <Col
             xs="12"
-            className="flex-shrink-3 flex-grow-1"
-            style={
-              {
-                "max-height": '10vh'
-              }
-            }
+            className="p-0 m-0 mh-100 h-100"
           >
-
             <NavigationBar className="mh-100" life={this.state.life}></NavigationBar>
 
           </Col>
 
+        </Row>
 
-          {/* Main area for cards */}
+
+        <Row
+          className="battlefield-sidebar-row p-0 m-0"
+          style={
+            {
+              "max-height": "90vh",
+              "height": "90vh"
+            }
+          }
+        >
+
+          {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
           <Col
             xs="10"
-            className="battlefield-col d-flex flex-wrap justify-content-start flex-shrink-1 px-0"
-            style={
-              {
-                "max-height": '90vh'
-              }
-            }
+            className="p-0 m-0 mh-100 h-100 border"
           >
-
-            {/* Top row of cards */}
-            <Col
-              xs="12"
-              style={
-                {
-                  "max-height": "45vh",
-                  "height": "45vh"
-                }
-              }
-              className="battlefield-top d-inline-flex flex-wrap px-0 border justify-content-start card-row card-row-top my-0 mx-0"
+            {/* Top row of battlefield */}
+            <Row
+              className="battlefield-top-row p-0 m-0 mh-50 h-50"
             >
-
-
-              {this.addCardToTopBattlefield(
-                "Sonic Assault",
-                "{1}{U}{R}",
-                "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                "Instant",
-                "https://img.scryfall.com/sets/grn.svg?1545022800",
-                "Card text here"
-              )}
-              {this.addCardToTopBattlefield(
-                "Sonic Assault",
-                "{1}{U}{R}",
-                "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                "Instant",
-                "https://img.scryfall.com/sets/grn.svg?1545022800",
-                "Card text here"
-              )}
-              {this.addCardToTopBattlefield(
-                "Sonic Assault",
-                "{1}{U}{R}",
-                "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                "Instant",
-                "https://img.scryfall.com/sets/grn.svg?1545022800",
-                "Card text here"
-              )}
-              {this.addCardToTopBattlefield(
-                "Sonic Assault",
-                "{1}{U}{R}",
-                "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                "Instant",
-                "https://img.scryfall.com/sets/grn.svg?1545022800",
-                "Card text here"
-              )}
-              {this.addCardToTopBattlefield(
-                "Sonic Assault",
-                "{1}{U}{R}",
-                "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                "Instant",
-                "https://img.scryfall.com/sets/grn.svg?1545022800",
-                "Card text here"
-              )}
-              {this.addCardToTopBattlefield(
-                "Sonic Assault",
-                "{1}{U}{R}",
-                "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                "Instant",
-                "https://img.scryfall.com/sets/grn.svg?1545022800",
-                "Card text here"
-              )}
-              {this.addCardToTopBattlefield(
-                "Sonic Assault",
-                "{1}{U}{R}",
-                "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                "Instant",
-                "https://img.scryfall.com/sets/grn.svg?1545022800",
-                "Card text here"
-              )}
-              {this.addCardToTopBattlefield(
-                "Sonic Assault",
-                "{1}{U}{R}",
-                "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                "Instant",
-                "https://img.scryfall.com/sets/grn.svg?1545022800",
-                "Card text here"
-              )}
-
-            </Col>
-
-            {/* Bottom row of cards */}
-            <Col
-              xs="12"
-              style={
-                {
-                  "max-height": "45vh",
-                  "height": "45vh"
-                }
-              }
-              className="battlefield-bottom d-inline-flex flex-wrap px-0 border justify-content-start card-row card-row-top my-0 mx-0"
-            >
-
+              {/* Main area for cards */}
               <Col
-                xs="2"
+                className="battlefield-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 px-0"
                 style={
                   {
-                    "min-width": "80px",
-                    "max-height": "50%",
+                    // "max-height": ''
                   }
                 }
-                className="p-0"
               >
-
-                <Card
-                  xs="2"
-                  name="Sonic Assault"
-                  cost="{1}{U}{R}"
-                  image="https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557"
-                  type="Instant"
-                  set="https://img.scryfall.com/sets/grn.svg?1545022800"
-                  text="Card text here">
-                </Card>
+                {this.addCardToTopBattlefield(
+                  "Sonic Assault",
+                  "{1}{U}{R}",
+                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                  "Instant",
+                  "https://img.scryfall.com/sets/grn.svg?1545022800",
+                  "Card text here"
+                )}
+                {this.addCardToTopBattlefield(
+                  "Sonic Assault",
+                  "{1}{U}{R}",
+                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                  "Instant",
+                  "https://img.scryfall.com/sets/grn.svg?1545022800",
+                  "Card text here"
+                )}
+                {this.addCardToTopBattlefield(
+                  "Sonic Assault",
+                  "{1}{U}{R}",
+                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                  "Instant",
+                  "https://img.scryfall.com/sets/grn.svg?1545022800",
+                  "Card text here"
+                )}
+                {this.addCardToTopBattlefield(
+                  "Sonic Assault",
+                  "{1}{U}{R}",
+                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                  "Instant",
+                  "https://img.scryfall.com/sets/grn.svg?1545022800",
+                  "Card text here"
+                )}
+                {this.addCardToTopBattlefield(
+                  "Sonic Assault",
+                  "{1}{U}{R}",
+                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                  "Instant",
+                  "https://img.scryfall.com/sets/grn.svg?1545022800",
+                  "Card text here"
+                )}
+                {this.addCardToTopBattlefield(
+                  "Sonic Assault",
+                  "{1}{U}{R}",
+                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                  "Instant",
+                  "https://img.scryfall.com/sets/grn.svg?1545022800",
+                  "Card text here"
+                )}
+                {this.addCardToTopBattlefield(
+                  "Sonic Assault",
+                  "{1}{U}{R}",
+                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                  "Instant",
+                  "https://img.scryfall.com/sets/grn.svg?1545022800",
+                  "Card text here"
+                )}
+                {this.addCardToTopBattlefield(
+                  "Sonic Assault",
+                  "{1}{U}{R}",
+                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                  "Instant",
+                  "https://img.scryfall.com/sets/grn.svg?1545022800",
+                  "Card text here"
+                )}
 
               </Col>
+            </Row>
 
-            </Col>
+            {/* Bottom row of cards */}
+            <Row
+              className="battlefield-bottom-row p-0 m-0 mh-50 h-50"
+            >
+              <Col
+                style={
+                  {
+                    "overflow": "scroll"
+                  }
+                }
+                className="battlefield-bottom d-inline-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 px-0"
+              >
+
+                {this.addCardToTopBattlefield(
+                  "Sonic Assault",
+                  "{1}{U}{R}",
+                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                  "Instant",
+                  "https://img.scryfall.com/sets/grn.svg?1545022800",
+                  "Card text here"
+                )}
+
+                {this.addCardToTopBattlefield(
+                  "Sonic Assault",
+                  "{1}{U}{R}",
+                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                  "Instant",
+                  "https://img.scryfall.com/sets/grn.svg?1545022800",
+                  "Card text here"
+                )}
+
+              </Col>
+            </Row>
+
 
           </Col>
 
-          {/* Side bar col container */}
+
+
+          {/* Sidebar area.  */}
+
+
+          {/* Sidebar for exile,graveyard,hand,library  */}
           <Col
             xs="2"
-            className="side-bar-col-container flex-shrink-3 px-0"
+            className="side-bar-col flex-shrink-3 px-0"
             style={
               {
-                "max-height": '90vh'
+                "max-height": '100%'
               }
             }
           >
-
-            {/* Sidebar for exile,graveyard,hand,library  */}
-            <Col
-              xs="2"
-              className="gamearea-sidebar-column px-0 w-100 mw-100 mh-100 h-100"
-            >
-              <Sidebar></Sidebar>
-            </Col>
-
+            <Sidebar></Sidebar>
           </Col>
 
         </Row>
+
       </Container >
     );
   }
