@@ -124,8 +124,8 @@ class GameArea extends Component {
           className="top-nav-row p-0 m-0"
           style={
             {
-              "max-height": "9vh",
-              "height": "9vh"
+              // "max-height": "9vh",
+              
             }
           }
         >
@@ -133,7 +133,12 @@ class GameArea extends Component {
             xs="12"
             className="p-0 m-0 mh-100 h-100"
           >
-            <NavigationBar className="mh-100" life={this.state.life}></NavigationBar>
+            <NavigationBar
+              className="mh-100"
+              life={this.state.life}
+              active="battlefield"
+            >
+            </NavigationBar>
 
           </Col>
 
@@ -158,15 +163,15 @@ class GameArea extends Component {
             {/* Top row of battlefield */}
             <Row
               className="battlefield-top-row p-0 m-0 mh-50 h-50"
+              style={
+                {
+                  "overflow": "auto"
+                }
+              }
             >
               {/* Main area for cards */}
               <Col
                 className="battlefield-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 px-0"
-                style={
-                  {
-                    // "max-height": ''
-                  }
-                }
               >
                 {this.addCardToTopBattlefield(
                   "Sonic Assault",
@@ -239,13 +244,14 @@ class GameArea extends Component {
             {/* Bottom row of cards */}
             <Row
               className="battlefield-bottom-row p-0 m-0 mh-50 h-50"
+              style={
+                {
+                  "overflow": "auto"
+                }
+              }
             >
               <Col
-                style={
-                  {
-                    "overflow": "scroll"
-                  }
-                }
+                
                 className="battlefield-bottom d-inline-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 px-0"
               >
 

@@ -16,16 +16,19 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
+  UncontrolledCollapse
 } from 'reactstrap';
 
 class NavigationBar extends Component {
   constructor(props) {
     super(props);
     this.toggle = this.toggle.bind(this);
+    this.isActive = this.isActive.bind(this);
 
     this.state = {
-      isOpen: false
+      isOpen: false,
+      active: "battlefield"
     };
   }
 
@@ -35,6 +38,15 @@ class NavigationBar extends Component {
     });
   }
 
+  isActive(name) {
+    console.log("methodInput: " + name + " props.active: " + this.props.name);
+    if (this.props.active === name) {
+      return "active";
+    }
+
+    return;
+  }
+
 
   render() {
     return (
@@ -42,102 +54,111 @@ class NavigationBar extends Component {
         fluid
         className="h-100 p-0 m-0"
       >
-        
+
         <Navbar
           light
-          expand="md"
-          className="expand-sm mh-100 h-100 m-0 p-1"
+          expand="lg"
+          className="bg-light mh-100 h-100 m-0 p-1 justify-content-between"
         >
-        
+
+
           <NavbarBrand
-            dark
+            light
             className="bg-light"
           >
-            Battlefield
+            Mystic-The-Get-Together
           </NavbarBrand>
-        
+
           <div
             className="navbar-text"
           >
             Life: {this.props.life}
           </div>
-        
+
           <NavbarToggler
             className="mh-100 h-100 m-0 p-0"
-            onClick={this.toggle}
+            id="toggler"
           />
-        
-          <Collapse
-            isOpen={this.state.isOpen}
+
+          <UncontrolledCollapse
             navbar
             className="pb-1"
+            toggler="#toggler"
           >
-        
+
             <Nav
               className="ml-auto"
               navbar
+              pills
               horizontal
-              tabs
             >
-        
+
               <NavItem>
-                <NavLink href="/components/">
+                <NavLink
+                  href="/components/"
+                  className={this.isActive("hand")}
+                >
+
+
                   Hand
                 </NavLink>
               </NavItem>
-        
+
               <NavItem>
-                <NavLink href="#">
+                <NavLink
+                  href="#"
+                  className={this.isActive("battlefield")}
+                >
                   Battlefield
                 </NavLink>
               </NavItem>
-        
+
               <UncontrolledDropdown
                 nav
                 inNavbar
               >
-        
+
                 <DropdownToggle
                   nav
                   caret
                 >
                   Options
 								</DropdownToggle>
-        
+
                 <DropdownMenu
                   right
                 >
-        
+
                   <DropdownItem>
                     Anthony
 									</DropdownItem>
-        
+
                   <DropdownItem>
                     Option 1
 									</DropdownItem>
-        
+
                   <DropdownItem>
                     Option 2
 									</DropdownItem>
-        
+
                   <DropdownItem
                     divider
                   />
-        
+
                   <DropdownItem>
                     Reset
 							    </DropdownItem>
-        
+
                 </DropdownMenu>
-        
+
               </UncontrolledDropdown>
-        
+
             </Nav>
-        
-          </Collapse>
-        
+
+          </UncontrolledCollapse>
+
         </Navbar>
-      
+
       </Container>
     );
   }
