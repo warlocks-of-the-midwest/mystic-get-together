@@ -1,0 +1,71 @@
+
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.intro {
+    height: 100vh;
+    width: 100vw;
+    margin: auto;
+    background: url("../components/images/lotus.jpg") no-repeat 50% 50%;
+    display: table;
+    top: 0;
+    background-size: cover;
+}
+
+.intro .inner {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    max-width: none;
+}
+
+.content {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.content h1 {
+    font-family: 'Raleway', sans-serif;
+    color: #F9F3F4;
+    text-shadow: 0px 0px 300px #000;
+    font-size: 300%
+}
+
+.btn, select {
+    border-radius: 9px;
+    margin: 5px;
+    font-family: 'Oswald', sans-serif;
+    color: #036A81;
+    font-size: 135%;
+    padding: 10px 20px;
+    border: solid #036A81 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.btn:hover {
+    color: #fff;
+    border: solid #fff 3px;
+}
+
+@media screen and (max-width: 768px) {
+    .content h1 {
+        font-size: 250%
+    }
+    .btn {
+        font-size: 110%;
+        padding: 7px 15px;
+    }
+}
+
+.App {
+  text-align: center;
+}

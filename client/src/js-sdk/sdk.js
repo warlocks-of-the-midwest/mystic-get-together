@@ -1,4 +1,4 @@
-import { db, FIREBASE_FUNCTION_BASE_URL } from './fire';
+import db, { FIREBASE_FUNCTION_BASE_URL } from './fire.js';
 import axios from 'axios';
 
 // Listeners
@@ -53,10 +53,10 @@ export function updateLife(player, newLife) {
 /**
  * This wraps the 'importDeckFunction', which imports a deck from MTGGoldfish
  * for the given player.
- * 
+ *
  * @param {string} player The name of the player, e.g. eric
  * @param {string} uri The uri of the deck, e.g. https://www.mtggoldfish.com/deck/1325288
- * 
+ *
  * @returns nothing
  */
 export async function importDeck(player, uri) {
@@ -71,9 +71,9 @@ export async function importDeck(player, uri) {
 
 /**
  * This wraps the 'parseDeckFunction', which parses a deck from MTGGoldfish.
- * 
+ *
  * @param {string} uri The uri of the deck, e.g. https://www.mtggoldfish.com/deck/1325288
- * 
+ *
  * @returns The parsed deck
  */
 export async function parseDeck(uri) {
@@ -88,12 +88,12 @@ export async function parseDeck(uri) {
 /**
  * This wraps the 'populateDeckFunction', which returns bulk Scryfall data
  * for a deck.
- * 
+ *
  * @param {string} player The name of the player, e.g. eric
  * @param {string} deckId The ID of the deck belonging to the given player
  * @param {...any} include If provided, filter the Scryfall data to only include
  * the named fields. Dot notation is supported.
- * 
+ *
  * @returns Bulk data for all cards in the specified deck
  */
 export async function populateDeck(player, deckId, ...include) {
@@ -111,10 +111,10 @@ export async function populateDeck(player, deckId, ...include) {
  * This wraps the 'hostGameFunction', which creates a new game containing
  * the specified player, with her board state initialized using the specified
  * deck.
- * 
+ *
  * @param {string} player The name of the player, e.g. eric
  * @param {string} deckId The ID of the deck belonging to the given player
- * 
+ *
  * @returns {string} The game ID
  */
 export async function hostGame(player, deckId) {
@@ -130,11 +130,11 @@ export async function hostGame(player, deckId) {
 /**
  * This wraps the 'joinGameFunction', which joins an existing game by adding
  * the specified player, intializing her board state using the specified deck.
- * 
+ *
  * @param {string} gameId The game ID, as returned by 'hostGame'
  * @param {string} player The name of the player, e.g. eric
  * @param {string} deckId The ID of the deck belonging to the given player
- * 
+ *
  * @returns nothing
  */
 export async function joinGame(gameId, player, deckId) {
@@ -151,9 +151,9 @@ export async function joinGame(gameId, player, deckId) {
 /**
  * This wraps the 'startGameFunction', which starts the game by setting the
  * 'turn_order' attribute on the Game.
- * 
+ *
  * @param {string} gameId The game ID, as returned by 'hostGame'
- * 
+ *
  * @returns nothing
  */
 export async function startGame(gameId) {
