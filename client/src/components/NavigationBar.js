@@ -98,8 +98,6 @@ class NavigationBar extends Component {
                   href="/components/"
                   className={this.isActive("hand")}
                 >
-
-
                   Hand
                 </NavLink>
               </NavItem>
