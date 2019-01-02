@@ -5,9 +5,7 @@ import * as sdk from '../js-sdk/sdk';
 
 import '../styles/GameArea.css';
 import Card from './Card.js';
-import Hand from './Hand.js';
 import '../styles/Card.css';
-import '../styles/Hand.css';
 
 import NavigationBar from './NavigationBar';
 import Sidebar from './Sidebar';
@@ -20,13 +18,18 @@ import {
   Button,
   ButtonGroup,
 } from 'reactstrap';
+import Axios from 'axios';
 
 class GameArea extends Component {
+  url = 'https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json';
+
   constructor(props) {
     super(props);
     this.state = {
       player: "Anthony",
       life: 0,
+      top_row: [],
+      bottom_row: [],
     };
 
     this.lifeComponent = this.lifeComponent.bind(this);
@@ -99,15 +102,125 @@ class GameArea extends Component {
     );
   }
 
-  render() {
-    const { gameState } = this.props;
-    const { life } = gameState.Players.player1;
-    const { card1 } = gameState.Players.player1.Zones.zone1;
-    const { card2 } = gameState.Players.player1.Zones.zone1;
-    const divStyle = {
-      "max-height": '45%',
-    };
+  loadTopRowCards(cardURLs) {
+    var arr = cardURLs.copy();
+    var cards = [];
+    // arr = async (arr) => {
+    //   arr.forEach((url) => {
+    //     const cardInfo = await Card.test(url);
+    //     cards.push(cardInfo);
+    //   })
+    //   this.setState({
+    //     top_row: cards
+    //   })
+    // }
+  }
 
+  componentDidMount() {
+    // var card =
+    //   Card.getScryfallCard('https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json')
+    //     .then(
+    //       (cardInfo) => {  
+    //         console.log('val: ' + cardInfo);
+    //         var arr = this.state.top_row;
+    //         arr.push(card);
+    //         this.setState({
+    //           top_row: arr
+    //         })
+    //         return cardInfo;
+    //       });
+
+    // console.log("componentdidmount");
+    // const responsePromise = async () => {
+    //   try {
+    //     console.log("pause to await axios response");
+    //     const response = await Axios.get(this.url)
+    //     console.log("axios response should be returned: " + response);
+    //   }
+    //   catch (e) {
+    //     console.log(e);
+    //   }
+
+    // }
+  }
+
+  async t() {
+    console.log("the method t was called with cards " + this.state.top_row.length);
+    const getcard = () => {
+      console.log("the method t was called with cards2 " + this.state.top_row.length);
+      const responsePromise = async () => {
+        try {
+          const response = await Axios.get(this.url)
+          console.log("axios response should be returned: " + response.data);
+          this.setState((state) => {
+            var arr = state.top_row.slice();
+            arr.push(response.data);
+            return { top_row: arr }
+          })
+          console.log("this.state.top_row " + this.state.top_row.length);
+          return responsePromise.data;
+        }
+        catch (e) {
+          console.log(e);
+          return e;
+        }
+        finally {
+          console.log("returning from axios fetch card try");
+        }
+      }
+      console.log("call async function to fetch card info from scryfall");
+      responsePromise();
+    }
+    return await getcard();
+  }
+
+  componentDidMount() {
+    this.u("url");
+    // this.forceUpdate();
+  }
+
+  async u(url) {
+    const cardInfo = await Card.getScryFallCardInfo(url);
+    this.setState((state) => {
+      var arr = state.top_row.slice();
+      arr.push(cardInfo);
+      return {
+        top_row: arr
+      };
+    });
+  }
+
+  getScryfallCards() {
+    var arr = this.state.top_row.map((cardInfo) => {
+      return (
+        <Col
+          xs="2"
+          style={
+            {
+              "min-width": "80px",
+              "max-height": "50%",
+            }
+          }
+          className="p-0">
+          <Card
+            name={this.state.top_row[0][0]}
+            cost={this.state.top_row[0][1]}
+            image={this.state.top_row[0][2]}
+            type={this.state.top_row[0][3]}
+            set={this.state.top_row[0][4]}
+            text={this.state.top_row[0][5]}
+            power={this.state.top_row[0][6]}
+            divider={this.state.top_row[0][6] ? "/" : ""}
+            toughness={this.state.top_row[0][7]}
+          >
+          </Card >
+        </Col>
+      );
+    });
+    return arr;
+  }
+
+  render() {
 
     return (
       <Container
@@ -122,12 +235,6 @@ class GameArea extends Component {
 
         <Row
           className="top-nav-row p-0 m-0"
-          style={
-            {
-              // "max-height": "9vh",
-              
-            }
-          }
         >
           <Col
             xs="12"
@@ -173,6 +280,71 @@ class GameArea extends Component {
               <Col
                 className="battlefield-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 px-0"
               >
+
+
+                {console.log(this.state.top_row)}
+                <>
+                  {
+                    this.state.top_row.map((cardInfo) => {
+                      console.log("inmapping")
+                      console.log(cardInfo);
+                      return (
+                        <Col
+                          xs="2"
+                          style={
+                            {
+                              "min-width": "80px",
+                              "max-height": "50%",
+                            }
+                          }
+                          className="p-0">
+                          <Card
+                            name={cardInfo[0]}
+                            cost={cardInfo[1]}
+                            image={cardInfo[2]}
+                            type={cardInfo[3]}
+                            set={cardInfo[4]}
+                            text={cardInfo[5]}
+                            power={cardInfo[6]}
+                            divider={cardInfo[6] ? "/" : ""}
+                            toughness={cardInfo[7]}
+                          >
+                          </Card >
+                        </Col>
+                      );
+                    })
+                  }
+                </>
+
+                {/* () => this.state.top_row.map(
+                    (cardInfo) => {
+                      return (
+                        <Col
+                          xs="2"
+                          style={
+                            {
+                              "min-width": "80px",
+                              "max-height": "50%",
+                            }
+                          }
+                          className="p-0">
+                          <Card
+                            name={cardInfo[0]}
+                            cost={cardInfo[1]}
+                            image={cardInfo[2]}
+                            type={cardInfo[3]}
+                            set={cardInfo[4]}
+                            text={cardInfo[5]}
+                            power={cardInfo[6]}
+                            divider={cardInfo[6] ? "/" : ""}
+                            toughness={cardInfo[7]}
+                          >
+                          </Card >
+                        </Col>
+                      );
+                    }))
+                } */}
+
                 {this.addCardToTopBattlefield(
                   "Sonic Assault",
                   "{1}{U}{R}",
@@ -251,7 +423,7 @@ class GameArea extends Component {
               }
             >
               <Col
-                
+
                 className="battlefield-bottom d-inline-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 px-0"
               >
 

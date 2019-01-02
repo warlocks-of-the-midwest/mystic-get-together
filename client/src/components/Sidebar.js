@@ -1,28 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
-import * as sdk from '../js-sdk/sdk'
 
 import '../styles/Sidebar.css';
 
 import {
-  Jumbotron,
   Container,
   Row,
-  Col,
-  Button,
-  ButtonGroup,
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
+  Col
 } from 'reactstrap';
 
 class Sidebar extends Component {

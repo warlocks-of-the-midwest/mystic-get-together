@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import '../styles/NavigationBar.css';
 
 import {
-  Button,
   Container,
-  Collapse,
   Navbar,
   NavbarToggler,
   NavbarBrand,
@@ -39,7 +36,6 @@ class NavigationBar extends Component {
   }
 
   isActive(name) {
-    console.log("methodInput: " + name + " props.active: " + this.props.name);
     if (this.props.active === name) {
       return "active";
     }
