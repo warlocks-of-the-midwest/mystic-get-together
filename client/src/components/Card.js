@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 import '../styles/Card.css';
+
 import {
   Container,
   Row,
   Col,
-  Media
+  Media,
+  Button,
+  UncontrolledPopover,
+  Popover,
+  PopoverHeader,
+  PopoverBody
 } from 'reactstrap';
 
 class Card extends React.Component {
@@ -113,7 +119,7 @@ class Card extends React.Component {
         className="card-container d-flex flex-column justify-content-center mh-100 h-100 mw-100 w-100 border rounded p-0 m-0"
         style={
           {
-            "overflow": "scroll"
+            "overflow": "hidden"
           }
         }
       >
@@ -124,6 +130,9 @@ class Card extends React.Component {
           className="card-name-cost-row d-inline-flex mx-0 px-1 justify-content-between flex-grow-5 flex-shrink-1"
           style={
             {
+              "height": "10%",
+              "max-height": "10%",
+              "overflow": "hidden"
             }
           }
         >
@@ -169,8 +178,9 @@ class Card extends React.Component {
           className="card-art-row justify-content-center mw-100 w-100 m-0 px-1 flex-grow-1 flex-shrink-5"
           style={
             {
-              // "max-height": "45%"
-              "flex-basis": "55%",
+              "height": "50%",
+              "max-height": "50%",
+              "flex-basis": "50%",
               "overflow": "hidden"
             }
           }
@@ -195,8 +205,10 @@ class Card extends React.Component {
           className="card-type-set-row justify-content-between px-1 m-0 flex-grow-1 flex-shrink-10"
           style={
             {
-              // "max-height": "10%"
-              "flex-basis": "5%"
+              "height": "10%",
+              "max-height": "10%",
+              "flex-basis": "10%",
+              "overflow": "hidden"
             }
           }
         >
@@ -249,14 +261,23 @@ class Card extends React.Component {
         <Row
           className="card-text-row px-1 m-0 flex-grow-1 flex-shrink-5"
           style={{
-            // "max-height": "20%"
-            "flex-basis": "0"
+            "height": "20%",
+            "max-height": "20%",
+            "flex-basis": "20%",
+            "overflow": "scroll"
           }}
         >
           <Col
             xs="12"
             className="card-text-col d-flex flex-shrink-5 flex-grow-1 p-0"
           >
+            <Button id="UncontrolledPopover" type="button">
+              Launch Popover
+            </Button>
+            <UncontrolledPopover placement="bottom" target="UncontrolledPopover">
+              <PopoverHeader>Popover Title</PopoverHeader>
+              <PopoverBody>Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</PopoverBody>
+            </UncontrolledPopover>
             <p
               className="card-text text-left text-wrap mb-0"
               style={
@@ -278,8 +299,10 @@ class Card extends React.Component {
           className="card-power-toughness-row m-0 px-1 d-inline-flex flex-grow-1 flex-shrink-5"
           style={
             {
-              // "max-height": "5%"
-              "flex-basis": "5%"
+              "height": "10%",
+              "max-height": "10%",
+              "flex-basis": "10%",
+              "overflow": "hidden"
             }
           }
         >
