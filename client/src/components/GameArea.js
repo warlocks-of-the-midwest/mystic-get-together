@@ -17,6 +17,8 @@ import {
   Col,
   Button,
   ButtonGroup,
+  Popover,
+  UncontrolledPopover,
 } from 'reactstrap';
 import Axios from 'axios';
 
@@ -79,7 +81,7 @@ class GameArea extends Component {
   addCardToTopBattlefield(name, cost, img, type, set, text, power, toughness) {
     return (
       <Col
-        xs="2"
+        xs="1"
         style={
           {
             "min-width": "80px",
@@ -102,52 +104,8 @@ class GameArea extends Component {
     );
   }
 
-  loadTopRowCards(cardURLs) {
-    var arr = cardURLs.copy();
-    var cards = [];
-    // arr = async (arr) => {
-    //   arr.forEach((url) => {
-    //     const cardInfo = await Card.test(url);
-    //     cards.push(cardInfo);
-    //   })
-    //   this.setState({
-    //     top_row: cards
-    //   })
-    // }
-  }
-
-  componentDidMount() {
-    // var card =
-    //   Card.getScryfallCard('https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json')
-    //     .then(
-    //       (cardInfo) => {  
-    //         console.log('val: ' + cardInfo);
-    //         var arr = this.state.top_row;
-    //         arr.push(card);
-    //         this.setState({
-    //           top_row: arr
-    //         })
-    //         return cardInfo;
-    //       });
-
-    // console.log("componentdidmount");
-    // const responsePromise = async () => {
-    //   try {
-    //     console.log("pause to await axios response");
-    //     const response = await Axios.get(this.url)
-    //     console.log("axios response should be returned: " + response);
-    //   }
-    //   catch (e) {
-    //     console.log(e);
-    //   }
-
-    // }
-  }
-
   async t() {
-    console.log("the method t was called with cards " + this.state.top_row.length);
     const getcard = () => {
-      console.log("the method t was called with cards2 " + this.state.top_row.length);
       const responsePromise = async () => {
         try {
           const response = await Axios.get(this.url)
@@ -194,7 +152,7 @@ class GameArea extends Component {
     var arr = this.state.top_row.map((cardInfo) => {
       return (
         <Col
-          xs="2"
+          xs="1"
           style={
             {
               "min-width": "80px",
@@ -225,23 +183,22 @@ class GameArea extends Component {
     return (
       <Container
         fluid
-        className="main-container d-flex flex-column mh-100 vh-100 p-0 m-0"
-        style={
-          {
-            "max-height": "100vh"
-          }
-        }
+        className="main-container d-flex vh-100 w-100 p-0 m-0"
       >
 
         <Row
-          className="top-nav-row p-0 m-0"
+          className="main-row p-0 m-0 d-flex flex-row flex-grow-1 flex-shrink-1"
         >
           <Col
             xs="12"
-            className="p-0 m-0 mh-100 h-100"
+            className="p-0 m-0"
+            style={
+              {
+                "flex-basis": "100%",
+              }
+            }
           >
             <NavigationBar
-              className="mh-100"
               life={this.state.life}
               active="battlefield"
             >
@@ -249,226 +206,189 @@ class GameArea extends Component {
 
           </Col>
 
-        </Row>
-
-
-        <Row
-          className="battlefield-sidebar-row p-0 m-0"
-          style={
-            {
-              "max-height": "90vh",
-              "height": "90vh"
-            }
-          }
-        >
-
-          {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
           <Col
-            xs="10"
-            className="p-0 m-0 mh-100 h-100 border"
-          >
-            {/* Top row of battlefield */}
-            <Row
-              className="battlefield-top-row p-0 m-0 mh-50 h-50"
-              style={
-                {
-                  "overflow": "auto"
-                }
-              }
-            >
-              {/* Main area for cards */}
-              <Col
-                className="battlefield-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 px-0"
-              >
-
-
-                {console.log(this.state.top_row)}
-                <>
-                  {
-                    this.state.top_row.map((cardInfo) => {
-                      console.log("inmapping")
-                      console.log(cardInfo);
-                      return (
-                        <Col
-                          xs="2"
-                          style={
-                            {
-                              "min-width": "80px",
-                              "max-height": "50%",
-                            }
-                          }
-                          className="p-0">
-                          <Card
-                            name={cardInfo[0]}
-                            cost={cardInfo[1]}
-                            image={cardInfo[2]}
-                            type={cardInfo[3]}
-                            set={cardInfo[4]}
-                            text={cardInfo[5]}
-                            power={cardInfo[6]}
-                            divider={cardInfo[6] ? "/" : ""}
-                            toughness={cardInfo[7]}
-                          >
-                          </Card >
-                        </Col>
-                      );
-                    })
-                  }
-                </>
-
-                {/* () => this.state.top_row.map(
-                    (cardInfo) => {
-                      return (
-                        <Col
-                          xs="2"
-                          style={
-                            {
-                              "min-width": "80px",
-                              "max-height": "50%",
-                            }
-                          }
-                          className="p-0">
-                          <Card
-                            name={cardInfo[0]}
-                            cost={cardInfo[1]}
-                            image={cardInfo[2]}
-                            type={cardInfo[3]}
-                            set={cardInfo[4]}
-                            text={cardInfo[5]}
-                            power={cardInfo[6]}
-                            divider={cardInfo[6] ? "/" : ""}
-                            toughness={cardInfo[7]}
-                          >
-                          </Card >
-                        </Col>
-                      );
-                    }))
-                } */}
-
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-
-              </Col>
-            </Row>
-
-            {/* Bottom row of cards */}
-            <Row
-              className="battlefield-bottom-row p-0 m-0 mh-50 h-50"
-              style={
-                {
-                  "overflow": "auto"
-                }
-              }
-            >
-              <Col
-
-                className="battlefield-bottom d-inline-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 px-0"
-              >
-
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-
-              </Col>
-            </Row>
-
-
-          </Col>
-
-
-
-          {/* Sidebar area.  */}
-
-
-          {/* Sidebar for exile,graveyard,hand,library  */}
-          <Col
-            xs="2"
-            className="side-bar-col flex-shrink-3 px-0"
+            xs="12"
+            className="battlefield-sidebar-col p-0 m-0 w-100 flex-grow-1 flex-shrink-1"
             style={
               {
-                "max-height": '100%'
+                "flex-basis": "90%",
               }
             }
           >
-            <Sidebar></Sidebar>
-          </Col>
 
+            {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
+            <Col
+              xs="10"
+              className="p-0 m-0 mh-100 h-100 border"
+            >
+              {/* Top row of battlefield */}
+              <Row
+                className="battlefield-top-row p-0 m-0 mh-50 h-50"
+                style={
+                  {
+                    "overflow-y": "scroll",
+                    "overflow-x": "hidden"
+                  }
+                }
+              >
+                {/* Main area for cards */}
+                <Col
+                  className="battlefield-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 px-0"
+                >
+
+
+                  {console.log(this.state.top_row)}
+                  <>
+                    {
+                      this.state.top_row.map((cardInfo) => {
+                        console.log("inmapping")
+                        console.log(cardInfo);
+                        return (
+                          <Col
+                            xs="1"
+                            style={
+                              {
+                                "min-width": "80px",
+                                "max-height": "50%",
+                              }
+                            }
+                            className="p-0">
+                            <Card
+                              name={cardInfo[0]}
+                              cost={cardInfo[1]}
+                              image={cardInfo[2]}
+                              type={cardInfo[3]}
+                              set={cardInfo[4]}
+                              text={cardInfo[5]}
+                              power={cardInfo[6]}
+                              divider={cardInfo[6] ? "/" : ""}
+                              toughness={cardInfo[7]}
+                            >
+                            </Card >
+                          </Col>
+                        );
+                      })
+                    }
+                  </>
+
+                  {this.addCardToTopBattlefield(
+                    "Sonic Assault",
+                    "{1}{U}{R}",
+                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                    "Instant",
+                    "https://img.scryfall.com/sets/grn.svg?1545022800",
+                    "Card text here"
+                  )}
+                  {this.addCardToTopBattlefield(
+                    "Sonic Assault",
+                    "{1}{U}{R}",
+                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                    "Instant",
+                    "https://img.scryfall.com/sets/grn.svg?1545022800",
+                    "Card text here"
+                  )}
+                  {this.addCardToTopBattlefield(
+                    "Sonic Assault",
+                    "{1}{U}{R}",
+                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                    "Instant",
+                    "https://img.scryfall.com/sets/grn.svg?1545022800",
+                    "Card text here"
+                  )}
+                  {this.addCardToTopBattlefield(
+                    "Sonic Assault",
+                    "{1}{U}{R}",
+                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                    "Instant",
+                    "https://img.scryfall.com/sets/grn.svg?1545022800",
+                    "Card text here"
+                  )}
+                  {this.addCardToTopBattlefield(
+                    "Sonic Assault",
+                    "{1}{U}{R}",
+                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                    "Instant",
+                    "https://img.scryfall.com/sets/grn.svg?1545022800",
+                    "Card text here"
+                  )}
+                  {this.addCardToTopBattlefield(
+                    "Sonic Assault",
+                    "{1}{U}{R}",
+                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                    "Instant",
+                    "https://img.scryfall.com/sets/grn.svg?1545022800",
+                    "Card text here"
+                  )}
+                  {this.addCardToTopBattlefield(
+                    "Sonic Assault",
+                    "{1}{U}{R}",
+                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                    "Instant",
+                    "https://img.scryfall.com/sets/grn.svg?1545022800",
+                    "Card text here"
+                  )}
+                  {this.addCardToTopBattlefield(
+                    "Sonic Assault",
+                    "{1}{U}{R}",
+                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                    "Instant",
+                    "https://img.scryfall.com/sets/grn.svg?1545022800",
+                    "Card text here"
+                  )}
+
+                </Col>
+              </Row>
+
+              {/* Bottom row of cards */}
+              <Row
+                className="battlefield-bottom-row p-0 m-0 mh-50 h-50"
+                style={
+                  {
+                    "overflow": "auto"
+                  }
+                }
+              >
+                <Col
+
+                  className="battlefield-bottom d-inline-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 px-0"
+                >
+
+                  {this.addCardToTopBattlefield(
+                    "Sonic Assault",
+                    "{1}{U}{R}",
+                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                    "Instant",
+                    "https://img.scryfall.com/sets/grn.svg?1545022800",
+                    "Card text here"
+                  )}
+
+                  {this.addCardToTopBattlefield(
+                    "Sonic Assault",
+                    "{1}{U}{R}",
+                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
+                    "Instant",
+                    "https://img.scryfall.com/sets/grn.svg?1545022800",
+                    "Card text here"
+                  )}
+
+                </Col>
+              </Row>
+
+            </Col>
+
+            {/* Sidebar for exile,graveyard,hand,library  */}
+            <Col
+              xs="2"
+              className="side-bar-col flex-shrink-3 px-0"
+              style={
+                {
+                  "flex-basis": "10%",
+                }
+              }
+            >
+              <Sidebar></Sidebar>
+            </Col>
+          </Col>
         </Row>
 
       </Container >

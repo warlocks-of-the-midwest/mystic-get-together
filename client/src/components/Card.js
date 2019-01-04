@@ -113,7 +113,8 @@ class Card extends React.Component {
         className="card-container d-flex flex-column justify-content-center mh-100 h-100 mw-100 w-100 border rounded p-0 m-0"
         style={
           {
-            "overflow": "scroll"
+            "overflow-y": "auto",
+            "overflow-x": "hidden"
           }
         }
       >
@@ -121,42 +122,50 @@ class Card extends React.Component {
 
         {/* Card name and mana cost row */}
         <Row
-          className="card-name-cost-row d-inline-flex mx-0 px-1 justify-content-between flex-grow-5 flex-shrink-1"
+          className="card-name-cost-row d-inline-flex mx-0 px-1 justify-content-between flex-grow-0 flex-shrink-0"
           style={
             {
+              "font-size": "1.5vh",
+              "flex-basis": "2vh",
             }
           }
         >
+
           {/* Card name */}
           <Col
             xs="6"
             className="card-name-col px-0 flex-grow-5 flex-shrink-0 justify-content-start"
           >
             <p
+              className="card-name text-left mb-0 font-weight-bold"
               style={
                 {
-                  "font-size": ".4rem",
-                  "text-overflow": "hidden"
+                  "text-overflow": "ellipsis",
+                  "overflow": "hidden",
+                  "white-space": "nowrap",
+                  "min-width": "0"
                 }
               }
-              className="card-name text-left text-nowrap mb-0 font-weight-bold"
             >
               {this.props.name}
             </p>
           </Col>
 
           {/* Mana cost */}
+
           <Col
             xs="6"
             className="card-mana-cost-col px-0 flex-shrink-3 flex-grow-1 justify-content-end">
             <p
+              className="card-cost text-right text-nowrap mb-0"
               style={
                 {
-                  "font-size": ".375rem",
-                  "text-overflow": "hidden"
+                  "text-overflow": "ellipsis",
+                  "overflow": "hidden",
+                  "white-space": "nowrap",
+                  "min-width": "0"
                 }
               }
-              className="card-cost text-right text-nowrap mb-0"
             >
               {this.props.cost}
             </p>
@@ -166,11 +175,10 @@ class Card extends React.Component {
 
         {/* Image row with a col wrapper to control size of image */}
         <Row
-          className="card-art-row justify-content-center mw-100 w-100 m-0 px-1 flex-grow-1 flex-shrink-5"
+          className="card-art-row justify-content-center mw-100 w-100 m-0 px-1 flex-grow-0 flex-shrink-0"
           style={
             {
-              // "max-height": "45%"
-              "flex-basis": "55%",
+              "flex-basis": "12vh",
               "overflow": "hidden"
             }
           }
@@ -192,11 +200,11 @@ class Card extends React.Component {
 
         {/* Row for type and set logo */}
         <Row
-          className="card-type-set-row justify-content-between px-1 m-0 flex-grow-1 flex-shrink-10"
+          className="card-type-set-row justify-content-between px-1 m-0 flex-grow-0 flex-shrink-0"
           style={
             {
-              // "max-height": "10%"
-              "flex-basis": "5%"
+              "font-size": "1.5vh",
+              "flex-basis": "2vh",
             }
           }
         >
@@ -206,7 +214,6 @@ class Card extends React.Component {
             <p
               style={
                 {
-                  "font-size": ".375rem",
                   "text-overflow": "hidden"
                 }
               }
@@ -247,23 +254,24 @@ class Card extends React.Component {
 
         {/* Card text */}
         <Row
-          className="card-text-row px-1 m-0 flex-grow-1 flex-shrink-5"
-          style={{
-            // "max-height": "20%"
-            "flex-basis": "0"
-          }}
+          className="card-text-row px-1 m-0 flex-grow-0 flex-shrink-0"
+          style={
+            {
+              "font-size": "1.5vh",
+              "flex-basis": "2vh",
+            }
+          }
         >
           <Col
             xs="12"
-            className="card-text-col d-flex flex-shrink-5 flex-grow-1 p-0"
+            className="card-text-col d-flex p-0"
           >
             <p
               className="card-text text-left text-wrap mb-0"
               style={
                 {
-                  "font-size": ".4rem",
                   "text-overflow": "hidden",
-                  "overflow": "hidden"
+                  "overflow": "hidden",
                 }
               }
             >
@@ -275,38 +283,33 @@ class Card extends React.Component {
 
         {/* Power and toughness if creature */}
         <Row
-          className="card-power-toughness-row m-0 px-1 d-inline-flex flex-grow-1 flex-shrink-5"
+          className="card-power-toughness-row d-inline-flex mx-0 px-1 justify-content-between flex-grow-0 flex-shrink-0"
           style={
             {
-              // "max-height": "5%"
-              "flex-basis": "5%"
+              "font-size": "1.5vh",
+              "flex-basis": "2vh",
             }
           }
         >
           <Col
-            xs="10"
-            className="left-padding-for-power-toughness"
+            xs="8"
+            className="left-padding-for-power-toughness px-0"
           >
           </Col>
           <Col
-            xs="2"
-            className="card-power-toughness-col px-1 d-flex flex-shrink-1 flex-grow-2 clearfix"
-            style={
-              {
-                // "max-height": "5%"
-              }
-            }
+            xs="4"
+            className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end"
           >
             <p
               className="card-power-toughness float-right m-0 text-right text-nowrap"
               style={
                 {
-                  "font-size": ".4rem",
-                  "text-overflow": "hidden"
+                  "text-overflow": "hidden",
+                  "overflow": "hidden",
                 }
               }
             >
-              {/* Don't forget to add the divider when inputting power and toughness */}
+              {/* Don't forget to add the divider when inputing power and toughness */}
               {this.props.power}{this.props.divider}{this.props.toughness}
             </p>
           </Col>
