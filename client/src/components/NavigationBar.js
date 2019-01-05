@@ -48,13 +48,13 @@ class NavigationBar extends Component {
     return (
       <Container
         fluid
-        className="h-100 p-0 m-0"
+        className="d-flex p-0 m-0"
       >
 
         <Navbar
           light
           expand="lg"
-          className="bg-light mh-100 h-100 m-0 p-1 justify-content-between"
+          className="bg-light mh-100 h-100 w-100 mw-100 m-0 p-1 justify-content-between"
         >
 
 
