@@ -332,15 +332,12 @@ class Card extends React.Component {
           className="card-power-toughness-row d-inline-flex mx-0 px-1 justify-content-between flex-grow-0 flex-shrink-0"
           style={
             {
-<<<<<<< HEAD
               "height": "10%",
               "max-height": "10%",
               "flex-basis": "10%",
-              "overflow": "hidden"
-=======
+              "overflow": "hidden",
               "font-size": "1.5vh",
               "flex-basis": "2vh",
->>>>>>> 8309d20ee39176b64af443d4027764193bafe6da
             }
           }
         >
