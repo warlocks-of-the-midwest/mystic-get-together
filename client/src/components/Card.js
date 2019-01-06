@@ -283,15 +283,6 @@ class Card extends React.Component {
 
         {/* Card text */}
         <Row
-<<<<<<< HEAD
-          className="card-text-row px-1 m-0 flex-grow-1 flex-shrink-5"
-          style={{
-            "height": "20%",
-            "max-height": "20%",
-            "flex-basis": "20%",
-            "overflow": "scroll"
-          }}
-=======
           className="card-text-row px-1 m-0 flex-grow-0 flex-shrink-0"
           style={
             {
@@ -299,7 +290,6 @@ class Card extends React.Component {
               "flex-basis": "2vh",
             }
           }
->>>>>>> 8309d20ee39176b64af443d4027764193bafe6da
         >
           <Col
             xs="12"
