@@ -17,11 +17,11 @@ class Sidebar extends Component {
     return (
       <Container
         fluid
-        className="sidebar-container mh-100 h-100 mw-100 w-100"
+        className="d-flex sidebar-container mh-100 h-100 mw-100 w-100 p-0 m-0"
       >
         
         <Row
-          className="justify-start sidebar-row mh-100 h-100"
+          className="justify-start sidebar-row mh-100 h-100 mw-100 w-100 p-0 m-0"
         >
 
           {/* Exile */}

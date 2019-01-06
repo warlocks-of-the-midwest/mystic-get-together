@@ -157,11 +157,10 @@ class GameArea extends Component {
     return (
       <Container
         fluid
-        className="main-container d-flex vh-100 w-100 p-0 m-0"
+        className="main-container d-flex flex-column vh-100 mh-100 w-100 p-0 m-0"
       >
-
         <Row
-          className="main-row p-0 m-0 d-flex flex-row flex-grow-1 flex-shrink-1"
+          className="top-bar-row-wrapper p-0 m-0 d-flex flex-row flex-grow-1 flex-shrink-1"
         >
           <Col
             xs="10"
@@ -208,45 +207,34 @@ class GameArea extends Component {
                 </ButtonGroup>
               </Col>
             </Row>
-          </Col>
+            </Col>
+        </Row>
 
+
+        <Row
+          className="cards-sidebar-row-wrapper flex-grow-1 flex-shrink-1 p-0 m-0"
+        >
           <Col
-            xs="12"
-            className="battlefield-sidebar-col p-0 m-0 w-100 flex-grow-1 flex-shrink-1"
-            style={
-              {
-                "flex-basis": "90%",
-              }
-            }
+            xs="10"
+            className="battlefield-col p-0 m-0 flex-grow-1 flex-shrink-1 flex-wrap"
           >
-
             {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
-            <Col
-              xs="10"
-              className="p-0 m-0 mh-100 h-100 border"
+            <Container
+              fluid
+              className="cards-rows-container mh-100 h-100 p-0 m-0"
             >
               {/* Top row of battlefield */}
               <Row
-                className="battlefield-top-row p-0 m-0 mh-50 h-50"
-                style={
-                  {
-                    "overflow-y": "scroll",
-                    "overflow-x": "hidden"
-                  }
-                }
+                className="top-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border"
               >
                 {/* Main area for cards */}
                 <Col
-                  className="battlefield-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 px-0"
+                  xs="12"
+                  className="top-cards-row-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 mw-100 w-100 p-0 m-0"
                 >
-
-
-                  {console.log(this.state.top_row)}
                   <>
                     {
                       this.state.top_row.map((cardInfo) => {
-                        console.log("inmapping")
-                        console.log(cardInfo);
                         return (
                           <Col
                             xs="1"
@@ -345,16 +333,11 @@ class GameArea extends Component {
 
               {/* Bottom row of cards */}
               <Row
-                className="battlefield-bottom-row p-0 m-0 mh-50 h-50"
-                style={
-                  {
-                    "overflow": "auto"
-                  }
-                }
+                className="bottom-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border"
               >
                 <Col
-
-                  className="battlefield-bottom d-inline-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 px-0"
+                  xs="12"
+                  className="battlefield-bottom d-inline-flex flex-wrap justify-content-start card-row card-row-top m-0 p-0"
                 >
 
                   {this.addCardToTopBattlefield(
@@ -377,21 +360,28 @@ class GameArea extends Component {
 
                 </Col>
               </Row>
+            </Container>
+          </Col>
 
-            </Col>
-
-            {/* Sidebar for exile,graveyard,hand,library  */}
-            <Col
-              xs="2"
-              className="side-bar-col flex-shrink-3 px-0"
-              style={
-                {
-                  "flex-basis": "10%",
-                }
-              }
+          {/* Sidebar for exile,graveyard,hand,library  */}
+          <Col
+            xs="2"
+            className="sidebar-col p-0 m-0"
+          >
+            <Container
+              fluid
+              className="sidebar-col-container mh-100 h-100 mw-100 w-100 p-0 m-0"
             >
-              <Sidebar></Sidebar>
-            </Col>
+              <Row
+                className="sidebar-col-container-row mh-100 h-100 mw-100 w-100 p-0 m-0"
+              >
+                <Col
+                  className="side-bar-col-container-row-col w-100 mw-100 flex-shrink-3 p-0 m-0"
+                >
+                  <Sidebar></Sidebar>
+                </Col>
+              </Row>
+            </Container>
           </Col>
         </Row>
 

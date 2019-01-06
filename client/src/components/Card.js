@@ -168,7 +168,7 @@ class Card extends React.Component {
           {/* Card name */}
           <Col
             xs="6"
-            className="card-name-col px-0 flex-grow-5 flex-shrink-0 justify-content-start"
+            className="card-name-col px-0 flex-grow-1 flex-shrink-1 justify-content-start"
           >
             <p
               className="card-name text-left mb-0 font-weight-bold"
@@ -189,7 +189,7 @@ class Card extends React.Component {
 
           <Col
             xs="6"
-            className="card-mana-cost-col px-0 flex-shrink-3 flex-grow-1 justify-content-end">
+            className="card-mana-cost-col px-0 flex-shrink-1 flex-grow-1 justify-content-end">
             <p
               className="card-cost text-right text-nowrap mb-0"
               style={
@@ -209,7 +209,7 @@ class Card extends React.Component {
 
         {/* Image row with a col wrapper to control size of image */}
         <Row
-          className="card-art-row justify-content-center mw-100 w-100 m-0 px-1 flex-grow-0 flex-shrink-0"
+          className="card-art-row justify-content-center mw-100 w-100 m-0 px-1 flex-grow-1 flex-shrink-1"
           style={
             {
               "flex-basis": "12vh",
@@ -234,61 +234,55 @@ class Card extends React.Component {
 
         {/* Row for type and set logo */}
         <Row
-          className="card-type-set-row justify-content-between px-1 m-0 flex-grow-0 flex-shrink-0"
+          className="card-type-set-row justify-content-around px-1 m-0 flex-grow-1 flex-shrink-5"
           style={
             {
-              "font-size": "1.5vh",
-              "flex-basis": "2vh",
+              "font-size": "1vh",
+              "flex-basis": "1vh",
             }
           }
         >
           {/* Card type */}
           <Col
-            className="card-type-col d-flex px-0 h-100 mh-100 text-left">
+            className="card-type-col d-flex flex-grow-10 flex-shrink-1 px-0 h-100 mh-100 mw-100 w-100 text-left"
+            style={
+              {
+                "flex-basis": "50%",
+                "overflow": "hidden"
+              }
+            }
+          >
             <p
               style={
                 {
                   "text-overflow": "hidden"
                 }
               }
-              className="card-type mb-0 text-left text-nowrap"
+              className="card-type w-100 mw-100 mb-0 text-left text-nowrap"
             >
               {this.props.type}
             </p>
           </Col>
-
-          {/* Card set image */}
-          <Media
-            className="card-set-image-col d-flex px-0 py-0 flex-shrink-2 clearfix"
-            style={
-              {
-                "max-height": "100%",
-                "height": "100%",
-                "overflow": "hidden"
-              }
-            }
+          <Col
+            className="flex-shrink-10 flex-grow-1 p-0 m-0"
+            style={{
+              "flex-basis": "10%"
+            }}
           >
-
+            {/* Card set image */}
             <Media
               obj
-              style={
-                {
-                  "max-height": "100%",
-                  "min-height": "1vmin",
-                }
-              }
-              className="set-image img-fluid mh-100 float-right ml-auto align-top"
+              className="set-image img-fluid d-block mx-auto mh-100"
               alt="Set Image"
               src={this.props.set}
             />
-
-          </Media>
+          </Col>
         </Row>
 
 
         {/* Card text */}
         <Row
-          className="card-text-row px-1 m-0 flex-grow-0 flex-shrink-0"
+          className="card-text-row px-1 m-0 flex-grow-1 flex-shrink-1"
           style={
             {
               "font-size": "1.5vh",
@@ -309,14 +303,14 @@ class Card extends React.Component {
               title={this.props.name}
               data-content={this.props.text}
               id="Popover"
-                style={
-                  {
-                    "text-overflow": "hidden",
-                    "overflow": "hidden",
-                  }
+              style={
+                {
+                  "text-overflow": "hidden",
+                  "overflow": "hidden",
                 }
-              >
-                Card Text
+              }
+            >
+              Card Text
             </a>
           </Col>
         </Row>
@@ -324,11 +318,9 @@ class Card extends React.Component {
 
         {/* Power and toughness if creature */}
         <Row
-          className="card-power-toughness-row d-inline-flex mx-0 px-1 justify-content-between flex-grow-0 flex-shrink-0"
+          className="card-power-toughness-row d-inline-flex mx-0 px-1 justify-content-between flex-grow-1 flex-shrink-0"
           style={
             {
-              "height": "10%",
-              "max-height": "10%",
               "flex-basis": "10%",
               "overflow": "hidden",
               "font-size": "1.5vh",
