@@ -56,7 +56,10 @@ class NavigationBar extends Component {
           expand="lg"
           className="bg-light mh-100 h-100 w-100 mw-100 m-0 p-1 justify-content-between"
         >
-
+          <NavbarToggler
+            className="mh-100 h-100 m-0 p-0"
+            id="toggler"
+          />
 
           <NavbarBrand
             light
@@ -65,16 +68,8 @@ class NavigationBar extends Component {
             Mystic-The-Get-Together
           </NavbarBrand>
 
-          <div
-            className="navbar-text"
-          >
-            Life: {this.props.life}
-          </div>
 
-          <NavbarToggler
-            className="mh-100 h-100 m-0 p-0"
-            id="toggler"
-          />
+
 
           <UncontrolledCollapse
             navbar

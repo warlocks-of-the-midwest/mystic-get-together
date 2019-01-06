@@ -34,37 +34,11 @@ class GameArea extends Component {
       bottom_row: [],
     };
 
-    this.lifeComponent = this.lifeComponent.bind(this);
-    this.mainTitle = this.mainTitle.bind(this);
-    this.player1Callback = this.player1Callback.bind(this);
-    this.player1ZoneCallback = this.player1ZoneCallback.bind(this);
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
-    this.toggleCard = this.toggleCard.bind(this);
     this.addCardToTopBattlefield = this.addCardToTopBattlefield.bind(this);
-
-    sdk.listenToPlayer("player1", this.player1Callback)
-    sdk.listenToZone("player1", "zone1", this.player1ZoneCallback)
   }
 
-  player1Callback(docData) {
-    const { gameActions } = this.props;
-    gameActions.updatePlayer("player1", docData)
-  }
-
-  player1ZoneCallback(docData) {
-    const { gameActions } = this.props;
-    gameActions.updateZone("player1", "zone1", docData)
-  }
-
-  toggleCard(card) {
-    if (card["state.tapped"]) {
-      sdk.untap(card)
-    }
-    else {
-      sdk.tap(card)
-    }
-  }
 
   increment(x) {
     this.setState({
@@ -190,7 +164,7 @@ class GameArea extends Component {
           className="main-row p-0 m-0 d-flex flex-row flex-grow-1 flex-shrink-1"
         >
           <Col
-            xs="12"
+            xs="10"
             className="p-0 m-0"
             style={
               {
@@ -203,7 +177,37 @@ class GameArea extends Component {
               active="battlefield"
             >
             </NavigationBar>
+          </Col>
 
+          <Col
+            xs="2"
+            className="flex-grow-1 flex-shrink-1"
+          >
+            <Row>
+              <Col className="d-inline-flex mh-100 h-100">
+                <p5>Life: </p5> <p5 className="">{this.state.life}</p5>
+              </Col>
+              <Col xs="12" className="d-inline-flex">
+                <ButtonGroup className="d-flex" size="sm">
+                  <Button outline color="success" onClick={(state) => this.increment(1)} type="submit">
+                    +1
+                  </Button>
+                  <Button outline color="warning" onClick={(state) => this.decrement(1)} type="submit" block>
+                    -1
+                  </Button>
+                </ButtonGroup>
+              </Col>
+              <Col className="d-inline-flex">
+                <ButtonGroup className="d-flex" size="sm">
+                  <Button outline color="primary" onClick={(state) => this.increment(5)} type="submit">
+                    +5
+                  </Button>
+                  <Button outline color="danger" onClick={(state) => this.decrement(5)} type="submit" block>
+                    -5
+                  </Button>
+                </ButtonGroup>
+              </Col>
+            </Row>
           </Col>
 
           <Col

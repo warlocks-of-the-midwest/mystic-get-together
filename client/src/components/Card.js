@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import Axios from 'axios';
 import '../styles/Card.css';
 
+import 'bootstrap/dist/js/bootstrap.bundle.js';
+import $ from 'jquery';
+
 import {
   Container,
   Row,
   Col,
   Media,
   Button,
-  UncontrolledPopover,
   Popover,
   PopoverHeader,
   PopoverBody
@@ -17,6 +19,17 @@ import {
 class Card extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      popoverOpen: false
+    }
+    this.toggle = this.toggle.bind(this);
+  }
+
+  compopnentDidMount() {
+    this.setState({
+      popoverOpen: true
+    }
+    )
   }
 
   url = 'https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json';
@@ -110,6 +123,21 @@ class Card extends React.Component {
       console.log("end of async parse response function");
     }
     return cardInfo;
+  }
+
+  toggle() {
+    this.setState({
+      popoverOpen: !this.state.popoverOpen
+    });
+    console.log("in toggle");
+    console.log(this.state(this.state.popoverOpen));
+  }
+
+
+  componentDidMount() {
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
   }
 
   render() {
@@ -216,7 +244,7 @@ class Card extends React.Component {
         >
           {/* Card type */}
           <Col
-            className="card-type-col d-flex px-0 text-left">
+            className="card-type-col d-flex px-0 h-100 mh-100 text-left">
             <p
               style={
                 {
@@ -270,26 +298,26 @@ class Card extends React.Component {
         >
           <Col
             xs="12"
-            className="card-text-col d-flex p-0"
+            className="card-text-col d-flex mh-100 h-100 m-0 p-0"
           >
-            <Button id="UncontrolledPopover" type="button">
-              Launch Popover
-            </Button>
-            <UncontrolledPopover placement="bottom" target="UncontrolledPopover">
-              <PopoverHeader>Popover Title</PopoverHeader>
-              <PopoverBody>Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</PopoverBody>
-            </UncontrolledPopover>
-            <p
-              className="card-text text-left text-wrap mb-0"
-              style={
-                {
-                  "text-overflow": "hidden",
-                  "overflow": "hidden",
+            <a
+              tabIndex="0"
+              type="button"
+              className="btn btn-sm btn-danger card-text m-0 p-0 text-left text-wrap mb-0"
+              data-toggle="popover"
+              data-trigger="focus"
+              title={this.props.name}
+              data-content={this.props.text}
+              id="Popover"
+                style={
+                  {
+                    "text-overflow": "hidden",
+                    "overflow": "hidden",
+                  }
                 }
-              }
-            >
-              {this.props.text}
-            </p>
+              >
+                Card Text
+            </a>
           </Col>
         </Row>
 
