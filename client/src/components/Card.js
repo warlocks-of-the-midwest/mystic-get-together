@@ -119,12 +119,8 @@ class Card extends React.Component {
         className="card-container d-flex flex-column justify-content-center mh-100 h-100 mw-100 w-100 border rounded p-0 m-0"
         style={
           {
-<<<<<<< HEAD
-            "overflow": "hidden"
-=======
             "overflow-y": "auto",
             "overflow-x": "hidden"
->>>>>>> 8309d20ee39176b64af443d4027764193bafe6da
           }
         }
       >
@@ -135,14 +131,8 @@ class Card extends React.Component {
           className="card-name-cost-row d-inline-flex mx-0 px-1 justify-content-between flex-grow-0 flex-shrink-0"
           style={
             {
-<<<<<<< HEAD
-              "height": "10%",
-              "max-height": "10%",
-              "overflow": "hidden"
-=======
               "font-size": "1.5vh",
               "flex-basis": "2vh",
->>>>>>> 8309d20ee39176b64af443d4027764193bafe6da
             }
           }
         >
@@ -194,13 +184,7 @@ class Card extends React.Component {
           className="card-art-row justify-content-center mw-100 w-100 m-0 px-1 flex-grow-0 flex-shrink-0"
           style={
             {
-<<<<<<< HEAD
-              "height": "50%",
-              "max-height": "50%",
-              "flex-basis": "50%",
-=======
               "flex-basis": "12vh",
->>>>>>> 8309d20ee39176b64af443d4027764193bafe6da
               "overflow": "hidden"
             }
           }
@@ -225,15 +209,8 @@ class Card extends React.Component {
           className="card-type-set-row justify-content-between px-1 m-0 flex-grow-0 flex-shrink-0"
           style={
             {
-<<<<<<< HEAD
-              "height": "10%",
-              "max-height": "10%",
-              "flex-basis": "10%",
-              "overflow": "hidden"
-=======
               "font-size": "1.5vh",
               "flex-basis": "2vh",
->>>>>>> 8309d20ee39176b64af443d4027764193bafe6da
             }
           }
         >
