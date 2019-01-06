@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import '../styles/LandingPage.css';
 
-// TODO Update the href values when you know what pages they should link to
+// Attempt with flexbox
 class LandingPage extends Component {
   render() {
     return (
-      <section className="intro">
-        <div className="inner">
-          <div className="content">
-            <h1>Mystic The Get Together</h1>
+      <div>
+        <img src={require('../components/images/lotus.jpg')} alt="lotus" className="lotus" />
+        <div>
+          <h1 className="mystic">Mystic The Get-Together</h1>
+          <div className="buttonsAndSelect">
             <a className="btn" href="/">Host Game</a>
             <a className="btn" href="/">Join Game</a>
             <a className="btn" href="/">Show Deck</a>
@@ -25,7 +26,7 @@ class LandingPage extends Component {
             </select>
           </div>
         </div>
-      </section>
+      </div>
     );
   }
 }
