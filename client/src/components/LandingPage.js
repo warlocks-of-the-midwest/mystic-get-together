@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../styles/LandingPage.css';
 
-// Attempt with flexbox
 class LandingPage extends Component {
   render() {
     return (
