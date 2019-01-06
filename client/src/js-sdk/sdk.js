@@ -16,7 +16,42 @@ export function listenToPlayer(player, callback) {
     });
 }
 
+//TODO make the game id determined dynamically, not hard coded
+
 // Game functions
+// Card functions
+export function moveCardToZone(card, targetZone) {
+  var playerName = card["state.owner"];
+  card["state.zone"] = targetZone
+  db.doc(`Games/game1/Players/${playerName}/Zones/${targetZone}`)
+    .update({
+      [card.id]: card
+    })
+}
+
+export function setCardPosition(card, newPosition) {
+  //TODO may need to move all other cards in the zone to accomodate new card?
+  var playerName = card["state.owner"];
+  var zoneName = card["state.zone"];
+  card["state.position"] = newPosition
+  db.doc(`Games/game1/Players/${playerName}/Zones/${targetZone}`)
+    .update({
+      [card.id]: card
+    })
+}
+
+export function shuffle(targetPlayer, targetZone) {
+  //TODO
+}
+
+export function remove(card) {
+  //TODO
+}
+
+export function changeController(card, targetPlayer, targetZone) {
+  //TODO
+}
+
 export function tap(card) {
   var playerName = card["state.owner"];
   var zoneName = card["state.zone"];
@@ -37,11 +72,54 @@ export function untap(card) {
     })
 }
 
+export function clone(card, shouldCreateToken) {
+  //TODO
+}
+
+export function flip(card) {
+  //TODO
+}
+
+export function createToken(tokenScryfallId, targetPlayer, targetZone, power, toughness) {
+  //TODO uhh not sure
+  //TODO fill in parameters in google drive doc once done with this
+}
+
+export function setCounters(card, counterType, numCounters) {
+  //TODO
+}
+
+export function setAttachedPermanents(card, attachedPermanents) {
+  //TODO
+}
+
+//Player functions
 export function updateLife(player, newLife) {
   db.doc(`Games/game1/Players/${player}`)
     .update({
       life: newLife
     })
+}
+
+export function setCounters(player, counterType, numCounters) {
+  //TODO
+}
+
+export function loseGame(player) {
+  //TODO
+}
+
+export function winGame(player) {
+  //TODO
+}
+
+export function drawGame() {
+  //TODO
+}
+
+//Deck functions
+export function getAvailableDecks(player) {
+  //TODO
 }
 
 // Methods for interacting with Cloud Functions
