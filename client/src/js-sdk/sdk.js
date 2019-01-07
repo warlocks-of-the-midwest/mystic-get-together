@@ -1,4 +1,4 @@
-import { db, FIREBASE_FUNCTION_BASE_URL } from './fire';
+import db, { FIREBASE_FUNCTION_BASE_URL } from './fire.js';
 import axios from 'axios';
 
 // Listeners
@@ -30,26 +30,102 @@ export function moveCardToZone(card, targetZone) {
 }
 
 export function setCardPosition(card, newPosition) {
-  //TODO may need to move all other cards in the zone to accomodate new card?
   var playerName = card["state.owner"];
   var zoneName = card["state.zone"];
-  card["state.position"] = newPosition
-  db.doc(`Games/game1/Players/${playerName}/Zones/${targetZone}`)
-    .update({
-      [card.id]: card
-    })
+  var currentZoneData;
+  db.doc(`Games/game1/Players/${player}/Zones/${zoneName}`).get().then(function(doc) {
+    currentZoneData = doc.data();
+  });
+  
+  // Move all other cards that are now below this one down.
+  var previousPosition = card["state.position"]
+  for (var cardId in currentZoneData) {
+    if (currentZoneData.hasOwnProperty(cardId) && cardId != card.id) {
+      if (cardId != card.id) {
+        var cardPosition = currentZoneData[cardId]["state.position"]
+        if (cardPosition >= newPosition && cardPosition < previousPosition) {
+          currentZoneData[cardId]["state.position"] = cardPosition + 1;
+        }
+      } else {
+        currentZoneData[cardId]["state.position"] = newPosition
+      }
+    }
+  }
+
+  db.doc(`Games/game1/Players/${playerName}/Zones/${zoneName}`)
+    .set(currentZoneData);
 }
 
+/**
+ * Randomly shuffle an array
+ * https://stackoverflow.com/a/2450976/1293256
+ * @param  {Array} array The array to shuffle
+ * @return {String}      The first item in the shuffled array
+ */
+function shuffleArray(array) {
+	var currentIndex = array.length;
+	var temporaryValue, randomIndex;
+
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+
+		// And swap it with the current element.
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
+
+	return array;
+};
+
 export function shuffle(targetPlayer, targetZone) {
-  //TODO
+  //TODO move all other cards in the zone
+  var currentZoneData;
+  db.doc(`Games/game1/Players/${targetPlayer}/Zones/${targetZone}`).get().then(function(doc) {
+    currentZoneData = doc.data();
+  });
+
+  var numCards = Object.keys(currentZoneData).length
+  var newOrdering = [];
+  for (var i = 0; i < numCards; i++) {
+    newOrdering.push(i);
+  }
+  shuffleArray(newOrdering)
+  
+  // Move all cards to shuffled positions
+  var i = 0;
+  for (var cardId in currentZoneData) {
+    if (currentZoneData.hasOwnProperty(cardId)) {
+      currentZoneData[cardId]["state.position"] = newOrdering[i];
+      i++;
+    }
+  }
+
+  db.doc(`Games/game1/Players/${targetPlayer}/Zones/${targetZone}`)
+    .set(currentZoneData);
 }
 
 export function remove(card) {
-  //TODO
+  var playerName = card["state.owner"];
+  var zoneName = card["state.zone"];
+  card["state.position"] = newPosition
+  db.doc(`Games/game1/Players/${playerName}/Zones/${zoneName}`)
+    .update({
+      [card.id]: firebase.firestore.FieldValue.delete()
+  });
 }
 
 export function changeController(card, targetPlayer, targetZone) {
-  //TODO
+  // First remove card from previous controller's zone
+  remove(card);
+  card["state.controller"] = targetPlayer
+  db.doc(`Games/game1/Players/${targetPlayer}/Zones/${targetZone}`)
+    .update({
+      [card.id]: card
+  });
 }
 
 export function tap(card) {
@@ -73,11 +149,26 @@ export function untap(card) {
 }
 
 export function clone(card, shouldCreateToken) {
-  //TODO
+  // deep copy the card
+  var cardCopy = JSON.parse(JSON.stringify(card))
+  cardCopy["state.is_token"] = shouldCreateToken
+  // TODO how do we plan to create/set card id? just incremented numbers?
+  // They need to be unique across all cards, so not sure what do do here now.
+  cardCopy.id = "newCardId"
+  db.doc(`Games/game1/Players/${playerName}/Zones/${zoneName}`)
+    .update({
+      [cardCopy.id]: cardCopy
+    })
 }
 
 export function flip(card) {
-  //TODO
+  var playerName = card["state.owner"];
+  var zoneName = card["state.zone"];
+  card["state.face_up"] = !card["state.face_up"]
+  db.doc(`Games/game1/Players/${playerName}/Zones/${zoneName}`)
+    .update({
+      [card.id]: card
+    })
 }
 
 export function createToken(tokenScryfallId, targetPlayer, targetZone, power, toughness) {
@@ -86,11 +177,25 @@ export function createToken(tokenScryfallId, targetPlayer, targetZone, power, to
 }
 
 export function setCounters(card, counterType, numCounters) {
-  //TODO
+  var playerName = card["state.owner"];
+  var zoneName = card["state.zone"];
+  var currentCounters = card["attachments.counters"]
+  currentCounters[counterType] = numCounters
+  card["attachments.counters"] = currentCounters
+  db.doc(`Games/game1/Players/${playerName}/Zones/${zoneName}`)
+    .update({
+      [card.id]: card
+    })
 }
 
 export function setAttachedPermanents(card, attachedPermanents) {
-  //TODO
+  var playerName = card["state.owner"];
+  var zoneName = card["state.zone"];
+  card["attachments.permanents"] = attachedPermanents
+  db.doc(`Games/game1/Players/${playerName}/Zones/${zoneName}`)
+    .update({
+      [card.id]: card
+    })
 }
 
 //Player functions
@@ -102,25 +207,35 @@ export function updateLife(player, newLife) {
 }
 
 export function setCounters(player, counterType, numCounters) {
-  //TODO
+  var currentCounters;
+  db.doc(`Games/game1/Players/${player}`).get().then(function(doc) {
+    currentCounters = doc.data().counters
+  });
+  currentCounters[counterType] = numCounters
+  db.doc(`Games/game1/Players/${player}`)
+    .update({
+      counters: currentCounters
+    })
 }
 
+//TODO I don't believe there is anything for the game status in our schema currently
+// we can just ignore these for now if we decide not to include them
 export function loseGame(player) {
-  //TODO
 }
-
 export function winGame(player) {
-  //TODO
 }
-
 export function drawGame() {
-  //TODO
 }
 
 //Deck functions
-export function getAvailableDecks(player) {
-  //TODO
+export function getAvailableDecks(user) {
+  var deckData;
+  db.doc(`Users/${user}`).get().then(function(doc) {
+    deckData = doc.data().decks
+  });
+  return Object.keys(deckData);
 }
+
 
 // Methods for interacting with Cloud Functions
 // TODO: Once we get Firebase Auth setup, we should convert our Functions

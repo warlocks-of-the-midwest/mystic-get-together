@@ -10,7 +10,7 @@ var config = {
     messagingSenderId: "847755874279"
 };
 
-var app = firebase.initializeApp(config);
+export const app = firebase.initializeApp(config);
 var db = firebase.firestore(app);
 
 db.settings({
@@ -18,5 +18,4 @@ db.settings({
 });
 
 export default db;
-export const app;
 export const FIREBASE_FUNCTION_BASE_URL = '';
