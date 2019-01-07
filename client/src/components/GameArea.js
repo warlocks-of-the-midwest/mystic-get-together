@@ -15,6 +15,7 @@ class GameArea extends Component {
     this.player1ZoneCallback = this.player1ZoneCallback.bind(this);
     this.increment = this.increment.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
+    this.testSdk = sdk;
 
     sdk.listenToPlayer("player1", this.player1Callback)
     sdk.listenToZone("player1", "zone1", this.player1ZoneCallback)
@@ -35,6 +36,7 @@ class GameArea extends Component {
   }
 
   toggleCard(card) {
+    sdk.setCardPosition(card, 2)
     if (card["state.tapped"]) {
       sdk.untap(card)
     }
