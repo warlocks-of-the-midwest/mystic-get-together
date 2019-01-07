@@ -6,6 +6,7 @@ import configureStore from './redux/store';
 import GameContainer from './containers/GameContainer';
 import * as serviceWorker from './serviceWorker';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 
 const app = (
