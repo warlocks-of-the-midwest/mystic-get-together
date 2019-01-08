@@ -62,7 +62,7 @@ class Card extends React.Component {
   static async getScryFallCardInfo(url) {
     const responsePromise = async () => {
       try {
-        const response = await Axios.get('https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json')
+        const response = await Axios.get(url)
         return response.data;
       }
       catch (e) {

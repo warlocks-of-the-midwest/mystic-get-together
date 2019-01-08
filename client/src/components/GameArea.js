@@ -23,7 +23,7 @@ import {
 import Axios from 'axios';
 
 class GameArea extends Component {
-  url = 'https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json';
+  lordyUrl = 'https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json';
 
   constructor(props) {
     super(props);
@@ -78,40 +78,20 @@ class GameArea extends Component {
     );
   }
 
-  async t() {
-    const getcard = () => {
-      const responsePromise = async () => {
-        try {
-          const response = await Axios.get(this.url)
-          console.log("axios response should be returned: " + response.data);
-          this.setState((state) => {
-            var arr = state.top_row.slice();
-            arr.push(response.data);
-            return { top_row: arr }
-          })
-          console.log("this.state.top_row " + this.state.top_row.length);
-          return responsePromise.data;
-        }
-        catch (e) {
-          console.log(e);
-          return e;
-        }
-        finally {
-          console.log("returning from axios fetch card try");
-        }
-      }
-      console.log("call async function to fetch card info from scryfall");
-      responsePromise();
-    }
-    return await getcard();
-  }
-
   componentDidMount() {
-    this.u("url");
-    // this.forceUpdate();
+    this.fetchCard(this.lordyUrl);
+    this.fetchCard("https://api.scryfall.com/cards/cc61a398-cf16-415b-b3cf-897217dc7cc9?format=json&pretty=true");
+    this.fetchCard("https://api.scryfall.com/cards/e16e4f85-9611-4d5f-a7d9-4a5961dd7182?format=json&pretty=true");
+    this.fetchCard("https://api.scryfall.com/cards/54a0afaa-f99f-4c7a-9fa1-c6a46dfb2a29?format=json&pretty=true");
+    this.fetchCard("https://api.scryfall.com/cards/086a0591-718f-4a33-a5f5-e9265468c3ad?format=json&pretty=true");
+    this.fetchCard("https://api.scryfall.com/cards/3ed39bd7-d059-4a44-9f03-0f628dcdb119?format=json&pretty=true");
+    this.fetchCard("https://api.scryfall.com/cards/b0e0ef27-3db2-4976-b9db-13e3d7cd795d?format=json&pretty=true");
+    this.fetchCard("https://api.scryfall.com/cards/544a06f8-75fe-41b6-81dc-c9a0358f03c5?format=json&pretty=true");
+    this.fetchCard("https://api.scryfall.com/cards/06750380-a9a9-4ab4-a03b-d4d35a31132a?format=json&pretty=true");
   }
 
-  async u(url) {
+  // Fetch a card given it's scryfall api url.
+  async fetchCard(url) {
     const cardInfo = await Card.getScryFallCardInfo(url);
     this.setState((state) => {
       var arr = state.top_row.slice();
@@ -133,7 +113,8 @@ class GameArea extends Component {
               "max-height": "50%",
             }
           }
-          className="p-0">
+          className="p-0"
+        >
           <Card
             name={this.state.top_row[0][0]}
             cost={this.state.top_row[0][1]}
@@ -161,6 +142,11 @@ class GameArea extends Component {
       >
         <Row
           className="top-bar-row-wrapper p-0 m-0 d-flex flex-row flex-grow-1 flex-shrink-1"
+          style={
+            {
+              "flex-basis": "10%"
+            }
+          }
         >
           <Col
             xs="10"
@@ -207,12 +193,17 @@ class GameArea extends Component {
                 </ButtonGroup>
               </Col>
             </Row>
-            </Col>
+          </Col>
         </Row>
 
 
         <Row
-          className="cards-sidebar-row-wrapper flex-grow-1 flex-shrink-1 p-0 m-0"
+          className="cards-sidebar-row-wrapper flex-row flex-grow-5 flex-shrink-1 p-0 m-0"
+          style={
+            {
+              "flex-basis": "90%"
+            }
+          }
         >
           <Col
             xs="10"
@@ -262,71 +253,6 @@ class GameArea extends Component {
                       })
                     }
                   </>
-
-                  {this.addCardToTopBattlefield(
-                    "Sonic Assault",
-                    "{1}{U}{R}",
-                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                    "Instant",
-                    "https://img.scryfall.com/sets/grn.svg?1545022800",
-                    "Card text here"
-                  )}
-                  {this.addCardToTopBattlefield(
-                    "Sonic Assault",
-                    "{1}{U}{R}",
-                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                    "Instant",
-                    "https://img.scryfall.com/sets/grn.svg?1545022800",
-                    "Card text here"
-                  )}
-                  {this.addCardToTopBattlefield(
-                    "Sonic Assault",
-                    "{1}{U}{R}",
-                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                    "Instant",
-                    "https://img.scryfall.com/sets/grn.svg?1545022800",
-                    "Card text here"
-                  )}
-                  {this.addCardToTopBattlefield(
-                    "Sonic Assault",
-                    "{1}{U}{R}",
-                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                    "Instant",
-                    "https://img.scryfall.com/sets/grn.svg?1545022800",
-                    "Card text here"
-                  )}
-                  {this.addCardToTopBattlefield(
-                    "Sonic Assault",
-                    "{1}{U}{R}",
-                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                    "Instant",
-                    "https://img.scryfall.com/sets/grn.svg?1545022800",
-                    "Card text here"
-                  )}
-                  {this.addCardToTopBattlefield(
-                    "Sonic Assault",
-                    "{1}{U}{R}",
-                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                    "Instant",
-                    "https://img.scryfall.com/sets/grn.svg?1545022800",
-                    "Card text here"
-                  )}
-                  {this.addCardToTopBattlefield(
-                    "Sonic Assault",
-                    "{1}{U}{R}",
-                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                    "Instant",
-                    "https://img.scryfall.com/sets/grn.svg?1545022800",
-                    "Card text here"
-                  )}
-                  {this.addCardToTopBattlefield(
-                    "Sonic Assault",
-                    "{1}{U}{R}",
-                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                    "Instant",
-                    "https://img.scryfall.com/sets/grn.svg?1545022800",
-                    "Card text here"
-                  )}
 
                 </Col>
               </Row>
