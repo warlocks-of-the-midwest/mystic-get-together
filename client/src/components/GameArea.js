@@ -36,7 +36,6 @@ class GameArea extends Component {
 
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
-    this.addCardToTopBattlefield = this.addCardToTopBattlefield.bind(this);
   }
 
 
@@ -74,37 +73,6 @@ class GameArea extends Component {
         top_row: arr
       };
     });
-  }
-
-  getScryfallCards() {
-    var arr = this.state.top_row.map((cardInfo) => {
-      return (
-        <Col
-          xs="1"
-          style={
-            {
-              "min-width": "80px",
-              "max-height": "50%",
-            }
-          }
-          className="p-0"
-        >
-          <Card
-            name={this.state.top_row[0][0]}
-            cost={this.state.top_row[0][1]}
-            image={this.state.top_row[0][2]}
-            type={this.state.top_row[0][3]}
-            set={this.state.top_row[0][4]}
-            text={this.state.top_row[0][5]}
-            power={this.state.top_row[0][6]}
-            divider={this.state.top_row[0][6] ? "/" : ""}
-            toughness={this.state.top_row[0][7]}
-          >
-          </Card >
-        </Col>
-      );
-    });
-    return arr;
   }
 
   render() {
@@ -239,24 +207,6 @@ class GameArea extends Component {
                   xs="12"
                   className="battlefield-bottom d-inline-flex flex-wrap justify-content-start card-row card-row-top m-0 p-0"
                 >
-
-                  {this.addCardToTopBattlefield(
-                    "Sonic Assault",
-                    "{1}{U}{R}",
-                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                    "Instant",
-                    "https://img.scryfall.com/sets/grn.svg?1545022800",
-                    "Card text here"
-                  )}
-
-                  {this.addCardToTopBattlefield(
-                    "Sonic Assault",
-                    "{1}{U}{R}",
-                    "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                    "Instant",
-                    "https://img.scryfall.com/sets/grn.svg?1545022800",
-                    "Card text here"
-                  )}
 
                 </Col>
               </Row>

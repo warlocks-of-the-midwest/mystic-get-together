@@ -67,57 +67,7 @@ class Card extends React.Component {
     const data = await responsePromise();
     return Card.parseScryfallData(data);
   }
-
-  static async getInfoScryfall(resolve, reject, x) {
-    var response;
-    try {
-      response = await JSON.parse(Axios.get(x));
-      console.log("got response: " + response.data);
-      console.log("parsing response");
-    }
-    catch (e) {
-      console.log(e)
-    }
-
-    resolve(response);
-  }
-
-  static async getScryfallCard(x) {
-    console.log("in getscryfallcard with url: " + x);
-    var cardInfo = [];
-    var response;
-    response = Card.getInfoScryfall(x);
-
-
-    // var parse = async () => {
-    //   var msg = await response();
-    if (response.data) {
-      console.log("inside msg parsing");
-      var jsonObj = response.data;
-      var name = jsonObj.name;
-      var mana_cost = jsonObj.mana_cost;
-      var image_uri_art_crop = jsonObj.image_uris.art_crop;
-      var type_line = jsonObj.type_line;
-      var set = jsonObj.set_uri;
-      var setName = set.match("/\w+$/")
-      var set_image = "https://img.scryfall.com/sets/" + setName + ".svg?1545627600"
-      var oracle_text = jsonObj.oracle_text;
-      var power = jsonObj.power;
-      var toughness = jsonObj.toughness;
-      cardInfo = [name,
-        mana_cost,
-        image_uri_art_crop,
-        type_line,
-        set_image,
-        oracle_text,
-        power,
-        toughness
-      ];
-      console.log("end of async parse response function");
-    }
-    return cardInfo;
-  }
-
+  
   toggle() {
     this.setState({
       popoverOpen: !this.state.popoverOpen
