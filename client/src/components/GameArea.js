@@ -52,60 +52,6 @@ class GameArea extends Component {
     })
   }
 
-  addCardToTopBattlefield(name, cost, img, type, set, text, power, toughness) {
-    return (
-      <Col
-        xs="1"
-        style={
-          {
-            "min-width": "80px",
-            "max-height": "50%",
-          }
-        }
-        className="p-0"
-      >
-
-        <Card
-          name={name}
-          cost={cost}
-          image={img}
-          type={type}
-          set={set}
-          text={text}
-        />
-
-      </Col>
-    );
-  }
-
-  async t() {
-    const getcard = () => {
-      const responsePromise = async () => {
-        try {
-          const response = await Axios.get(this.url)
-          console.log("axios response should be returned: " + response.data);
-          this.setState((state) => {
-            var arr = state.top_row.slice();
-            arr.push(response.data);
-            return { top_row: arr }
-          })
-          console.log("this.state.top_row " + this.state.top_row.length);
-          return responsePromise.data;
-        }
-        catch (e) {
-          console.log(e);
-          return e;
-        }
-        finally {
-          console.log("returning from axios fetch card try");
-        }
-      }
-      console.log("call async function to fetch card info from scryfall");
-      responsePromise();
-    }
-    return await getcard();
-  }
-
   componentDidMount() {
     this.u("url");
     // this.forceUpdate();
