@@ -52,6 +52,7 @@ class GameArea extends Component {
     })
   }
 
+<<<<<<< HEAD
   addCardToTopBattlefield(name, cost, img, type, set, text, power, toughness) {
     return (
       <Col
@@ -78,6 +79,8 @@ class GameArea extends Component {
     );
   }
 
+=======
+>>>>>>> 07e72a560ba63e2e8e45c3ddb5e00568638dc160
   componentDidMount() {
     this.fetchCard(this.lordyUrl);
     this.fetchCard("https://api.scryfall.com/cards/cc61a398-cf16-415b-b3cf-897217dc7cc9?format=json&pretty=true");

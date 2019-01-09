@@ -25,13 +25,6 @@ class Card extends React.Component {
     this.toggle = this.toggle.bind(this);
   }
 
-  compopnentDidMount() {
-    this.setState({
-      popoverOpen: true
-    }
-    )
-  }
-
   url = 'https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json';
 
   static parseScryfallData(data) {
