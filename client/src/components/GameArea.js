@@ -86,7 +86,8 @@ class GameArea extends Component {
           className="top-bar-row-wrapper p-0 m-0 d-flex flex-row flex-grow-1 flex-shrink-1"
           style={
             {
-              "flex-basis": "10%"
+              "flex-basis": "10%",
+              "overflow": "auto"
             }
           }
         >
