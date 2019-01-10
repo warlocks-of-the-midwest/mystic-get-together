@@ -8,6 +8,7 @@ import GameContainer from './containers/GameContainer';
 import LandingPage from './components/LandingPage';
 import * as serviceWorker from './serviceWorker';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 
 const app = () => (
