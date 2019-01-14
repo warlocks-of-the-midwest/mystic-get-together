@@ -259,7 +259,7 @@ class Card extends React.Component {
             <a
               tabIndex="0"
               type="button"
-              className="btn btn-sm btn-danger card-text m-0 p-0 align-middle text-left text-wrap mb-0"
+              className="btn btn-sm btn-danger card-text m-0 p-0 align-middle text-left text-wrap mb-0 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
               title={this.props.name}
