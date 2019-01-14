@@ -111,11 +111,13 @@ class Card extends React.Component {
           {/* Card name */}
           <Col
             xs="6"
+
             className="card-name-col pl-0 pr-1 flex-grow-0 flex-shrink-2 justify-content-start"
             style={{
               "flex-basis": "5%",
               "max-width": "80%"
             }}
+
           >
             <p
               className="card-name text-left mb-0 font-weight-bold"
@@ -156,11 +158,13 @@ class Card extends React.Component {
         </Row>
 
 
+
         {/* Image row with a col wrapper to control size of image */}
         <Row
           className="card-art-row justify-content-center mw-100 w-100 m-0 px-1 flex-grow-1 flex-shrink-1"
           style={
             {
+
               "flex-basis": "40%",
               "overflow": "hidden"
             }
@@ -172,6 +176,7 @@ class Card extends React.Component {
           >
             <Media
               obj
+
               className="card-art-image img-fluid d-block mx-auto h-100 mh-100 w-100 mw-100"
               alt="Card Art"
               src={this.props.image}
@@ -194,7 +199,7 @@ class Card extends React.Component {
         >
           {/* Card type */}
           <Col
-            className="card-type-col d-flex flex-grow-10 flex-shrink-1 align-items-center px-0 h-100 mh-100 mw-100 w-100 text-left"
+            className="card-type-col d-flex flex-grow-10 flex-shrink-1 align-items-center px-0 h-100 mh-100 mw-100 w-100 text-left
             style={
               {
                 "flex-basis": "50%",
@@ -205,6 +210,7 @@ class Card extends React.Component {
             <p
               style={
                 {
+
                   "text-overflow": "hidden",
                 }
               }
@@ -218,11 +224,13 @@ class Card extends React.Component {
             style={{
               "flex-basis": "10%",
               "overflow": "hidden",
+
             }}
           >
             {/* Card set image */}
             <Media
               obj
+
               className="set-image img-fluid d-block mx-auto align-self-baseline"
               alt="Set Image"
               src={this.props.set}
