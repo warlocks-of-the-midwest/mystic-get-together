@@ -199,7 +199,7 @@ class Card extends React.Component {
         >
           {/* Card type */}
           <Col
-            className="card-type-col d-flex flex-grow-10 flex-shrink-1 align-items-center px-0 h-100 mh-100 mw-100 w-100 text-left
+            className="card-type-col d-flex flex-grow-10 flex-shrink-1 align-items-center px-0 h-100 mh-100 mw-100 w-100 text-left"
             style={
               {
                 "flex-basis": "50%",
