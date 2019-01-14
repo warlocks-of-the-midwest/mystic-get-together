@@ -255,7 +255,7 @@ class Card extends React.Component {
             xs="12"
             className="card-text-col d-flex align-items-stretch mh-100 h-100 m-0 p-0"
           >
-            <a
+            <button
               tabIndex="0"
               type="button"
               className="btn btn-sm btn-danger card-text m-0 p-0 align-middle text-left text-wrap mb-0 mw-100 w-100"
@@ -274,7 +274,7 @@ class Card extends React.Component {
               }
             >
               {this.props.text}
-            </a>
+            </button>
           </Col>
         </Row>
 
