@@ -1,0 +1,75 @@
+
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+
+img.lotus {
+  /* Fill background. Here min-width is the width of this specific image. */
+  min-height: 100%;
+  min-width: 1920px;
+
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+
+  /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  /* Send to the back */
+  z-index: -1;
+}
+
+/* The max-width is equal to the width of this specific image. This rule will
+center the image if the browser's width becomes less than the image's width. */
+@media screen and (max-width: 1920px) {
+  img.lotus {
+    left: 50%;
+    margin-left: -960px;   /* 50% */
+  }
+}
+
+.mystic {
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    color: #F9F3F4;
+    text-shadow: 0px 0px 300px #000;
+    font-size: 300%
+}
+
+.buttonsAndSelect {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.btn, select {
+    border-radius: 9px;
+    margin: 5px;
+    font-family: 'Oswald', sans-serif;
+    color: #036A81;
+    font-size: 135%;
+    padding: 10px 20px;
+    border: solid #036A81 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.btn:hover {
+    color: #fff;
+    border: solid #fff 3px;
+}
+
+@media screen and (max-width: 768px) {
+    .mystic {
+        font-size: 250%
+    }
+    .btn {
+        font-size: 110%;
+        padding: 7px 15px;
+    }
+}
+
+.App {
+  text-align: center;
+}
