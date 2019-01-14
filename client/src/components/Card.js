@@ -218,7 +218,6 @@ class Card extends React.Component {
               >
                 {this.props.type}
               </p>
-            </a>
           </Col>
           <Col
             className="flex-shrink-10 set-image-col align-items-baseline flex-grow-1 p-0 m-0 mh-100"
