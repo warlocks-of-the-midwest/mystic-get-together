@@ -13,12 +13,14 @@ class GameArea extends Component {
     super(props);
     this.player1Callback = this.player1Callback.bind(this);
     this.player1ZoneCallback = this.player1ZoneCallback.bind(this);
+    this.player1Zone2Callback = this.player1Zone2Callback.bind(this);
     this.increment = this.increment.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
     this.testSdk = sdk;
 
-    sdk.listenToPlayer("player1", this.player1Callback)
-    sdk.listenToZone("player1", "zone1", this.player1ZoneCallback)
+    sdk.listenToPlayer(this.props.gameState.gameId, "player1", this.player1Callback)
+    sdk.listenToZone(this.props.gameState.gameId, "player1", "zone1", this.player1ZoneCallback)
+    sdk.listenToZone(this.props.gameState.gameId, "player1", "zone2", this.player1Zone2Callback)
   }
 
   player1Callback(docData) {
@@ -31,25 +33,29 @@ class GameArea extends Component {
     gameActions.updateZone("player1", "zone1", docData)
   }
 
+  player1Zone2Callback(docData) {
+    const { gameActions } = this.props;
+    gameActions.updateZone("player1", "zone2", docData)
+  }
+
   increment(newLife) {
-    sdk.updateLife("player1", newLife)
+    sdk.updateLife(this.props.gameState.gameId, "player1", newLife)
   }
 
   toggleCard(card) {
-    sdk.setCardPosition(card, 2)
     if (card["state.tapped"]) {
-      sdk.untap(card)
+      sdk.untap(this.props.gameState.gameId, card)
     }
     else {
-      sdk.tap(card)
+      sdk.tap(this.props.gameState.gameId, card)
     }
   }
 
   render() {
     const { gameState } = this.props;
     const { life } = gameState.Players.player1;
-    const { card1 } = gameState.Players.player1.Zones.zone1;
-    const { card2 } = gameState.Players.player1.Zones.zone1;
+    const { card1 } = gameState.Players.player1.Zones.zone2;
+    const { card2 } = gameState.Players.player1.Zones.zone2;
 
     return (
       <div className="game-area">
