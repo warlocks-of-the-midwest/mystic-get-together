@@ -67,7 +67,7 @@ class Card extends React.Component {
     const data = await responsePromise();
     return Card.parseScryfallData(data);
   }
-  
+
   toggle() {
     this.setState({
       popoverOpen: !this.state.popoverOpen
@@ -129,7 +129,7 @@ class Card extends React.Component {
                 }
               }
             >
-              <small>{this.props.name}</small>
+              {this.props.name}
             </p>
           </Col>
 
@@ -152,7 +152,7 @@ class Card extends React.Component {
                 }
               }
             >
-              <small>{this.props.cost}</small>
+              {this.props.cost}
             </p>
           </Col>
         </Row>
@@ -211,13 +211,14 @@ class Card extends React.Component {
               style={
                 {
 
-                  "text-overflow": "hidden",
+                    "text-overflow": "hidden",
+                  }
                 }
-              }
-              className="card-type w-100 mw-100 mb-0 align-middle text-left text-nowrap"
-            >
-              <small>{this.props.type}</small>
-            </p>
+                className="card-type w-100 mw-100 mb-0 align-middle text-left text-nowrap"
+              >
+                {this.props.type}
+              </p>
+            </a>
           </Col>
           <Col
             className="flex-shrink-10 set-image-col align-items-baseline flex-grow-1 p-0 m-0 mh-100"
@@ -274,7 +275,7 @@ class Card extends React.Component {
                 }
               }
             >
-              <small>{this.props.text}</small>
+              {this.props.text}
             </a>
           </Col>
         </Row>
@@ -312,7 +313,7 @@ class Card extends React.Component {
               }
             >
               {/* Don't forget to add the divider when inputing power and toughness */}
-              <small>{this.props.power}{this.props.divider}{this.props.toughness}</small>
+              {this.props.power}{this.props.divider}{this.props.toughness}
             </p>
           </Col>
         </Row>
