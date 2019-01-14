@@ -210,14 +210,13 @@ class Card extends React.Component {
             <p
               style={
                 {
-
-                    "text-overflow": "hidden",
-                  }
+                  "text-overflow": "hidden",
                 }
-                className="card-type w-100 mw-100 mb-0 align-middle text-left text-nowrap"
-              >
-                {this.props.type}
-              </p>
+              }
+              className="card-type w-100 mw-100 mb-0 align-middle text-left text-nowrap"
+            >
+              {this.props.type}
+            </p>
           </Col>
           <Col
             className="flex-shrink-10 set-image-col align-items-baseline flex-grow-1 p-0 m-0 mh-100"
