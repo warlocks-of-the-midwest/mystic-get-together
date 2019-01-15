@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import * as sdk from '../js-sdk/sdk'
+import ZoneModal from './ZoneWrapper.js';
 
 import '../styles/Sidebar.css';
 
@@ -41,7 +42,7 @@ class Sidebar extends Component {
           className="justify-start sidebar-row mh-100 h-100"
         >
 
-          {/* Exile */}
+          {/* Hand */}
           <Col
             xs="12"
             className="border p-1"
@@ -60,43 +61,9 @@ class Sidebar extends Component {
 
           </Col>
 
-          {/* Graveyard */}
-          <Col
-            xs="12"
-            className="border p-1"
-          >
-            
-            <h6
-              className="font-weight-bold text-wrap"
-              style={
-                {
-                  "font-size": "50%"
-                }
-              }
-            >
-              Exile
-            </h6>
+          <ZoneModal name="Exile" cardlist=""/>
 
-          </Col>
-
-          {/* Hand */}
-          <Col
-            xs="12"
-            className="border p-1"
-          >
-            
-            <h6
-              className="font-weight-bold text-wrap"
-              style={
-                {
-                  "font-size": "50%"
-                }
-              }
-            >
-              Grave
-            </h6>
-
-          </Col>
+          <ZoneModal name="Graveyard" cardlist=""/>
 
           {/* Library */}
           <Col
