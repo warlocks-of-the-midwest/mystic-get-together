@@ -119,7 +119,6 @@ class GameArea extends Component {
           }
         }
       >
-      <div id="modal-root"></div>
 
         <Row
           className="top-nav-row p-0 m-0"
