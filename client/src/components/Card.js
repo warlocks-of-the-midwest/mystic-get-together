@@ -72,8 +72,6 @@ class Card extends React.Component {
     this.setState({
       popoverOpen: !this.state.popoverOpen
     });
-    console.log("in toggle");
-    console.log(this.state(this.state.popoverOpen));
   }
 
 
