@@ -23,6 +23,7 @@ class Card extends React.Component {
       popoverOpen: false
     };
     this.toggle = this.toggle.bind(this);
+    this.isCreature = this.isCreature.bind(this);
   }
 
   url =
@@ -80,6 +81,21 @@ class Card extends React.Component {
     $(function() {
       $('[data-toggle="popover"]').popover();
     });
+    this.isCreature();
+  }
+
+  isCreature() {
+    if (this.props.power) {
+      console.log("has power");
+      this.setState(state => ({
+        isCreature: String(this.props.power + "/" + this.props.toughness)
+      }));
+    } else {
+      console.log("doesn't have power");
+      this.setState(state => ({
+        isCreature: "non-creature"
+      }));
+    }
   }
 
   render() {
@@ -96,26 +112,20 @@ class Card extends React.Component {
         <Row
           className="card-name-cost-row d-inline-flex flex-nowrap mw-100 mx-0 px-1 justify-content-between flex-grow-0 flex-shrink-0"
           style={{
-            "font-size": "1.5vh",
-            "flex-basis": "2vh"
+            "font-size": "2vh"
           }}
         >
           {/* Card name */}
           <Col
-            xs="6"
-            className="card-name-col pl-0 pr-1 flex-grow-0 flex-shrink-2 justify-content-start"
-            style={{
-              "flex-basis": "5%",
-              "max-width": "80%"
-            }}
+            className="card-name-col p-0 m-0 flex-grow-3 flex-shrink-1 justify-content-start"
+            style={{}}
           >
             <button
               tabIndex="0"
               type="button"
               color="link"
-              block
               size="sm"
-              className="card-name-pop text-dark bg-transparent m-0 p-0 align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
+              className="card-name-pop text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-left text-nowrap mh-100 h-100 mw-100"
               s
               data-toggle="popover"
               data-trigger="focus"
@@ -133,27 +143,22 @@ class Card extends React.Component {
 
           {/* Mana cost */}
           <Col
-            xs="4"
-            className="card-mana-cost-col px-0 flex-shrink-1 flex-grow-2 justify-content-end"
-            style={{
-              "flex-basis": "95%",
-              "min-width": "20%"
-            }}
+            className="card-mana-cost-col p-0 m-0 flex-shrink-3 flex-grow-0 justify-content-end"
+            style={{}}
           >
             <button
               tabIndex="0"
               type="button"
               color="link"
-              block
               size="sm"
-              className="card-cost-pop text-dark bg-transparent m-0 p-0 align-start text-left text-wrap mh-100 h-100 mw-100 w-100"
+              block
+              className="card-cost-pop text-dark font-weight-bold bg-transparent m-0 p-0 justify-end align-start text-right text-nowrap mh-100 h-100 mw-100"
               data-toggle="popover"
               data-trigger="focus"
               title={this.props.name}
               data-content={this.props.cost}
               id="Popover"
               style={{
-                "font-size": "1.5vh",
                 "text-overflow": "ellipsis",
                 overflow: "hidden"
               }}
@@ -185,9 +190,9 @@ class Card extends React.Component {
         <Row
           className="card-type-set-row justify-content-around px-1 m-0 flex-grow-1 flex-shrink-5"
           style={{
-            "font-size": "1.5vh",
+            "font-size": "1vh",
             "flex-basis": "1vh",
-            "max-height": "1.5vh"
+            "max-height": "2vh"
           }}
         >
           {/* Card type */}
@@ -204,7 +209,7 @@ class Card extends React.Component {
               color="link"
               block
               size="sm"
-              className="card-type-pop text-dark bg-transparent m-0 p-0 align-items-start align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
+              className="card-type-pop text-dark font-weight-bold bg-transparent m-0 p-0 align-items-start align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
               data-content={this.props.type}
@@ -216,7 +221,7 @@ class Card extends React.Component {
                 overflow: "hidden"
               }}
             >
-              {this.props.name}
+              {this.props.type}
             </button>
           </Col>
           <Col
@@ -257,7 +262,7 @@ class Card extends React.Component {
               color="link"
               block
               size="sm"
-              className="card-text-pop text-dark bg-transparent m-0 p-0 align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
+              className="card-text-pop text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
               title={this.props.name}
@@ -279,33 +284,25 @@ class Card extends React.Component {
           className="card-power-toughness-row d-inline-flex mx-0 px-1 justify-content-between flex-grow-1 flex-shrink-0"
           style={{
             overflow: "hidden",
-            "font-size": "1.5vh",
-            "flex-basis": "1vh",
+            "font-size": "1vh",
             "max-height": "2vh",
             "min-height": "0"
           }}
         >
-          <Col xs="8" className="left-padding-for-power-toughness px-0" />
-          <Col
-            xs="4"
-            className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end"
-          >
+          <Col className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end">
             <button
               tabIndex="0"
               type="button"
               color="link"
               block
               size="sm"
-              className="card-power-toughness text-dark bg-transparent m-0 p-0 align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
+              className="card-power-toughness text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-right text-wrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
               title={this.props.name}
-              data-content={
-                this.props.power + this.props.divider + this.props.toughness
-              }
+              data-content={this.state.isCreature}
               id="Popover"
               style={{
-                "font-size": "1.5vh",
                 "text-overflow": "ellipsis",
                 overflow: "hidden"
               }}
@@ -313,7 +310,8 @@ class Card extends React.Component {
               {/* Don't forget to add the divider when inputing power and toughness */}
               {this.props.power}
               {this.props.divider}
-              {this.props.toughness}{" "}
+              {this.props.toughness}
+              {String()}
             </button>
           </Col>
         </Row>
