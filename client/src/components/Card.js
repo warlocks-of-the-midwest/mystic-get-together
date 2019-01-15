@@ -115,7 +115,8 @@ class Card extends React.Component {
               color="link"
               block
               size="sm"
-              className="card-name text-dark bg-transparent m-0 p-0 align-middle text-left text-wrap mb-0 mw-100 w-100"
+              className="card-name-pop text-dark bg-transparent m-0 p-0 align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
+              s
               data-toggle="popover"
               data-trigger="focus"
               title={this.props.name}
@@ -123,20 +124,10 @@ class Card extends React.Component {
               id="Popover"
               style={{
                 "text-overflow": "ellipsis",
-                overflow: "hidden",
-                "max-height": "100%"
+                overflow: "hidden"
               }}
             >
-              <p
-                className="card-name text-left mb-0 font-weight-bold"
-                style={{
-                  "text-overflow": "ellipsis",
-                  overflow: "hidden",
-                  "white-space": "nowrap"
-                }}
-              >
-                {this.props.name}
-              </p>
+              {this.props.name}
             </button>
           </Col>
 
@@ -155,7 +146,7 @@ class Card extends React.Component {
               color="link"
               block
               size="sm"
-              className="card-cost text-dark bg-transparent m-0 p-0 align-middle text-left text-wrap mb-0 mw-100 w-100"
+              className="card-cost-pop text-dark bg-transparent m-0 p-0 align-start text-left text-wrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
               title={this.props.name}
@@ -164,20 +155,10 @@ class Card extends React.Component {
               style={{
                 "font-size": "1.5vh",
                 "text-overflow": "ellipsis",
-                overflow: "hidden",
-                "max-height": "100%"
+                overflow: "hidden"
               }}
             >
-              <p
-                className="card-cost text-right align-middle text-nowrap mb-0"
-                style={{
-                  "text-overflow": "ellipsis",
-                  overflow: "hidden",
-                  "white-space": "nowrap"
-                }}
-              >
-                {this.props.cost}
-              </p>
+              {this.props.cost}
             </button>
           </Col>
         </Row>
@@ -223,26 +204,19 @@ class Card extends React.Component {
               color="link"
               block
               size="sm"
-              className="card-type text-dark bg-transparent m-0 p-0 align-middle text-left text-wrap mb-0"
+              className="card-type-pop text-dark bg-transparent m-0 p-0 align-items-start align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
-              title={this.props.name}
               data-content={this.props.type}
               id="Popover"
+              value={this.props.type}
               style={{
-                "font-size": "1.5vh",
+                "font-size": "1vh",
                 "text-overflow": "ellipsis",
                 overflow: "hidden"
               }}
             >
-              <p
-                style={{
-                  "text-overflow": "hidden"
-                }}
-                className="card-type w-100 mw-100 mb-0 align-middle text-left text-nowrap"
-              >
-                {this.props.type}
-              </p>
+              {this.props.name}
             </button>
           </Col>
           <Col
@@ -283,7 +257,7 @@ class Card extends React.Component {
               color="link"
               block
               size="sm"
-              className="card-text text-dark bg-transparent m-0 p-0 align-middle text-left text-wrap mb-0 mw-100 w-100"
+              className="card-text-pop text-dark bg-transparent m-0 p-0 align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
               title={this.props.name}
@@ -292,8 +266,7 @@ class Card extends React.Component {
               style={{
                 "font-size": "1.5vh",
                 "text-overflow": "ellipsis",
-                overflow: "hidden",
-                "max-height": "100%"
+                overflow: "hidden"
               }}
             >
               {this.props.text}
@@ -323,7 +296,7 @@ class Card extends React.Component {
               color="link"
               block
               size="sm"
-              className="card-power-toughness text-dark bg-transparent m-0 p-0 align-middle text-left text-wrap mb-0 mw-100 w-100"
+              className="card-power-toughness text-dark bg-transparent m-0 p-0 align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
               title={this.props.name}
@@ -334,22 +307,13 @@ class Card extends React.Component {
               style={{
                 "font-size": "1.5vh",
                 "text-overflow": "ellipsis",
-                overflow: "hidden",
-                "max-height": "100%"
+                overflow: "hidden"
               }}
             >
-              <p
-                className="card-power-toughness float-right m-0 font-weight-bold align-middle text-right text-nowrap"
-                style={{
-                  "text-overflow": "hidden",
-                  overflow: "hidden"
-                }}
-              >
-                {/* Don't forget to add the divider when inputing power and toughness */}
-                {this.props.power}
-                {this.props.divider}
-                {this.props.toughness}{" "}
-              </p>
+              {/* Don't forget to add the divider when inputing power and toughness */}
+              {this.props.power}
+              {this.props.divider}
+              {this.props.toughness}{" "}
             </button>
           </Col>
         </Row>
