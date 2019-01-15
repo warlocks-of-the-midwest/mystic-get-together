@@ -110,30 +110,29 @@ class Card extends React.Component {
       >
         {/* Card name and mana cost row */}
         <Row
-          className="card-name-cost-row d-inline-flex flex-nowrap mw-100 mx-0 px-1 justify-content-between flex-grow-0 flex-shrink-0"
+          className="card-name-cost-row d-inline-flex flex-nowrap mw-100 no-gutters flex-nowrap justify-content-between flex-grow-0 flex-shrink-0"
           style={{
-            "font-size": "2vh"
+            "font-size": "1vw"
           }}
         >
           {/* Card name */}
           <Col
-            className="card-name-col p-0 m-0 flex-grow-3 flex-shrink-1 justify-content-start"
-            style={{}}
+            xs="7"
+            className="card-name-col p-0 m-0 justify-content-start"
           >
             <button
               tabIndex="0"
               type="button"
               color="link"
               size="sm"
-              className="card-name-pop text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-left text-nowrap mh-100 h-100 mw-100"
-              s
+              className="card-name-pop text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-left text-nowrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
               title={this.props.name}
               data-content={this.props.name}
               id="Popover"
               style={{
-                "text-overflow": "ellipsis",
+                textOverflow: "ellipsis",
                 overflow: "hidden"
               }}
             >
@@ -143,8 +142,8 @@ class Card extends React.Component {
 
           {/* Mana cost */}
           <Col
-            className="card-mana-cost-col p-0 m-0 flex-shrink-3 flex-grow-0 justify-content-end"
-            style={{}}
+            xs="5"
+            className="card-mana-cost-col p-0 m-0 justify-content-end"
           >
             <button
               tabIndex="0"
@@ -152,7 +151,7 @@ class Card extends React.Component {
               color="link"
               size="sm"
               block
-              className="card-cost-pop text-dark font-weight-bold bg-transparent m-0 p-0 justify-end align-start text-right text-nowrap mh-100 h-100 mw-100"
+              className="card-cost-pop text-dark font-weight-bold bg-transparent m-0 p-0 justify-end align-start text-right text-nowrap mh-100 h-100 w-100 mw-100"
               data-toggle="popover"
               data-trigger="focus"
               title={this.props.name}
@@ -160,7 +159,8 @@ class Card extends React.Component {
               id="Popover"
               style={{
                 "text-overflow": "ellipsis",
-                overflow: "hidden"
+                overflow: "hidden",
+                "font-size": ".75vw"
               }}
             >
               {this.props.cost}
@@ -170,9 +170,11 @@ class Card extends React.Component {
 
         {/* Image row with a col wrapper to control size of image */}
         <Row
-          className="card-art-row justify-content-center mw-100 w-100 m-0 px-1 flex-grow-1 flex-shrink-1"
+          className="card-art-row justify-content-center mw-100 w-100 no-gutters flex-grow-1 flex-shrink-1"
           style={{
             "flex-basis": "40%",
+            minHeight: "40%",
+            maxHeight: "80%",
             overflow: "hidden"
           }}
         >
@@ -188,11 +190,11 @@ class Card extends React.Component {
 
         {/* Row for type and set logo */}
         <Row
-          className="card-type-set-row justify-content-around px-1 m-0 flex-grow-1 flex-shrink-5"
+          className="card-type-set-row justify-content-around no-gutters flex-grow-1 flex-shrink-5"
           style={{
-            "font-size": "1vh",
-            "flex-basis": "1vh",
-            "max-height": "2vh"
+            "font-size": ".5vw",
+            "flex-basis": "1vw",
+            "max-height": "1vw"
           }}
         >
           {/* Card type */}
@@ -216,7 +218,6 @@ class Card extends React.Component {
               id="Popover"
               value={this.props.type}
               style={{
-                "font-size": "1vh",
                 "text-overflow": "ellipsis",
                 overflow: "hidden"
               }}
@@ -246,10 +247,11 @@ class Card extends React.Component {
 
         {/* Card text */}
         <Row
-          className="card-text-row px-1 m-0 align-items-stretch flex-grow-1 flex-shrink-10"
+          className="card-text-row no-gutters align-items-stretch flex-grow-1 flex-shrink-10"
           style={{
-            "flex-basis": "2vh",
-            "max-height": "5vh"
+            "font-size": ".75vw",
+            "flex-basis": "1.5vw",
+            "max-height": "1.5vw"
           }}
         >
           <Col
@@ -269,7 +271,6 @@ class Card extends React.Component {
               data-content={this.props.text}
               id="Popover"
               style={{
-                "font-size": "1.5vh",
                 "text-overflow": "ellipsis",
                 overflow: "hidden"
               }}
@@ -281,12 +282,12 @@ class Card extends React.Component {
 
         {/* Power and toughness if creature */}
         <Row
-          className="card-power-toughness-row d-inline-flex mx-0 px-1 justify-content-between flex-grow-1 flex-shrink-0"
+          className="card-power-toughness-row d-inline-flex no-gutters justify-content-between flex-grow-1 flex-shrink-0"
           style={{
             overflow: "hidden",
-            "font-size": "1vh",
-            "max-height": "2vh",
-            "min-height": "0"
+            flexBasis: "1.4vw",
+            "font-size": ".75vw",
+            "max-height": "1.5vw",
           }}
         >
           <Col className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end">
