@@ -46,6 +46,8 @@ export interface PlayerDocument {
     life: number,
     // The player's username
     username: string,
+    // The player's uid
+    uid: string,
     counters: {
         // How many energy counters the player has
         energy: number,
@@ -66,12 +68,13 @@ export interface PlayerDocument {
 /**
  * Create the base player document.
  * 
- * @param player The username of the player
+ * @param player The uid of the player
  */
 const createBasePlayerDocument = function(player: string, deckId: string): PlayerDocument {
     return {
         life: 40,
         username: player,
+        uid: player,
         counters: {
             energy: 0,
             experience: 0,
@@ -84,147 +87,110 @@ const createBasePlayerDocument = function(player: string, deckId: string): Playe
     };
 };
 
-export interface ZoneDocument {
-    cards: any
+export interface Card {
+    id: string,
+    scryfall_id: string,
+    state: {
+        owner: string,
+        controller: string,
+        zone: Zone,
+        position: number,
+        tapped: boolean,
+        face_up: boolean,
+        clone_of: string,
+        is_morph: boolean,
+        is_token: boolean,
+        power: number,
+        toughness: number,
+        attachments: {
+            counters: {
+                [key: string]: number,
+            },
+            permanents: {
+                [key: string]: Card,
+            }
+        },
+    }
 }
 
 /**
- * Create an empty zone.
- */
-const createEmptyZone = function(): ZoneDocument {
-    // TODO I would like to define a type for this, but not sure how since
-    // {} is not a Map
-    return {
-        cards: {}
-    };
-};
-
-/**
- * Create the library zone.
+ * Create an array of Cards that can each be written as a document to Firestore.
  * 
- * @param player The username of the player
- * @param deck The entirety of the deck
+ * @param player The uid of the player
+ * @param deck The deck to process
  */
-const createLibraryZone = function(player: string, deck: Decklist.Deck): ZoneDocument {
-    const zone = createEmptyZone();
-
-    // Expand the deck so a card with quantity > 1 becomes
-    // that number of distinct objects
-    const library = [];
-    _.forEach(deck.cards, (card: Decklist.IdentifiedCard) => {
-        for (let i = 0; i < card.qty; i++) {
-            library.push(card);
-        }
+const createCards = function(player: string, deck: Decklist.Deck): Array<Card> {
+    const library: Array<Decklist.IdentifiedCard> = _.filter(deck.cards, (card: Decklist.IdentifiedCard) => {
+        return card.board === Decklist.Board.MAIN;
+    }).sort(() => uuidv4()); // shuffle
+    const commandZone: Array<Decklist.IdentifiedCard> = _.filter(deck.cards, (card: Decklist.IdentifiedCard) => {
+        return card.board === Decklist.Board.COMMAND;
     });
-    // Now shuffle it
-    library.sort(() => uuidv4());
 
-    // Now we can iterate over the library to create the zone
-    let position = 0;
-    _.forEach(library, (card: Decklist.IdentifiedCard) => {
-        if (card.board === Decklist.Board.MAIN) {
-            const id = uuidv4();
-            // We do not fully populate this since it is unnecessary,
-            // and this reduces bandwidth usage (recall that we pay for 
-            // bandwith and since Firestore is schemaless, the field name 
-            // has to be sent as well)
-            // TODO: this creates an invalid object... probably because the properties
-            // aren't properly defined
-            Object.defineProperty(zone.cards, id, {
-                value: {
-                    id: id,
-                    scryfall_id: card.id,
-                    state: {
-                        owner: player,
-                        controller: player,
-                        zone: Zone.LIBRARY,
-                        position: position,
-                        tapped: false,
-                        face_up: false,
-                        clone_of: null,
-                        is_morph: false,
-                        is_token: false,
-                        power: null,
-                        toughness: null,
-                        attachments: {
-                            counters: {
+    const cards: Array<Card> = _.map(commandZone, (card: Decklist.IdentifiedCard) => {
+        return <Card> {
+            id: uuidv4(),
+            scryfall_id: card.id,
+            state: {
+                owner: player,
+                controller: player,
+                zone: Zone.COMMAND,
+                position: 0,
+                tapped: false,
+                face_up: true,
+                clone_of: null,
+                is_morph: false,
+                is_token: false,
+                power: null,
+                toughness: null,
+                attachments: {
+                    counters: {
 
-                            },
-                            permanents: {
+                    },
+                    permanents: {
 
-                            }
-                        }
                     }
-                },
-                enumerable: true
-            });
-            position++;
-        }
+                }
+            }
+        };
     });
-    
-    return zone;
-};
 
-/**
- * Create the command zone.
- * 
- * @param player The username of the player
- * @param deck The entirety of the deck
- */
-const createCommandZone = function(player: string, deck: Decklist.Deck): ZoneDocument {
-    const zone = createEmptyZone();
+    cards.push(..._.map(library, (card: Decklist.IdentifiedCard, position: number) => {
+        return <Card> {
+            id: uuidv4(),
+            scryfall_id: card.id,
+            state: {
+                owner: player,
+                controller: player,
+                zone: Zone.LIBRARY,
+                position: position,
+                tapped: false,
+                face_up: false,
+                clone_of: null,
+                is_morph: false,
+                is_token: false,
+                power: null,
+                toughness: null,
+                attachments: {
+                    counters: {
 
-    _.forEach(deck.cards, (card: Decklist.IdentifiedCard) => {
-        if (card.board === Decklist.Board.COMMAND) {
-            const id = uuidv4();
-            Object.defineProperty(zone.cards, id, {
-                value: {
-                    id: id,
-                    scryfall_id: card.id,
-                    state: {
-                        owner: player,
-                        controller: player,
-                        zone: Zone.COMMAND,
-                        position: 0,
-                        tapped: false,
-                        face_up: true,
-                        clone_of: null,
-                        is_morph: false,
-                        is_token: false,
-                        power: null,
-                        toughness: null,
-                        attachments: {
-                            counters: {
+                    },
+                    permanents: {
 
-                            },
-                            permanents: {
-
-                            }
-                        }
                     }
-                },
-                enumerable: true
-            });
+                }
+            }
         }
-    });
-    return zone;
-}
+    }));
 
-/**
- * This is a hacky workaround to a problem with how some objects are generated,
- * causing the Firestore SDK to fail to read any fields.
- * 
- * @param obj The object to regenerate
- */
-const regenerateObject = function(obj: any): any {
-    return JSON.parse(JSON.stringify(obj));
+    return cards;
 }
 
 /**
  * Create the player document, initializing all fields, as well as all Zones.
  * 
  * @param gameRef A DocumentReference to the game
- * @param player The username of the player
+ * @param player The uid of the player
  * @param deck The player's deck
  */
 const createPlayerInFirestore = async function(gameRef: Firestore.DocumentReference, player: string,
@@ -245,22 +211,15 @@ const createPlayerInFirestore = async function(gameRef: Firestore.DocumentRefere
             }
         }
 
-        const playerRef = gameRef.collection('Players').doc(player);
-        const libraryZone = regenerateObject(createLibraryZone(player, deck));
-        const commandZone = regenerateObject(createCommandZone(player, deck));
+        const cardsRef = gameRef.collection('Cards');
+        const cards: Array<Card> = createCards(player, deck);
 
         try {
-            await Promise.all([
-                playerRef.collection('Zones').doc(Zone.LIBRARY).create(libraryZone),
-                playerRef.collection('Zones').doc(Zone.COMMAND).create(commandZone),
-                playerRef.collection('Zones').doc(Zone.HAND).create(createEmptyZone()),
-                playerRef.collection('Zones').doc(Zone.BATTLEFIELD).create(createEmptyZone()),
-                playerRef.collection('Zones').doc(Zone.GRAVEYARD).create(createEmptyZone()),
-                playerRef.collection('Zones').doc(Zone.EXILE).create(createEmptyZone()),
-                playerRef.collection('Zones').doc(Zone.STACK).create(createEmptyZone()),
-            ]);
+            await Promise.all(_.map(cards, (card: Card) => {
+                return cardsRef.doc(card.id).create(card);
+            }));
         } catch (e) {
-            console.error('Caught error initializing zones', e)
+            console.error('Caught error initializing cards', e)
             throw createError(500);
         }
     }
@@ -269,7 +228,7 @@ const createPlayerInFirestore = async function(gameRef: Firestore.DocumentRefere
  * Host a game by creating a new game document and adding the player and her
  * deck to the game.
  * 
- * @param player The username of the player
+ * @param player The uid of the player
  * @param deckId The deck document ID
  */
 const hostGameHelper = async function(player: string, deckId: string): Promise<string> {
@@ -291,8 +250,12 @@ const hostGameHelper = async function(player: string, deckId: string): Promise<s
             }
         }
     } catch (e) {
-        console.error('Caught error adding base game document', e)
-        throw createError(500);
+        if (e instanceof createError.HttpError) {
+            throw e;
+        } else {
+            console.error('Caught error adding base game document', e)
+            throw createError(500);
+        }
     }
 }
 
@@ -300,7 +263,7 @@ const hostGameHelper = async function(player: string, deckId: string): Promise<s
  * Join a game by adding the player and her deck to the game.
  * 
  * @param gameId The game document ID
- * @param player The username of the player
+ * @param player The uid of the player
  * @param deckId The deck document ID
  */
 const joinGameHelper = async function(gameId: string, player: string, deckId: string): Promise<void> {
@@ -377,7 +340,7 @@ export const hostGameFunction = functions.https.onRequest((request, response) =>
     if (!player) {
         response
             .status(400)
-            .send('Body must include "player" attribute denoting host player\'s username');
+            .send('Body must include "player" attribute denoting host player\'s uid');
         return;
     }
     if (!deckId) {
@@ -423,7 +386,7 @@ export const joinGameFunction = functions.https.onRequest((request, response) =>
     if (!player) {
         response
             .status(400)
-            .send('Body must include "player" attribute denoting host player\'s username');
+            .send('Body must include "player" attribute denoting host player\'s uid');
         return;
     }
     if (!deckId) {
