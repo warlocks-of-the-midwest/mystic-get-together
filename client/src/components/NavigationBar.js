@@ -48,7 +48,7 @@ class NavigationBar extends Component {
     return (
       <Container
         fluid
-        className="d-flex p-0 m-0"
+        className="h-100 p-0 m-0"
       >
 
         <Navbar
@@ -60,16 +60,12 @@ class NavigationBar extends Component {
             className="mh-100 h-100 m-0 p-0"
             id="toggler"
           />
-
           <NavbarBrand
             light
             className="bg-light"
           >
             Mystic-The-Get-Together
           </NavbarBrand>
-
-
-
 
           <UncontrolledCollapse
             navbar

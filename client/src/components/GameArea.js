@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import * as sdk from "../js-sdk/sdk";
+import * as sdk from '../js-sdk/sdk';
 
 import "../styles/GameArea.css";
 import Card from "./Card.js";
 import "../styles/Card.css";
 
-import NavigationBar from "./NavigationBar";
-import Sidebar from "./Sidebar";
+import NavigationBar from './NavigationBar';
+import Sidebar from './Sidebar';
 
 import {
   Jumbotron,
@@ -34,6 +34,30 @@ class GameArea extends Component {
 
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
+    this.toggleCard = this.toggleCard.bind(this);
+    this.addCardToTopBattlefield = this.addCardToTopBattlefield.bind(this);
+
+    sdk.listenToPlayer("player1", this.player1Callback)
+    sdk.listenToZone("player1", "zone1", this.player1ZoneCallback)
+  }
+
+  player1Callback(docData) {
+    const { gameActions } = this.props;
+    gameActions.updatePlayer("player1", docData)
+  }
+
+  player1ZoneCallback(docData) {
+    const { gameActions } = this.props;
+    gameActions.updateZone("player1", "zone1", docData)
+  }
+
+  toggleCard(card) {
+    if (card["state.tapped"]) {
+      sdk.untap(card)
+    }
+    else {
+      sdk.tap(card)
+    }
   }
 
   increment(x) {
@@ -75,7 +99,6 @@ class GameArea extends Component {
       "https://api.scryfall.com/cards/06750380-a9a9-4ab4-a03b-d4d35a31132a?format=json&pretty=true"
     );
   }
-
   // Fetch a card given it's scryfall api url.
   async fetchCard(url) {
     const cardInfo = await Card.getScryFallCardInfo(url);
@@ -267,7 +290,6 @@ class GameArea extends Component {
               </Row>
             </Container>
           </Col>
-
           {/* Sidebar for exile,graveyard,hand,library  */}
           <Col xs="2" className="sidebar-col p-0 m-0">
             <Container

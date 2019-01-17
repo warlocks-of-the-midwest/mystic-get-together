@@ -99,8 +99,6 @@ class Sidebar extends Component {
             </h6>
 
           </Col>
-
-
         </Row>
 
       </Container >
