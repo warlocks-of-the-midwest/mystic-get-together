@@ -1,0 +1,30 @@
+{
+    "Game-arooni" : {
+        "game3" : {
+            "playerCount" : 4,
+            "gameState" : "Softlocked by that god damn Smoke, Mungha Wurm, Damping Field, Static Orb combo",
+            "Players" : {
+                "player1" : {
+                    "life" : 40,
+                    "name" : "Scott",
+                    "Zones" : {
+                        "battlefield" : {
+                            "cards" : [
+                                { "name" : "card1", "power" : "inifinite" },
+                                { "name" : "card2", "power" : "a one"}
+                            ]
+                        }
+                    },
+                    "Piles" : {
+                        "pile1" : { "name" : "morphs"},
+                        "pile2" : { "name" : "morpharoonis"}
+                    }
+                }
+            }
+        },
+        "game4" : {
+            "playerCount" : 0,
+            "gameState" : "Initialized"
+        }
+    }
+}
