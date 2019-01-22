@@ -32,6 +32,8 @@ class Sidebar extends Component {
   }
 
   render() {
+    let exileList = ["Sonic Assault", "Expansion // Explosion", "Radical Idea"];
+    let graveyardList = ["Niv-Mizzet, Parun", "Jori En, Ruin Diver", "Beacon Bolt"];
     return (
       <Container
         fluid
@@ -61,9 +63,9 @@ class Sidebar extends Component {
 
           </Col>
 
-          <ZoneModal name="Exile" cardlist=""/>
+          <ZoneModal name="Exile" cardlist={exileList}/>
 
-          <ZoneModal name="Graveyard" cardlist=""/>
+          <ZoneModal name="Graveyard" cardlist={graveyardList}/>
 
           {/* Library */}
           <Col
