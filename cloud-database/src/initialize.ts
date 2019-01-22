@@ -4,11 +4,9 @@ import data from "./db.json";
 
 const LOGGING_TOGGLE = true;
 
-function log(message) {
-    if(LOGGING_TOGGLE) {
-        console.log(message);
-    }
-}
+traverseCollections('',data);
+
+console.log("DONE");
 
 export function traverseCollections(path, collectionObject) {
     let collections = _.toPairs(collectionObject);
@@ -50,6 +48,9 @@ function traverseDocument(path, documentObject) {
 
     // Create Subcollections in Document
     for(var subCollection of  _.toPairs(subcollections)) {
+        let attributeName = subCollection[0];
+        let attributeValue = subCollection[1];
+
         traverseCollections(path, _.fromPairs([subCollection]));
     }
 }
@@ -65,6 +66,8 @@ function createSubCollection(path, subcollections) {
     }
 }
 
-traverseCollections('',data);
-
-console.log("DONE");
+function log(message) {
+    if(LOGGING_TOGGLE) {
+        console.log(message);
+    }
+}
