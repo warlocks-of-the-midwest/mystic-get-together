@@ -1,39 +1,44 @@
 import * as _ from "lodash";
 import db from "./firestore";
+
+// Initialization Data
 import data from "./db.json";
 
 const LOGGING_TOGGLE = true;
 
-traverseCollections('',data);
-
+// visit data object and create necessary documents
+visitCollections('',data);
 console.log("DONE");
 
-export function traverseCollections(path, collectionObject) {
-    let collections = _.toPairs(collectionObject);
-    for (var collection of collections) {
+
+export function visitCollections(path, collectionObject) {
+    // visit all collections
+    for (var collection of _.toPairs(collectionObject)) {
         let collectionName = collection[0];
         let documents = _.toPairs(collection[1]);
 
-        log('Traversing Collection -- ' + path + '/' + collectionName);
+        log('Visiting Collection -- ' + path + '/' + collectionName);
 
+        // visit documents within  collection
         for (var document of documents) {
             let documentPath = path + '/' + collectionName + '/' + document[0];
 
-            traverseDocument(documentPath, document[1]);
+            visitDocument(documentPath, document[1]);
         }
     }
 }
 
-function traverseDocument(path, documentObject) {
+function visitDocument(path, documentObject) {
     let subcollections = {};
     let attributes = {};
 
-    // Sort into Attributes and Subcollection 
+    // Sort Document into Attributes and Subcollections
     let document = _.toPairs(documentObject);
     for(var attribute of document) {
         let attributeName = attribute[0];
         let attributeValue = attribute[1];
         
+        // Subcollections attribute names start with a capital letter. Normal attribute otherwise
         let isSubCollection = attributeName[0] >= 'A' && attributeName[0] <= 'Z';
 
         if(isSubCollection) {
@@ -46,13 +51,8 @@ function traverseDocument(path, documentObject) {
     // Create Document w/ Attributes
     createDocument(path, attributes);
 
-    // Create Subcollections in Document
-    for(var subCollection of  _.toPairs(subcollections)) {
-        let attributeName = subCollection[0];
-        let attributeValue = subCollection[1];
-
-        traverseCollections(path, _.fromPairs([subCollection]));
-    }
+    // Create Subcollections within Document
+    visitCollections(path, subcollections);
 }
 
 function createDocument(path, body) {
@@ -62,7 +62,7 @@ function createDocument(path, body) {
 
 function createSubCollection(path, subcollections) {
     for(var subCollection of  _.toPairs(subcollections)) {
-        traverseCollections(path, subCollection);
+        visitCollections(path, subCollection);
     }
 }
 
