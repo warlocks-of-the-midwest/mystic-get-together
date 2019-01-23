@@ -12,7 +12,6 @@ console.log("DONE");
 
 
 export function visitCollections(path, collectionObject) {
-    // visit all collections
     for (var collection of _.toPairs(collectionObject)) {
         let collectionName = collection[0];
         let documents = _.toPairs(collection[1]);
@@ -58,12 +57,6 @@ function visitDocument(path, documentObject) {
 function createDocument(path, body) {
     log('Creating Document     -- ' + path + '\n' + JSON.stringify(body, null, '  ') + '\n');
     db.doc(path).set(body);
-}
-
-function createSubCollection(path, subcollections) {
-    for(var subCollection of  _.toPairs(subcollections)) {
-        visitCollections(path, subCollection);
-    }
 }
 
 function log(message) {
