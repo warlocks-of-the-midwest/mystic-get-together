@@ -1,15 +1,12 @@
 import * as _ from "lodash";
 import db from "./firestore";
-
-// Initialization Data
-import data from "./db.json";
+import data from "./db.json"; // Initialization Data
 
 const LOGGING_TOGGLE = true;
 
-// visit data object and create necessary documents
+// visit data object and create firestore documents
 visitCollections('',data);
 console.log("DONE");
-
 
 export function visitCollections(path, collectionObject) {
     for (var collection of _.toPairs(collectionObject)) {
@@ -18,7 +15,7 @@ export function visitCollections(path, collectionObject) {
 
         log('Visiting Collection -- ' + path + '/' + collectionName);
 
-        // visit documents within  collection
+        // visit documents within collection
         for (var document of documents) {
             let documentPath = path + '/' + collectionName + '/' + document[0];
 
@@ -34,16 +31,14 @@ function visitDocument(path, documentObject) {
     // Sort Document into Attributes and Subcollections
     let document = _.toPairs(documentObject);
     for(var attribute of document) {
+        // Subcollection names start with a capital letter
         let attributeName = attribute[0];
-        let attributeValue = attribute[1];
-        
-        // Subcollections attribute names start with a capital letter. Normal attribute otherwise
         let isSubCollection = attributeName[0] >= 'A' && attributeName[0] <= 'Z';
 
         if(isSubCollection) {
-            subcollections = _.merge({}, subcollections, _.fromPairs([[attributeName, attributeValue]]));
+            subcollections = _.merge({}, subcollections, _.fromPairs([attribute]));
         } else {
-            attributes = _.merge({}, attributes, _.fromPairs([[attributeName, attributeValue]]));
+            attributes = _.merge({}, attributes, _.fromPairs([attribute]));
         }
     }
 
