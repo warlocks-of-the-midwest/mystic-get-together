@@ -4,8 +4,8 @@ import axios from 'axios';
 import uuidv4 from 'uuid/v4';
 
 // Listeners
-export function listenToCard(gameId, card, callback) {
-  db.doc(`Games/${gameId}/Cards/${card.id}`)
+export function listenToCard(gameId, cardId, callback) {
+  db.doc(`Games/${gameId}/Cards/${cardId}`)
     .onSnapshot((doc) => {
       callback(doc.data())
     });
@@ -24,8 +24,6 @@ export function moveCardToZone(gameId, card, targetZone) {
   if (card.state.zone === targetZone) {
     return;
   }
-
-  remove(gameId, card); // remove from current zone before moving
   card.state.zone = targetZone
   db.doc(`Games/${gameId}/Cards/${card.id}`).set(card)
 }
@@ -56,13 +54,29 @@ export function setCardPosition(gameId, card, newPosition) {
   });
 }
 
+//https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffleArray(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+}
+
 export function shuffle(gameId, targetPlayer) {
   const numCards = 100;
   let newOrdering = [];
   for (let i = 0; i < numCards; i++) {
     newOrdering.push(i);
   }
-  newOrdering = newOrdering.OrderBy(a => uuidv4());
+  shuffleArray(newOrdering);
 
   let i = 0;
   db.collection(`Games/${gameId}/Cards/`).get().then(function(querySnapshot) {
@@ -81,8 +95,6 @@ export function remove(gameId, card) {
 }
 
 export function changeController(gameId, card, targetPlayer, targetZone) {
-  // First remove card from previous controller's zone
-  remove(card);
   card.state.controller = targetPlayer
   db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
 }
@@ -174,7 +186,7 @@ export function drawGame() {
 //Deck functions
 export function getAvailableDecks(user) {
   let deckData;
-  db.doc(`Users/${user}`).get().then(function(doc) {
+  return db.doc(`Users/${user}`).get().then(function(doc) {
     deckData = doc.data().decks
     return Object.keys(deckData);
   });
