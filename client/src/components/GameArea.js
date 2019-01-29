@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import * as sdk from '../js-sdk/sdk';
 
-import '../styles/GameArea.css';
-import Card from './Card.js';
-import Hand from './Hand.js';
-import '../styles/Card.css';
-import '../styles/Hand.css';
+import "../styles/GameArea.css";
+import Card from "./Card.js";
+import "../styles/Card.css";
 
 import NavigationBar from './NavigationBar';
 import Sidebar from './Sidebar';
@@ -18,25 +16,25 @@ import {
   Row,
   Col,
   Button,
-  ButtonGroup,
-} from 'reactstrap';
+  ButtonGroup
+} from "reactstrap";
 
 class GameArea extends Component {
+  lordyUrl =
+    "https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json";
+
   constructor(props) {
     super(props);
     this.state = {
       player: "Anthony",
       life: 0,
+      top_row: [],
+      bottom_row: []
     };
 
-    this.lifeComponent = this.lifeComponent.bind(this);
-    this.mainTitle = this.mainTitle.bind(this);
-    this.player1Callback = this.player1Callback.bind(this);
-    this.player1ZoneCallback = this.player1ZoneCallback.bind(this);
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
-    this.addCardToTopBattlefield = this.addCardToTopBattlefield.bind(this);
 
     //sdk.listenToPlayer(this.props.gameState.gameId, "player1", this.player1Callback)
     //sdk.listenToZone(this.props.gameState.gameId, "player1", "zone1", this.player1ZoneCallback)
@@ -65,242 +63,248 @@ class GameArea extends Component {
   increment(x) {
     this.setState({
       life: Number(this.state.life) + Number(x)
-    })
+    });
   }
 
   decrement(x) {
     this.setState({
       life: Number(this.state.life) - Number(x)
-    })
+    });
   }
 
-  addCardToTopBattlefield(name, cost, img, type, set, text, power, toughness) {
-    return (
-      <Col
-        xs="2"
-        style={
-          {
-            "min-width": "80px",
-            "max-height": "50%",
-          }
-        }
-        className="p-0"
-      >
-
-        <Card
-          name={name}
-          cost={cost}
-          image={img}
-          type={type}
-          set={set}
-          text={text}
-        />
-
-      </Col>
+  componentDidMount() {
+    this.fetchCard(this.lordyUrl);
+    this.fetchCard(
+      "https://api.scryfall.com/cards/cc61a398-cf16-415b-b3cf-897217dc7cc9?format=json&pretty=true"
     );
+    this.fetchCard(
+      "https://api.scryfall.com/cards/e16e4f85-9611-4d5f-a7d9-4a5961dd7182?format=json&pretty=true"
+    );
+    this.fetchCard(
+      "https://api.scryfall.com/cards/54a0afaa-f99f-4c7a-9fa1-c6a46dfb2a29?format=json&pretty=true"
+    );
+    this.fetchCard(
+      "https://api.scryfall.com/cards/086a0591-718f-4a33-a5f5-e9265468c3ad?format=json&pretty=true"
+    );
+    this.fetchCard(
+      "https://api.scryfall.com/cards/3ed39bd7-d059-4a44-9f03-0f628dcdb119?format=json&pretty=true"
+    );
+    this.fetchCard(
+      "https://api.scryfall.com/cards/b0e0ef27-3db2-4976-b9db-13e3d7cd795d?format=json&pretty=true"
+    );
+    this.fetchCard(
+      "https://api.scryfall.com/cards/544a06f8-75fe-41b6-81dc-c9a0358f03c5?format=json&pretty=true"
+    );
+    this.fetchCard(
+      "https://api.scryfall.com/cards/06750380-a9a9-4ab4-a03b-d4d35a31132a?format=json&pretty=true"
+    );
+  }
+  // Fetch a card given it's scryfall api url.
+  async fetchCard(url) {
+    const cardInfo = await Card.getScryFallCardInfo(url);
+    this.setState(state => {
+      var arr = state.top_row.slice();
+      arr.push(cardInfo);
+      return {
+        top_row: arr
+      };
+    });
   }
 
   render() {
-    const { gameState } = this.props;
-    const { life } = gameState.Players.player1;
-    const { card1 } = gameState.Players.player1.Zones.zone2;
-    const { card2 } = gameState.Players.player1.Zones.zone2;
-    const divStyle = {
-      "max-height": '45%',
-    };
-
-
     return (
       <Container
         fluid
-        className="main-container d-flex flex-column mh-100 vh-100 p-0 m-0"
-        style={
-          {
-            "max-height": "100vh"
-          }
-        }
+        className="main-container d-flex flex-column vh-100 mh-100 w-100 p-0 m-0"
       >
-
         <Row
-          className="top-nav-row p-0 m-0"
-          style={
-            {
-              // "max-height": "9vh",
-              
-            }
-          }
+          className="top-bar-row-wrapper p-0 m-0 d-flex flex-row flex-grow-1 flex-shrink-1"
+          style={{
+            "flex-basis": "10%",
+            overflow: "auto"
+          }}
         >
-          <Col
-            xs="12"
-            className="p-0 m-0 mh-100 h-100"
-          >
-            <NavigationBar
-              className="mh-100"
-              life={this.state.life}
-              active="battlefield"
-            >
-            </NavigationBar>
-
-          </Col>
-
-        </Row>
-
-
-        <Row
-          className="battlefield-sidebar-row p-0 m-0"
-          style={
-            {
-              "max-height": "90vh",
-              "height": "90vh"
-            }
-          }
-        >
-
-          {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
           <Col
             xs="10"
-            className="p-0 m-0 mh-100 h-100 border"
+            className="p-0 m-0"
+            style={{
+              "flex-basis": "100%"
+            }}
           >
-            {/* Top row of battlefield */}
-            <Row
-              className="battlefield-top-row p-0 m-0 mh-50 h-50"
-              style={
-                {
-                  "overflow": "auto"
-                }
-              }
-            >
-              {/* Main area for cards */}
-              <Col
-                className="battlefield-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 px-0"
-              >
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-
-              </Col>
-            </Row>
-
-            {/* Bottom row of cards */}
-            <Row
-              className="battlefield-bottom-row p-0 m-0 mh-50 h-50"
-              style={
-                {
-                  "overflow": "auto"
-                }
-              }
-            >
-              <Col
-                
-                className="battlefield-bottom d-inline-flex flex-wrap border justify-content-start card-row card-row-top my-0 mx-0 px-0"
-              >
-
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-
-                {this.addCardToTopBattlefield(
-                  "Sonic Assault",
-                  "{1}{U}{R}",
-                  "https://img.scryfall.com/cards/art_crop/front/c/c/cc61a398-cf16-415b-b3cf-897217dc7cc9.jpg?1538880557",
-                  "Instant",
-                  "https://img.scryfall.com/sets/grn.svg?1545022800",
-                  "Card text here"
-                )}
-
-              </Col>
-            </Row>
-
-
+            <NavigationBar life={this.state.life} active="battlefield" />
           </Col>
 
-
-
-          {/* Sidebar area.  */}
-
-
-          {/* Sidebar for exile,graveyard,hand,library  */}
-          <Col
-            xs="2"
-            className="side-bar-col flex-shrink-3 px-0"
-            style={
-              {
-                "max-height": '100%'
-              }
-            }
-          >
-            <Sidebar></Sidebar>
+          <Col xs="2" className="flex-grow-1 flex-shrink-1">
+            <Row>
+              <Col className="d-inline-flex mh-100 h-100">
+                <p5>Life: </p5> <p5 className="">{this.state.life}</p5>
+              </Col>
+              <Col xs="12" className="d-inline-flex">
+                <ButtonGroup className="d-flex" size="sm">
+                  <Button
+                    outline
+                    color="success"
+                    onClick={state => this.increment(1)}
+                    type="submit"
+                  >
+                    +1
+                  </Button>
+                  <Button
+                    outline
+                    color="warning"
+                    onClick={state => this.decrement(1)}
+                    type="submit"
+                    block
+                  >
+                    -1
+                  </Button>
+                </ButtonGroup>
+              </Col>
+              <Col className="d-inline-flex">
+                <ButtonGroup className="d-flex" size="sm">
+                  <Button
+                    outline
+                    color="primary"
+                    onClick={state => this.increment(5)}
+                    type="submit"
+                  >
+                    +5
+                  </Button>
+                  <Button
+                    outline
+                    color="danger"
+                    onClick={state => this.decrement(5)}
+                    type="submit"
+                    block
+                  >
+                    -5
+                  </Button>
+                </ButtonGroup>
+              </Col>
+            </Row>
           </Col>
-
         </Row>
 
-      </Container >
+        <Row
+          className="cards-sidebar-row-wrapper flex-row flex-grow-5 flex-shrink-1 p-0 m-0"
+          style={{
+            "flex-basis": "90%"
+          }}
+        >
+          <Col
+            xs="10"
+            className="battlefield-col p-0 m-0 flex-grow-1 flex-shrink-1 flex-wrap"
+          >
+            {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
+            <Container
+              fluid
+              className="cards-rows-container mh-100 h-100 p-0 m-0"
+            >
+              {/* Top row of battlefield */}
+              <Row className="top-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border">
+                {/* Main area for cards */}
+                <Col
+                  xs="12"
+                  className="top-cards-row-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 mw-100 w-100 p-0 m-0"
+                >
+                  <>
+                    {this.state.top_row.map(cardInfo => {
+                      return (
+                        <Col
+                          xs="2"
+                          style={{
+                            "min-width": "80px",
+                            "max-height": "50%"
+                          }}
+                          className="no-gutters"
+                        >
+                          <Col
+                            xs="11"
+                            className="mh-100 h-100 no-gutters"
+                          >
+                            <Card
+                              name={cardInfo[0]}
+                              cost={cardInfo[1]}
+                              image={cardInfo[2]}
+                              type={cardInfo[3]}
+                              set={cardInfo[4]}
+                              text={cardInfo[5]}
+                              power={cardInfo[6]}
+                              divider={cardInfo[6] ? "/" : ""}
+                              toughness={cardInfo[7]}
+                            />
+                          </Col>
+                          <Col
+                            xs="1"
+                            className="mh-100 h-100 no-gutters"
+                          />
+                        </Col>
+                      );
+                    })}
+                  </>
+                </Col>
+              </Row>
+
+              {/* Bottom row of cards */}
+              <Row className="bottom-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border">
+                <Col
+                  xs="12"
+                  className="battlefield-bottom d-inline-flex flex-wrap justify-content-start card-row card-row-top m-0 p-0"
+                >
+                <>
+                    {this.state.top_row.map(cardInfo => {
+                      return (
+                        <Col
+                          xs="2"
+                          style={{
+                            "min-width": "80px",
+                            "max-height": "50%"
+                          }}
+                          className="no-gutters"
+                        >
+                          <Col
+                            xs="11"
+                            className="mh-100 h-100 no-gutters"
+                          >
+                            <Card
+                              name={cardInfo[0]}
+                              cost={cardInfo[1]}
+                              image={cardInfo[2]}
+                              type={cardInfo[3]}
+                              set={cardInfo[4]}
+                              text={cardInfo[5]}
+                              power={cardInfo[6]}
+                              divider={cardInfo[6] ? "/" : ""}
+                              toughness={cardInfo[7]}
+                            />
+                          </Col>
+                          <Col
+                            xs="1"
+                            className="mh-100 h-100 no-gutters"
+                          />
+                        </Col>
+                      );
+                    })}
+                  </>
+                  </Col>
+              </Row>
+            </Container>
+          </Col>
+          {/* Sidebar for exile,graveyard,hand,library  */}
+          <Col xs="2" className="sidebar-col p-0 m-0">
+            <Container
+              fluid
+              className="sidebar-col-container mh-100 h-100 mw-100 w-100 p-0 m-0"
+            >
+              <Row className="sidebar-col-container-row mh-100 h-100 mw-100 w-100 p-0 m-0">
+                <Col className="side-bar-col-container-row-col w-100 mw-100 flex-shrink-3 p-0 m-0">
+                  <Sidebar />
+                </Col>
+              </Row>
+            </Container>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 
@@ -323,22 +327,44 @@ class GameArea extends Component {
         </Col>
         <Col xs="12" className="d-inline-flex">
           <ButtonGroup className="d-flex" size="sm">
-            <Button outline color="success" onClick={(state) => this.increment(1)} type="submit">
+            <Button
+              outline
+              color="success"
+              onClick={state => this.increment(1)}
+              type="submit"
+            >
               +1
-          </Button>
-            <Button outline color="warning" onClick={(state) => this.decrement(1)} type="submit" block>
+            </Button>
+            <Button
+              outline
+              color="warning"
+              onClick={state => this.decrement(1)}
+              type="submit"
+              block
+            >
               -1
-          </Button>
+            </Button>
           </ButtonGroup>
         </Col>
         <Col className="d-inline-flex">
           <ButtonGroup className="d-flex" size="sm">
-            <Button outline color="primary" onClick={(state) => this.increment(5)} type="submit">
+            <Button
+              outline
+              color="primary"
+              onClick={state => this.increment(5)}
+              type="submit"
+            >
               +5
-          </Button>
-            <Button outline color="danger" onClick={(state) => this.decrement(5)} type="submit" block>
+            </Button>
+            <Button
+              outline
+              color="danger"
+              onClick={state => this.decrement(5)}
+              type="submit"
+              block
+            >
               -5
-          </Button>
+            </Button>
           </ButtonGroup>
         </Col>
       </Row>
@@ -348,7 +374,7 @@ class GameArea extends Component {
 
 GameArea.propTypes = {
   gameState: PropTypes.shape({}).isRequired,
-  gameActions: PropTypes.shape({}).isRequired,
+  gameActions: PropTypes.shape({}).isRequired
 };
 
 export default GameArea;
