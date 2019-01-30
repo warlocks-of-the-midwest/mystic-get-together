@@ -1,47 +1,47 @@
-import db, { FIREBASE_FUNCTION_BASE_URL } from './fire.js';
 import axios from 'axios';
+import db, { FIREBASE_FUNCTION_BASE_URL } from './fire.js';
 
 // Listeners
 export function listenToZone(player, zone, callback) {
   db.doc(`Games/game1/Players/${player}/Zones/${zone}`)
     .onSnapshot((doc) => {
-      callback(doc.data())
+      callback(doc.data());
     });
 }
 
 export function listenToPlayer(player, callback) {
   db.doc(`Games/game1/Players/${player}`)
     .onSnapshot((doc) => {
-      callback(doc.data())
+      callback(doc.data());
     });
 }
 
 // Game functions
 export function tap(card) {
-  var playerName = card["state.owner"];
-  var zoneName = card["state.zone"];
-  card["state.tapped"] = true
+  let playerName = card['state.owner'];
+  let zoneName = card['state.zone'];
+  card['state.tapped'] = true;
   db.doc(`Games/game1/Players/${playerName}/Zones/${zoneName}`)
     .update({
-      [card.id]: card
-    })
+      [card.id]: card,
+    });
 }
 
 export function untap(card) {
-  var playerName = card["state.owner"];
-  var zoneName = card["state.zone"];
-  card["state.tapped"] = false
+  let playerName = card['state.owner'];
+  let zoneName = card['state.zone'];
+  card['state.tapped'] = false;
   db.doc(`Games/game1/Players/${playerName}/Zones/${zoneName}`)
     .update({
-      [card.id]: card
-    })
+      [card.id]: card,
+    });
 }
 
 export function updateLife(player, newLife) {
   db.doc(`Games/game1/Players/${player}`)
     .update({
-      life: newLife
-    })
+      life: newLife,
+    });
 }
 
 // Methods for interacting with Cloud Functions
@@ -66,7 +66,7 @@ export async function importDeck(player, uri) {
         uri
     }
   });
-  return;
+  
 }
 
 /**
@@ -79,8 +79,8 @@ export async function importDeck(player, uri) {
 export async function parseDeck(uri) {
   const response = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/parseDeckFunction`, {
     params: {
-        uri
-    }
+      uri,
+    },
   });
   return response.data;
 }
@@ -99,10 +99,10 @@ export async function parseDeck(uri) {
 export async function populateDeck(player, deckId, ...include) {
   const response = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/populateDeckFunction`, {
     params: {
-        player,
-        deckId,
-        ...include && { include }
-    }
+      player,
+      deckId,
+      ...include && { include },
+    },
   });
   return response.data;
 }
@@ -120,9 +120,9 @@ export async function populateDeck(player, deckId, ...include) {
 export async function hostGame(player, deckId) {
   const response = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/hostGameFunction`, {
     params: {
-        player,
-        deckId
-    }
+      player,
+      deckId,
+    },
   });
   return response.headers['x-gameid'];
 }
@@ -145,7 +145,7 @@ export async function joinGame(gameId, player, deckId) {
         deckId
     }
   });
-  return;
+  
 }
 
 /**
@@ -162,5 +162,5 @@ export async function startGame(gameId) {
         gameId
     }
   });
-  return;
+  
 }

@@ -53,6 +53,7 @@
       "import": 0,
       "func-names": 0,
       "space-before-function-paren": 0,
+      "camelcase": 0,
       "comma-dangle": ["error", {
         "arrays": "always-multiline",
         "objects": "always-multiline",
@@ -64,6 +65,8 @@
       "import/extensions": 0,
       "no-underscore-dangle": 0,
       "consistent-return": 0,
+      "class-methods-use-this": 0,
+      "object-curly-newline": 0,
       "react/display-name": 1,
       "react/no-array-index-key": 0,
       "react/react-in-jsx-scope": 0,
