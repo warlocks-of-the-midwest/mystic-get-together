@@ -2,7 +2,7 @@
     "DummyCollection" : {
         "dummyDocument" : {
             "dummyAttribute" : 0,
-            "dummySubCollection" : {
+            "DummySubCollection" : {
                 "dummySubCollectionDocument" : {
                     "dummySubCollectionDocumentAttribute" : 0
                 }
