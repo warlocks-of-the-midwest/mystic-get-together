@@ -38,15 +38,7 @@ class GameArea extends Component {
 
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
-    this.player1Callback = this.player1ZoneCallback.bind(this);
-    this.player1ZoneCallback = this.player1ZoneCallback.bind(this);
     this.fetchCard = this.fetchCard.bind(this);
-  }
-
-  componentDidMount() {
-    sdk.listenToPlayer('player1', this.player1Callback);
-    sdk.listenToZone('player1', 'zone1', this.player1ZoneCallback);
-    // this.fetchCard(this.lordyUrl);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -56,20 +48,12 @@ class GameArea extends Component {
     });
   }
 
-  player1Callback(docData) {
-    const { gameActions } = this.props;
-    gameActions.updatePlayer('player1', docData);
-  }
-
-  player1ZoneCallback(docData) {
-    // const { gameActions } = this.props;
-    // // gameActions.updateZone('player1', 'zone1', docData);
-    // // console.log(docData);
-    // const newCards = _.map(_.keys(docData), (cardId) => new CardInfo(docData[cardId]));
-    // // console.log(newCards);
-    // this.setState({
-    //   cards: newCards,
-    // });
+  toggleCard(card) {
+    if (card['state.tapped']) {
+      sdk.untap(this.props.gameState.gameId, card);
+    } else {
+      sdk.tap(this.props.gameState.gameId, card);
+    }
   }
 
   increment(x) {
@@ -124,7 +108,7 @@ class GameArea extends Component {
             <Button
               outline
               color="success"
-              onClick={(state) => this.increment(1)}
+              onClick={() => this.increment(1)}
               type="submit"
             >
               +1
@@ -132,7 +116,7 @@ class GameArea extends Component {
             <Button
               outline
               color="warning"
-              onClick={(state) => this.decrement(1)}
+              onClick={() => this.decrement(1)}
               type="submit"
               block
             >
@@ -145,7 +129,7 @@ class GameArea extends Component {
             <Button
               outline
               color="primary"
-              onClick={(state) => this.increment(5)}
+              onClick={() => this.increment(5)}
               type="submit"
             >
               +5
@@ -153,7 +137,7 @@ class GameArea extends Component {
             <Button
               outline
               color="danger"
-              onClick={(state) => this.decrement(5)}
+              onClick={() => this.decrement(5)}
               type="submit"
               block
             >

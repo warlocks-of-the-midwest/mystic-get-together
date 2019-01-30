@@ -1,7 +1,16 @@
+import firebase from 'firebase';
 import axios from 'axios';
+import uuidv4 from 'uuid/v4';
 import db, { FIREBASE_FUNCTION_BASE_URL } from './fire.js';
 
 // Listeners
+export function listenToCard(gameId, cardId, callback) {
+  db.doc(`Games/${gameId}/Cards/${cardId}`)
+    .onSnapshot((doc) => {
+      callback(doc.data());
+    });
+}
+
 export function listenToZone(player, zone, callback) {
   db.doc(`Games/game1/Players/${player}/Zones/${zone}`)
     .onSnapshot((doc) => {
@@ -9,40 +18,188 @@ export function listenToZone(player, zone, callback) {
     });
 }
 
-export function listenToPlayer(player, callback) {
-  db.doc(`Games/game1/Players/${player}`)
+export function listenToPlayer(gameId, player, callback) {
+  db.doc(`Games/${gameId}/Players/${player}`)
     .onSnapshot((doc) => {
       callback(doc.data());
     });
 }
 
 // Game functions
-export function tap(card) {
-  let playerName = card['state.owner'];
-  let zoneName = card['state.zone'];
-  card['state.tapped'] = true;
-  db.doc(`Games/game1/Players/${playerName}/Zones/${zoneName}`)
-    .update({
-      [card.id]: card,
-    });
+// Card functions
+export function moveCardToZone(gameId, card, targetZone) {
+  if (card.state.zone === targetZone) {
+    return;
+  }
+  card.state.zone = targetZone;
+  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
 }
 
-export function untap(card) {
-  let playerName = card['state.owner'];
-  let zoneName = card['state.zone'];
-  card['state.tapped'] = false;
-  db.doc(`Games/game1/Players/${playerName}/Zones/${zoneName}`)
-    .update({
-      [card.id]: card,
-    });
+function setSingleCardPosition(gameId, card, newPosition) {
+  card.state.position = newPosition;
+  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
 }
 
-export function updateLife(player, newLife) {
-  db.doc(`Games/game1/Players/${player}`)
+export function setCardPosition(gameId, card, newPosition) {
+  const previousPosition = card.state.position;
+  db.collection(`Games/${gameId}/Cards/`).get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const otherCardData = doc.data();
+      // Move all other cards that are now below this one down.
+      if (otherCardData.id !== card.id) {
+        const cardPosition = otherCardData.state.position
+        if (cardPosition > previousPosition && cardPosition <= newPosition) {
+          setSingleCardPosition(gameId, otherCardData, cardPosition - 1)
+        }
+        else if (cardPosition >= newPosition && cardPosition < previousPosition) {
+          setSingleCardPosition(gameId, otherCardData, cardPosition + 1)
+        }
+      } else {
+        setSingleCardPosition(gameId, card, newPosition)
+      }
+    });
+  });
+}
+
+// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffleArray(array) {
+  let currentIndex = array.length; let temporaryValue; let
+    randomIndex;
+  // While there remain elements to shuffle...
+  while (currentIndex !== 0) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+}
+
+export function shuffle(gameId, targetPlayer) {
+  const numCards = 100;
+  const newOrdering = [];
+  for (let i = 0; i < numCards; i++) {
+    newOrdering.push(i);
+  }
+  shuffleArray(newOrdering);
+
+  let i = 0;
+  db.collection(`Games/${gameId}/Cards/`).get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const card = doc.data();
+      if (card.state.zone === "Library") { // Only shuffle library cards
+        setSingleCardPosition(gameId, card, newOrdering[i])
+        i++;
+      }
+    });
+  });
+}
+
+export function remove(gameId, card) {
+  db.doc(`Games/${gameId}/Cards/${card.id}`).delete();
+}
+
+export function changeController(gameId, card, targetPlayer, targetZone) {
+  card.state.controller = targetPlayer;
+  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
+}
+
+export function tap(gameId, card) {
+  card.state.tapped = true;
+  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
+}
+
+export function untap(gameId, card) {
+  card.state.tapped = false;
+  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
+}
+
+export function clone(gameId, card, shouldCreateToken) {
+  // deep copy the card
+  const cardCopy = JSON.parse(JSON.stringify(card));
+  cardCopy.state.is_token = shouldCreateToken;
+  cardCopy.id = uuidv4();
+  db.doc(`Games/${gameId}/Cards/${cardCopy.id}`).set(cardCopy);
+}
+
+export function flip(gameId, card) {
+  card.state.face_up = !card.state.face_up;
+  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
+}
+
+export function createToken(gameId, tokenScryfallId, targetPlayer, targetZone, power, toughness) {
+  const newCard = {
+    id: uuidv4(),
+    scryfall_id: tokenScryfallId,
+    'state.owner': targetPlayer,
+    'state.controller': targetPlayer,
+    'state.zone': targetZone,
+    'state.position': 0,
+    'state.tapped': false,
+    'state.face_up': true,
+    'state.clone_of': false,
+    'state.is_morph': false,
+    'state.is_token': true,
+    'state.power': power,
+    'state.toughness': toughness,
+    'attachments.counters': {},
+    'attachments.permanents': {},
+  };
+  db.doc(`Games/${gameId}/Cards/${newCard.id}`).set(newCard);
+}
+
+export function setCardCounters(gameId, card, counterType, numCounters) {
+  const currentCounters = card.attachments.counters;
+  currentCounters[counterType] = numCounters;
+  card.attachments.counters = currentCounters;
+  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
+}
+
+export function setAttachedPermanents(gameId, card, attachedPermanents) {
+  card.attachments.permanents = attachedPermanents;
+  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
+}
+
+// Player functions
+export function updateLife(gameId, player, newLife) {
+  db.doc(`Games/${gameId}/Players/${player}`)
     .update({
       life: newLife,
     });
 }
+
+export function setPlayerCounters(gameId, player, counterType, numCounters) {
+  let currentCounters;
+  db.doc(`Games/${gameId}/Players/${player}`).get().then((doc) => {
+    currentCounters = doc.data().counters;
+    currentCounters[counterType] = numCounters;
+    db.doc(`Games/${gameId}/Players/${player}`)
+      .update({
+        counters: currentCounters,
+      });
+  });
+}
+
+// TODO we don't currently store any data for game status like this
+export function loseGame(player) {
+}
+export function winGame(player) {
+}
+export function drawGame() {
+}
+
+// Deck functions
+export function getAvailableDecks(user) {
+  let deckData;
+  return db.doc(`Users/${user}`).get().then((doc) => {
+    deckData = doc.data().decks;
+    return Object.keys(deckData);
+  });
+}
+
 
 // Methods for interacting with Cloud Functions
 // TODO: Once we get Firebase Auth setup, we should convert our Functions
@@ -62,11 +219,10 @@ export function updateLife(player, newLife) {
 export async function importDeck(player, uri) {
   await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/importDeckFunction`, {
     params: {
-        player,
-        uri
-    }
+      player,
+      uri,
+    },
   });
-  
 }
 
 /**
@@ -140,12 +296,11 @@ export async function hostGame(player, deckId) {
 export async function joinGame(gameId, player, deckId) {
   await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/joinGameFunction`, {
     params: {
-        gameId,
-        player,
-        deckId
-    }
+      gameId,
+      player,
+      deckId,
+    },
   });
-  
 }
 
 /**
@@ -159,8 +314,7 @@ export async function joinGame(gameId, player, deckId) {
 export async function startGame(gameId) {
   await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/startGameFunction`, {
     params: {
-        gameId
-    }
+      gameId,
+    },
   });
-  
 }
