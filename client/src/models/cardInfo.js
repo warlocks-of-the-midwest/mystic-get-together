@@ -60,7 +60,7 @@ class CardInfo {
   }
 
   getPowerToughness() {
-    return this.isCreature() ? `${this.getPower()}/${this.getToughness()}` : null;
+    return this.isCreature() ? `${this.power}/${this.toughness}` : null;
   }
 
   isCreature() {
@@ -80,6 +80,14 @@ class CardInfo {
         [name]: _.get(cardJson, propertyName, null),
       };
     }, {});
+    const { power, toughness } = state;
+    if (power) {
+      this.power = power;
+    }
+    if (toughness) {
+      this.toughness = toughness;
+    }
+
     this.state = { ...state };
   }
 }
