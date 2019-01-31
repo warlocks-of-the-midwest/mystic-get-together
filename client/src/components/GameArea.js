@@ -48,14 +48,6 @@ class GameArea extends Component {
     });
   }
 
-  toggleCard(card) {
-    if (card['state.tapped']) {
-      sdk.untap(this.props.gameState.gameId, card);
-    } else {
-      sdk.tap(this.props.gameState.gameId, card);
-    }
-  }
-
   increment(x) {
     this.setState({
       life: Number(this.state.life) + Number(x),
@@ -337,8 +329,7 @@ class GameArea extends Component {
 }
 
 GameArea.propTypes = {
-  gameState: PropTypes.shape({}).isRequired,
-  gameActions: PropTypes.shape({}).isRequired,
+  cards: PropTypes.array.isRequired,
 };
 
 export default GameArea;

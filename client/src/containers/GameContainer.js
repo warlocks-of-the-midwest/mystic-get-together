@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -16,7 +17,6 @@ class GameContainer extends React.Component {
   }
 
   componentDidMount() {
-    // sdk.listenToPlayer('player1', this.player1Callback);
     sdk.listenToZone('player1', 'zone1', this.loadCards);
   }
 
@@ -25,23 +25,12 @@ class GameContainer extends React.Component {
     const cards = _.map(_.keys(data), (cardId) => data[cardId]);
     const scryfallIds = _.map(cards, (card) => _.get(card, 'scryfall_id', null));
 
-    const requests = _.map(scryfallIds, async (id) => {
-      const response = await fetch(`https://api.scryfall.com/cards/${id}?format=json`);
-      const scryfallData = await response.json();
-      const {
-        name,
-        mana_cost,
-        image_uris,
-        type_line,
-        set_name,
-        oracle_text,
-        power,
-        toughness,
-      } = scryfallData;
+    const requests = _.map(scryfallIds, async (scryfallId) => {
+      const response = await fetch(`https://api.scryfall.com/cards/${scryfallId}?format=json`);
+      const scryfallJson = await response.json();
+      const { id, ...scryfallData } = scryfallJson;
 
-      const img_url = image_uris.art_crop;
-
-      return Promise.resolve({ name, mana_cost, img_url, type_line, set_name, oracle_text, power, toughness });
+      return Promise.resolve({ ...scryfallData });
     });
 
     Promise.all(requests)
@@ -60,6 +49,11 @@ class GameContainer extends React.Component {
     );
   }
 }
+
+GameContainer.propTypes = {
+  gameState: PropTypes.shape({}).isRequired,
+  gameActions: PropTypes.shape({}).isRequired,
+};
 
 const mapStateToProps = (state) => ({
   ...state,

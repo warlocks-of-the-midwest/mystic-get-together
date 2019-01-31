@@ -4,10 +4,10 @@ class CardInfo {
   // CardInfo constructor takes raw JSON
   // TODO -- set symbol url
   constructor(cardJson) {
-    const { id, img_url, mana_cost, name, oracle_text, power, scryfall_id, set_name, toughness, type_line } = cardJson;
+    const { id, image_uris, mana_cost, name, oracle_text, power, scryfall_id, set_name, toughness, type_line } = cardJson;
 
     this.id = id;
-    this.imgUrl = img_url;
+    this.imgUrl = image_uris.art_crop;
     this.manaCost = mana_cost;
     this.cardText = oracle_text;
     this.name = name;
@@ -16,7 +16,7 @@ class CardInfo {
     this.setName = set_name;
     this.toughness = toughness;
     this.type = type_line;
-    this.translateCardState(cardJson);
+    this._translateCardState(cardJson);
   }
 
   getId() {
@@ -71,7 +71,7 @@ class CardInfo {
     return this.state.tapped;
   }
 
-  translateCardState(cardJson) {
+  _translateCardState(cardJson) {
     const stateProperties = _.filter(_.keys(cardJson), (propertyName) => _.includes(propertyName, 'state'));
     const state = _.reduce(stateProperties, (stateObj, propertyName) => {
       const name = _.last(_.split(propertyName, '.'));
