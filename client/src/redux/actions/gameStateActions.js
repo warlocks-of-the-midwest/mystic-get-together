@@ -1,6 +1,7 @@
 const types = {
   UPDATE_PLAYER: 'UPDATE_PLAYER',
-  UPDATE_ZONE: 'UPDATE_ZONE'
+  /*UPDATE_ZONE: 'UPDATE_ZONE',*/
+  UPDATE_CARD: 'UPDATE_CARD'
 };
 
 const updatePlayer = (playerName, playerData) => (dispatch) => {
@@ -13,7 +14,7 @@ const updatePlayer = (playerName, playerData) => (dispatch) => {
   });
 };
 
-const updateZone = (playerName, zoneName, zoneData) => (dispatch) => {
+/*const updateZone = (playerName, zoneName, zoneData) => (dispatch) => {
   dispatch({
     type: types.UPDATE_ZONE,
     payload: {
@@ -22,10 +23,20 @@ const updateZone = (playerName, zoneName, zoneData) => (dispatch) => {
       zoneData: zoneData
     },
   });
+};*/
+
+const updateCard = (card) => (dispatch) => {
+  dispatch({
+    type: types.UPDATE_CARD,
+    payload: {
+      card: card
+    },
+  });
 };
 
 export default {
   types,
   updatePlayer,
-  updateZone
+  /*updateZone,*/
+  updateCard
 };
