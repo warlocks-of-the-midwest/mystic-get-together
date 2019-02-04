@@ -30,45 +30,17 @@ class GameArea extends Component {
       life: 0,
       top_row: [],
       bottom_row: [],
-      card: {
-        id: 'f3bd773c-ff34-465d-b176-18e8873d28a7',
-        scryfall_id: '123',
-        state: {
-          controller: 'player1',
-          is_token: true,
-          owner: 'player1',
-          position: 18,
-          zone:'Exile',
-          tapped: false
-        }
-      }
     };
 
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
-
-    //this.toggleCard(this.state.card);
-    //sdk.moveCardToZone(this.props.gameState.gameId, this.state.card.id, "Battlefield");
-    //sdk.setCardPosition(this.props.gameState.gameId, this.state.card.id, 17);
-    //sdk.shuffle(this.props.gameState.gameId, "player1");
-    
-    //TODO remove onward
-
-    //sdk.listenToPlayer(this.props.gameState.gameId, "player1", this.player1Callback)
-    //sdk.listenToZone(this.props.gameState.gameId, "player1", "zone1", this.player1ZoneCallback)
-    //sdk.listenToZone(this.props.gameState.gameId, "player1", "zone2", this.player1Zone2Callback)
   }
 
   player1Callback(docData) {
     const { gameActions } = this.props;
     gameActions.updatePlayer("player1", docData)
   }
-
-  /*player1ZoneCallback(docData) {
-    const { gameActions } = this.props;
-    gameActions.updateZone("player1", "zone1", docData)
-  }*/
 
   toggleCard(card) {
     if (card.state.tapped) {

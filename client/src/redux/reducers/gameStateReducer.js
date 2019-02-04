@@ -1,38 +1,11 @@
 import gameActions from '../actions/gameStateActions';
 
 //TODO make a complete initial state
-//TODO update with correct schema
 const initialState = {
   gameId: 'game1',
   Players: {
     player1: {
-      life: 40,
-      /*Zones: {
-        zone1: {
-          card1: {
-            "state.tapped": false,
-            "state.owner": "player1",
-            "state.zone": "zone1"
-          },
-          card2: {
-            "state.tapped": false,
-            "state.owner": "player1",
-            "state.zone": "zone1"
-          }
-        },
-        zone2: {
-          card1: {
-            "state.tapped": false,
-            "state.owner": "player1",
-            "state.zone": "zone2"
-          },
-          card2: {
-            "state.tapped": false,
-            "state.owner": "player1",
-            "state.zone": "zone2"
-          }
-        }
-      }*/
+      life: 40
     }
   },
   Cards: {
@@ -85,14 +58,6 @@ const gameStateReducer = (state = initialState, action) => {
         Players: newPlayers
       };
     }
-    /*case gameActions.types.UPDATE_ZONE: {
-      let newPlayers = state.Players
-      newPlayers[action.payload.playerName].Zones[action.payload.zoneName] = action.payload.zoneData
-      return {
-        ...state,
-        Players: newPlayers
-      };
-    }*/
     case gameActions.types.UPDATE_CARD: {
       let newCards = state.Cards
       //TODO handling cards getting deleted/removed?
