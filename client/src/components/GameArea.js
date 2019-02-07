@@ -38,8 +38,9 @@ class GameArea extends Component {
     this.toggleCard = this.toggleCard.bind(this);
     this.handleToggleSidebarClick = this.handleToggleSidebarClick.bind(this);
 
-    sdk.listenToPlayer("player1", this.player1Callback)
-    sdk.listenToZone("player1", "zone1", this.player1ZoneCallback)
+    //sdk.listenToPlayer(this.props.gameState.gameId, "player1", this.player1Callback)
+    //sdk.listenToZone(this.props.gameState.gameId, "player1", "zone1", this.player1ZoneCallback)
+    //sdk.listenToZone(this.props.gameState.gameId, "player1", "zone2", this.player1Zone2Callback)
   }
 
   player1Callback(docData) {
@@ -54,10 +55,10 @@ class GameArea extends Component {
 
   toggleCard(card) {
     if (card["state.tapped"]) {
-      sdk.untap(card)
+      sdk.untap(this.props.gameState.gameId, card)
     }
     else {
-      sdk.tap(card)
+      sdk.tap(this.props.gameState.gameId, card)
     }
   }
 
