@@ -122,7 +122,7 @@ class GameArea extends Component {
     const FULL_LENGTH = 12;
     const SHORTER_LENGTH = 10;
     const battfieldFieldColumnLength = this.state.isToggleSidebarOn ? FULL_LENGTH : SHORTER_LENGTH;
-    const displaySidebar = this.state.isToggleSidebarOn ? { display: 'none' } : {};
+
     return (
       <Container
         fluid
@@ -305,7 +305,8 @@ class GameArea extends Component {
             </Container>
           </Col>
           {/* Sidebar for exile,graveyard,hand,library  */}
-          <Col xs="2" className="sidebar-col p-0 m-0" style={displaySidebar}>
+          {!this.state.isToggleSidebarOn && (
+          <Col xs="2" className="sidebar-col p-0 m-0">
             <Container
               fluid
               className="sidebar-col-container mh-100 h-100 mw-100 w-100 p-0 m-0"
@@ -317,6 +318,7 @@ class GameArea extends Component {
               </Row>
             </Container>
           </Col>
+          )}
         </Row>
       </Container>
     );
