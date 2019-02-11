@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Axios from 'axios';
+import PropTypes from 'prop-types';
+
 import '../styles/Card.css';
 
 import 'bootstrap/dist/js/bootstrap.bundle.js';
-import $ from 'jquery';
 
 import {
   Container,
@@ -17,57 +17,13 @@ import * as sdk from '../js-sdk/sdk';
 class Card extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       popoverOpen: false,
     };
 
     this.toggle = this.toggle.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
-    this.isCreature = this.isCreature.bind(this);
-  }
-
-  url =
-    'https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json';
-
-  static parseScryfallData(data) {
-    if (data) {
-      const jsonObj = data;
-      const name = jsonObj.name;
-      const mana_cost = jsonObj.mana_cost;
-      const image_uri_art_crop = jsonObj.image_uris.art_crop;
-      const type_line = jsonObj.type_line;
-      const set = jsonObj.set;
-      const set_image = `https://img.scryfall.com/sets/${set}.svg?1545627600`;
-      const oracle_text = jsonObj.oracle_text;
-      const power = jsonObj.power;
-      const toughness = jsonObj.toughness;
-      const cardInfo = [
-        name,
-        mana_cost,
-        image_uri_art_crop,
-        type_line,
-        set_image,
-        oracle_text,
-        power,
-        toughness,
-      ];
-      return cardInfo;
-    }
-  }
-
-  static async getScryFallCardInfo(url) {
-    const responsePromise = async () => {
-      try {
-        const response = await Axios.get(url);
-        return response.data;
-      } catch (e) {
-        console.error(e);
-        return null;
-      }
-    };
-
-    const data = await responsePromise();
-    return Card.parseScryfallData(data);
   }
 
   toggle() {
@@ -81,26 +37,6 @@ class Card extends React.Component {
       sdk.untap(card);
     } else {
       sdk.tap(card);
-    }
-  }
-
-  componentDidMount() {
-    $(() => {
-      $('[data-toggle="popover"]').popover();
-    });
-    this.isCreature();
-  }
-
-  isCreature() {
-    if (this.props.power) {
-      console.log('has power');
-      this.setState((state) => ({
-        isCreature: String(`${this.props.power}/${this.props.toughness}`),
-      }));
-    } else {
-      this.setState((state) => ({
-        isCreature: 'non-creature',
-      }));
     }
   }
 
@@ -244,7 +180,7 @@ class Card extends React.Component {
               obj
               className="set-image img-fluid d-block mx-auto align-self-baseline"
               alt="Set Image"
-              src={card.getSetImage()} // TODO
+              src={card.getSetImage()}
               style={{
                 'max-height': '100%',
               }}
@@ -357,5 +293,9 @@ class Card extends React.Component {
     );
   }
 }
+
+Card.propTypes = {
+  card: PropTypes.shape({}).isRequired,
+};
 
 export default Card;
