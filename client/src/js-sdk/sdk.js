@@ -25,6 +25,24 @@ export function listenToPlayer(gameId, player, callback) {
     });
 }
 
+export async function loadPlayers(gameId) {
+  const querySnapshot = await db.collection(`Games/${gameId}/Players`).get();
+  const result = [];
+  querySnapshot.forEach((doc) => {
+    result.push(doc.data());
+  });
+  return result;
+}
+
+export async function loadCards(gameId) {
+  const querySnapshot = await db.collection(`Games/${gameId}/Cards`).get();
+  const result = [];
+  querySnapshot.forEach((doc) => {
+    result.push(doc.data());
+  });
+  return result;
+}
+
 // Game functions
 // Card functions
 export function moveCardToZone(gameId, card, targetZone) {
@@ -47,15 +65,14 @@ export function setCardPosition(gameId, card, newPosition) {
       const otherCardData = doc.data();
       // Move all other cards that are now below this one down.
       if (otherCardData.id !== card.id) {
-        const cardPosition = otherCardData.state.position
+        const cardPosition = otherCardData.state.position;
         if (cardPosition > previousPosition && cardPosition <= newPosition) {
-          setSingleCardPosition(gameId, otherCardData, cardPosition - 1)
-        }
-        else if (cardPosition >= newPosition && cardPosition < previousPosition) {
-          setSingleCardPosition(gameId, otherCardData, cardPosition + 1)
+          setSingleCardPosition(gameId, otherCardData, cardPosition - 1);
+        } else if (cardPosition >= newPosition && cardPosition < previousPosition) {
+          setSingleCardPosition(gameId, otherCardData, cardPosition + 1);
         }
       } else {
-        setSingleCardPosition(gameId, card, newPosition)
+        setSingleCardPosition(gameId, card, newPosition);
       }
     });
   });
@@ -90,8 +107,8 @@ export function shuffle(gameId, targetPlayer) {
   db.collection(`Games/${gameId}/Cards/`).get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
       const card = doc.data();
-      if (card.state.zone === "Library") { // Only shuffle library cards
-        setSingleCardPosition(gameId, card, newOrdering[i])
+      if (card.state.zone === 'Library') { // Only shuffle library cards
+        setSingleCardPosition(gameId, card, newOrdering[i]);
         i++;
       }
     });

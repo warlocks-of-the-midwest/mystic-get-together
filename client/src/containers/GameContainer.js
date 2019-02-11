@@ -9,15 +9,48 @@ import * as sdk from '../js-sdk/sdk';
 import GameArea from '../components/GameArea';
 import gameStateActions from '../redux/actions/gameStateActions';
 
+const GAME_ID = 'pCc44llUV5JVRjfl0YqZ'; // hard-coded for debugging
+
 class GameContainer extends React.Component {
   constructor(props) {
     super(props);
 
+    this.playerUpdate = this.playerUpdate.bind(this);
+    this.cardUpdate = this.cardUpdate.bind(this);
     this.loadCards = this.loadCards.bind(this);
   }
 
-  componentDidMount() {
-    sdk.listenToZone('player1', 'zone1', this.loadCards);
+  async componentDidMount() {
+    const { gameActions } = this.props;
+
+    const playerPromise = sdk.loadPlayers(GAME_ID);
+    const cardPromise = sdk.loadCards(GAME_ID);
+
+    const [playerData, cardData] = await Promise.all([playerPromise, cardPromise]);
+
+    _.forEach(playerData, (player) => {
+      const { uid } = player;
+      sdk.listenToPlayer(GAME_ID, uid, this.playerUpdate);
+    });
+    gameActions.loadPlayers(playerData);
+
+    _.forEach(cardData, (card) => {
+      const { id } = card;
+      sdk.listenToCard(GAME_ID, id, this.cardUpdate);
+    });
+    this.loadCards(cardData);
+  }
+
+  playerUpdate(data) {
+    console.log('player callback');
+    console.log(data);
+    // TODO update player in reducer array
+  }
+
+  cardUpdate(data) {
+    console.log('card callback');
+    console.log(data);
+    // TODO update card in reducer array
   }
 
   loadCards(data) {

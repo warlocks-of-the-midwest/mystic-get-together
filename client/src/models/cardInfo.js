@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 class CardInfo {
-  // CardInfo constructor takes raw JSON
   constructor(cardJson) {
     const { id, image_uris, mana_cost, name, oracle_text, power, scryfall_id, set_name, toughness, type_line, icon_svg_uri } = cardJson;
 

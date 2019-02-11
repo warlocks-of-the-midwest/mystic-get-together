@@ -10,7 +10,6 @@ import {
   ButtonGroup,
 } from 'reactstrap';
 
-import * as sdk from '../js-sdk/sdk';
 import Card from './Card.js';
 
 import NavigationBar from './NavigationBar';
@@ -20,25 +19,17 @@ import '../styles/GameArea.css';
 import '../styles/Card.css';
 
 class GameArea extends Component {
-  lordyUrl =
-    'https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json';
-
   constructor(props) {
     super(props);
 
     const { cards } = this.props;
-
     this.state = {
-      player: 'Anthony',
       life: 0,
-      top_row: [],
-      bottom_row: [],
       cards,
     };
 
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
-    this.fetchCard = this.fetchCard.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,24 +49,6 @@ class GameArea extends Component {
     this.setState({
       life: Number(this.state.life) - Number(x),
     });
-  }
-
-  // Fetch a card given it's scryfall api url.
-  async fetchCard(url) {
-    const cardInfo = await Card.getScryFallCardInfo(url);
-    this.setState((state) => {
-      const arr = state.top_row.slice();
-      const c = this.props.gameState.Players.player1.Zones.zone1.card1;
-      const cardState = {
-        owner: c['state.owner'],
-        zone: c['state.zone'],
-      };
-      arr.push(cardInfo);
-      return {
-        top_row: arr,
-      };
-    });
-    console.log(cardInfo);
   }
 
   mainTitle() {
@@ -272,39 +245,7 @@ class GameArea extends Component {
                   xs="12"
                   className="battlefield-bottom d-inline-flex flex-wrap justify-content-start card-row card-row-top m-0 p-0"
                 >
-                <>
-                  {this.state.top_row.map((cardInfo) => (
-                    <Col
-                      xs="2"
-                      style={{
-                        'min-width': '80px',
-                        'max-height': '50%',
-                      }}
-                      className="no-gutters"
-                    >
-                      <Col
-                        xs="11"
-                        className="mh-100 h-100 no-gutters"
-                      >
-                        <Card
-                          name={cardInfo[0]}
-                          cost={cardInfo[1]}
-                          image={cardInfo[2]}
-                          type={cardInfo[3]}
-                          set={cardInfo[4]}
-                          text={cardInfo[5]}
-                          power={cardInfo[6]}
-                          divider={cardInfo[6] ? '/' : ''}
-                          toughness={cardInfo[7]}
-                        />
-                      </Col>
-                      <Col
-                        xs="1"
-                        className="mh-100 h-100 no-gutters"
-                      />
-                    </Col>
-                  ))}
-                  </>
+                  {'placeholder text - bottom row'}
                 </Col>
               </Row>
             </Container>
