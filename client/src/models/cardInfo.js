@@ -2,9 +2,8 @@ import _ from 'lodash';
 
 class CardInfo {
   // CardInfo constructor takes raw JSON
-  // TODO -- set symbol url
   constructor(cardJson) {
-    const { id, image_uris, mana_cost, name, oracle_text, power, scryfall_id, set_name, toughness, type_line } = cardJson;
+    const { id, image_uris, mana_cost, name, oracle_text, power, scryfall_id, set_name, toughness, type_line, icon_svg_uri } = cardJson;
 
     this.id = id;
     this.imgUrl = image_uris.art_crop;
@@ -16,6 +15,7 @@ class CardInfo {
     this.setName = set_name;
     this.toughness = toughness;
     this.type = type_line;
+    this.setImgUrl = icon_svg_uri;
     this._translateCardState(cardJson);
   }
 
@@ -35,7 +35,7 @@ class CardInfo {
     return this.manaCost;
   }
 
-  getImageUrl() {
+  getImage() {
     return this.imgUrl;
   }
 
@@ -45,6 +45,10 @@ class CardInfo {
 
   getSetName() {
     return this.setName;
+  }
+
+  getSetImage() {
+    return this.setImgUrl;
   }
 
   getCardText() {
@@ -64,7 +68,7 @@ class CardInfo {
   }
 
   isCreature() {
-    return _.includes(_.toLower(this.getType()), 'creature');
+    return _.includes(_.toLower(this.type), 'creature');
   }
 
   isTapped() {

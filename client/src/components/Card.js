@@ -190,7 +190,7 @@ class Card extends React.Component {
               obj
               className="card-art-image img-fluid d-block mx-auto h-100 mh-100 w-100 mw-100"
               alt="Card Art"
-              src={card.getImageUrl()}
+              src={card.getImage()}
             />
           </Col>
         </Row>
@@ -244,7 +244,7 @@ class Card extends React.Component {
               obj
               className="set-image img-fluid d-block mx-auto align-self-baseline"
               alt="Set Image"
-              src={this.props.set} // TODO
+              src={card.getSetImage()} // TODO
               style={{
                 'max-height': '100%',
               }}

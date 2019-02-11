@@ -26,11 +26,15 @@ class GameContainer extends React.Component {
     const scryfallIds = _.map(cards, (card) => _.get(card, 'scryfall_id', null));
 
     const requests = _.map(scryfallIds, async (scryfallId) => {
-      const response = await fetch(`https://api.scryfall.com/cards/${scryfallId}?format=json`);
+      let response = await fetch(`https://api.scryfall.com/cards/${scryfallId}?format=json`);
       const scryfallJson = await response.json();
-      const { id, ...scryfallData } = scryfallJson;
+      const { id, set_uri, ...scryfallData } = scryfallJson;
 
-      return Promise.resolve({ ...scryfallData });
+      response = await fetch(set_uri);
+      const setJson = await response.json();
+      const { icon_svg_uri } = setJson;
+
+      return Promise.resolve({ icon_svg_uri, ...scryfallData });
     });
 
     Promise.all(requests)
