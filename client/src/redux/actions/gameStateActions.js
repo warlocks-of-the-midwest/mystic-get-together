@@ -5,7 +5,6 @@ import Player from '../../models/player';
 
 const types = {
   UPDATE_PLAYER: 'UPDATE_PLAYER',
-  UPDATE_ZONE: 'UPDATE_ZONE',
   LOAD_PLAYERS: 'LOAD_PLAYERS',
   LOAD_CARDS: 'LOAD_CARDS',
 };
@@ -16,17 +15,6 @@ const updatePlayer = (playerName, playerData) => (dispatch) => {
     payload: {
       playerName,
       playerData,
-    },
-  });
-};
-
-const updateZone = (playerName, zoneName, zoneData) => (dispatch) => {
-  dispatch({
-    type: types.UPDATE_ZONE,
-    payload: {
-      playerName,
-      zoneName,
-      zoneData,
     },
   });
 };
@@ -54,7 +42,6 @@ const loadCards = (cards) => (dispatch) => {
 export default {
   types,
   updatePlayer,
-  updateZone,
   loadPlayers,
   loadCards,
 };
