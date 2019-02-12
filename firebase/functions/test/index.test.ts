@@ -199,9 +199,20 @@ describe('Cloud Functions Test Suite', function() {
       });
     });
   
-    describe('Test populating a deck that does not exist', () => {
-      // * Populate a deck with id `FAKEID`
-      // * Assert that the function returns an error
+    describe('Test populating a deck that does not exist', function() {
+      describe('Populate a deck with id "FAKEID"', function() {
+        it('Make the HTTP call', async function() {
+          this.timeout(15000);
+          await supertest(functionsConfig.baseURI)
+          .post('/populateDeckFunction')
+          .send({
+            player: functionsConfig.user2.uid,
+            deckId: 'FAKEID',
+            include: ['name', 'id'],
+          })
+          .expect(400);
+        });
+      });
     });
   });
 
