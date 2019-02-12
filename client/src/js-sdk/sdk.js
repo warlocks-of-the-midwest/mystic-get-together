@@ -11,6 +11,34 @@ export function listenToCard(gameId, cardId, callback) {
     });
 }
 
+// Expects an array of queries in the following format:
+// queries = [
+//   query0 = [ "state.controller", "==", "player1" ],
+//   query1 = [ "state.power", ">=", 5 ],
+//   query2 = [ "state.is_token", "!=", true ]
+// ]
+export function listenToCardsByQuery(gameId, queries, callback) {
+  let queryRef = db.collection(`Games/${gameId}/Cards`);
+  queries.forEach(function(query) {
+    queryRef = queryRef.where(query[0], query[1], query[2]);
+  });
+  queryRef.onSnapshot(function(querySnapshot) {
+    querySnapshot.forEach(function(doc) {
+        callback(doc.data());
+    });
+  });
+}
+
+// Listens to all cards in a game
+export function listenToGame(gameId, callback) {
+  db.collection(`Games/${gameId}/Cards`).onSnapshot(
+    function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            callback(doc.data());
+        });
+    });
+}
+
 export function listenToPlayer(gameId, player, callback) {
   db.doc(`Games/${gameId}/Players/${player}`)
     .onSnapshot((doc) => {
