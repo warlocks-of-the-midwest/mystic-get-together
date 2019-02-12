@@ -130,7 +130,7 @@ describe('Cloud Functions Test Suite', function() {
           });
           commanders = _.sortBy(commanders, ['id']);
           
-          expect(commanders.length).to.equal(2);
+          expect(commanders).to.have.lengthOf(2);
           expect(commanders[0].id).to.equal('125b552b-45ea-4e0b-94a9-8131c97a04c0');
           expect(commanders[1].id).to.equal('3b951e0c-a4dd-4a20-87c6-eaa947e33aa4');
         });
@@ -153,9 +153,6 @@ describe('Cloud Functions Test Suite', function() {
 
       describe('Validate the document in Firestore', function() {
         it('No document was created', async function() {
-          // TODO - we can only implement this if we can expect a clean execution environment
-          // Need a before suite method to wipe the collection
-          // Then expect that the deck collection has a size of 1
           const decks = await firestore.collection(`Users/${functionsConfig.user1.uid}/Decks`).get();
           expect(decks.size).to.equal(1);
         });
@@ -183,7 +180,7 @@ describe('Cloud Functions Test Suite', function() {
         });
 
         it('Received data for four cards', function() {
-          expect(response.body.cards.length).to.equal(4);
+          expect(response.body.cards).to.have.lengthOf(4);
         });
 
         it('The names for the four cards were returned', function() {
@@ -218,27 +215,53 @@ describe('Cloud Functions Test Suite', function() {
     describe('Test starting a game', function() {
       describe('Host a game with the "DRAGONS" deck as user1', function() {
         it('Make the HTTP call', async function() {
-          console.log(`user1: ${user1DeckId} and user2: ${user2DeckId}`)
+          this.timeout(15000);
+          await supertest(functionsConfig.baseURI)
+          .post('/hostGameFunction')
+          .send({
+            player: functionsConfig.user1.uid,
+            deckId: user1DeckId,
+          })
+          .expect(201)
+          .then((res) => {
+            gameId = res.header['x-gameid'];
+          })
         });
       });
   
-      describe('data is good', function() {
-        it('* Assert that `Games/<gameId>/Players/<userId>` exists, and has', ()=> {
-          // * `life` set to 40
-          // * `uid` set to
-          // * `meta.deck_id` set to the correct value for the DRAGONS deck
+      describe('Validate the document in Firestore', function() {
+        let playerDoc: Firestore.DocumentSnapshot;
+        it(`"Games/<gameId>/Players/${functionsConfig.user1.uid}" exists`, async function() {
+          playerDoc = await firestore.doc(`Games/${gameId}/Players/${functionsConfig.user1.uid}`).get();
+          expect(playerDoc.exists).to.be.true;
         });
-      
-        it('* Assert that `Games/<gameId>/Cards` contains 100 documents', () => {
-      
+
+        it('Validate player document', function() {
+          expect(playerDoc.data().life).to.equal(40);
+          expect(playerDoc.data().uid).to.equal(functionsConfig.user1.uid);
+          expect(playerDoc.data().meta.deckId).to.equal(user1DeckId);
         });
-      
-        it ('* Assert that the collection contains exactly 1 document where `scryfall_id` equals `7e78b70b-0c67-4f14-8ad7-c9f8e3f59743`, `state.zone` equals `Command`, and `state.owner` equals <userId for user 1>', () => {
-      
+
+        it(`Games/<gameId>/Cards contains 100 documents`, async function() {
+          const cards = await firestore.collection(`Games/${gameId}/Cards`).get();
+          expect(cards.size).to.equal(100);
+        });
+
+        let commanderDoc: Firestore.DocumentSnapshot;
+        it('Collection contains 1 commander', async function() {
+          const commander = await firestore.collection(`Games/${gameId}/Cards`)
+            .where('state.zone', '==', Decklist.Board.COMMAND)
+            .get();
+          expect(commander.docs).to.have.lengthOf(1);
+          commanderDoc = commander.docs[0];
+        });
+
+        it('Validate commander card document', function() {
+          expect(commanderDoc.data().scryfall_id).to.equal('7e78b70b-0c67-4f14-8ad7-c9f8e3f59743');
+          expect(commanderDoc.data().state.zone).to.equal(Decklist.Board.COMMAND);
+          expect(commanderDoc.data().state.owner).to.equal(functionsConfig.user1.uid);
         });
       });
-  
-      
     });
   });
 
