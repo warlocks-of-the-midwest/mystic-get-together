@@ -5,9 +5,9 @@ import {
   Modal, ModalHeader, ModalBody,
   Input, InputGroup,
   ListGroup, ListGroupItem,
-  Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
 } from 'reactstrap';
 import Card from './Card.js';
+import SideZoneContextMenu from './SideZoneContextMenu.js';
 import '../styles/Zones.css';
 
 class SideZone extends Component {
@@ -44,7 +44,7 @@ class SideZone extends Component {
    * Toggles the modal state. Also resets this.state.currentSearchTerm.
    */
   toggle() {
-    this.setState((prevState, props) => (
+    this.setState((prevState) => (
       {
         modal: !prevState.modal,
         currentSearchTerm: '',
@@ -114,8 +114,9 @@ class SideZone extends Component {
     const { name } = this.props;
     return (
       <ListGroup className="zone-modal-list">
-        {this.currentVisibleCardList().map((item) => (
+        {this.currentVisibleCardList().map((item, index) => (
           <ListGroupItem
+            key={index.toString()}
             onClick={this.cardListClick}
             id={`${name}_${item[1]}`}
           >
@@ -181,7 +182,7 @@ class SideZone extends Component {
                     />
                   </Row>
                   <Row>
-                    <ZoneContextMenu
+                    <SideZoneContextMenu
                       name={name}
                     />
                   </Row>
@@ -198,45 +199,5 @@ SideZone.propTypes = {
   name: PropTypes.string.isRequired,
   cardlist: PropTypes.array.isRequired,
 };
-
-class ZoneContextMenu extends Component {
-  zoneList = ["Graveyard", "Exile", "Library", "Hand", "Battlefield"];
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false
-    }
-  }
-
-  toggle() {
-    this.setState((prevState) => (
-      { isOpen: !prevState.isOpen }
-    ))
-  }
-
-  renderContextMenu() {
-    return this.zoneList.filter((zoneName) => (
-      !zoneName.match(this.props.name)
-    )).map((zoneName) => (
-      <DropdownItem>{zoneName}</DropdownItem>
-    ))
-  }
-
-  render() {
-    return (
-      <Dropdown
-        isOpen={this.state.isOpen}
-        toggle={this.toggle.bind(this)}>
-        <DropdownToggle caret>
-          Move card to...
-                </DropdownToggle>
-        <DropdownMenu right>
-          {this.renderContextMenu()}
-        </DropdownMenu>
-      </Dropdown>
-    );
-  }
-}
 
 export default SideZone;
