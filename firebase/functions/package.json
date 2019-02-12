@@ -8,6 +8,7 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
+    "fb-clean": "firebase firestore:delete -y -r /Users/JLI7eua7cnRYBYGdWbepVqZwQEg1/Decks && firebase firestore:delete -y -r /Users/cKDlZPoerrVy3NbgR1a7HJmeW3E2/Decks",
     "test": "mocha --require ts-node/register --reporter spec test/**/*.ts"
   },
   "main": "lib/index.js",
