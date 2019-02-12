@@ -27,6 +27,7 @@ const functionsConfig = {
 }
 
 describe('Cloud Functions Test Suite', function() {
+
   // Tests for importDeckFunction
   let user1DeckId: String;
   let user2DeckId: String;
@@ -138,26 +139,30 @@ describe('Cloud Functions Test Suite', function() {
       })
     });
   
-    describe('Test importing a deck that is not for commander', () => {
-      it('Import a non-commander deck for user1, via Cloud Functions', () => {
-        // https://www.mtggoldfish.com/deck/1630110#paper
-        // Assert that the function returns an error
+    describe('Test importing a deck with an invalid or non-existent URI', function() {
+      describe('Import a non-existent deck for user1, via Cloud Functions', function() {
+        it('Make the HTTP call', async function() {
+          this.timeout(15000);
+          await supertest(functionsConfig.baseURI)
+          .post('/importDeckFunction')
+          .send({
+            player: functionsConfig.user1.uid,
+            uri: 'https://www.mtggoldfish.com/deck/9999999999',
+          })
+          .expect(500); // TODO would be great to get a 400 back and a useful error message
+        });
       });
-  
-      it('No deck was created in Firestore', () => {
-  
+
+      describe('Validate the document in Firestore', function() {
+        it('No document was created', async function() {
+          // TODO - we can only implement this if we can expect a clean execution environment
+          // Need a before suite method to wipe the collection
+          // Then expect that the deck collection has a size of 1
+          const decks = await firestore.collection(`Users/${functionsConfig.user1.uid}/Decks`).get();
+          expect(decks.size).to.equal(1);
+        });
       });
-    })
-  
-    describe('Test importing a deck with an invalid or non-existent URI', () => {
-      it('* Import `https://www.mtggoldfish.com/deck/1630110FAKE#paper`', () => {
-        // Assert that the function returns an error
-      });
-  
-      it('No deck was created in Firestore', () => {
-  
-      });
-    })
+    });
   });
   
 
