@@ -243,7 +243,7 @@ describe('Cloud Functions Test Suite', function() {
           expect(playerDoc.data().meta.deckId).to.equal(user1DeckId);
         });
 
-        it(`Games/<gameId>/Cards contains 100 documents`, async function() {
+        it(`"Games/<gameId>/Cards" contains 100 documents`, async function() {
           const cards = await firestore.collection(`Games/${gameId}/Cards`).get();
           expect(cards.size).to.equal(100);
         });
@@ -295,7 +295,7 @@ describe('Cloud Functions Test Suite', function() {
           expect(playerDoc.data().meta.deckId).to.equal(user2DeckId);
         });
 
-        it(`Games/<gameId>/Cards contains 200 documents`, async function() {
+        it(`"Games/<gameId>/Cards" contains 200 documents`, async function() {
           const cards = await firestore.collection(`Games/${gameId}/Cards`).get();
           expect(cards.size).to.equal(200);
         });
@@ -336,8 +336,28 @@ describe('Cloud Functions Test Suite', function() {
 
   describe('Tests for startGameFunction', function() {
     describe('Start the game', function() {
-      // * As user1, start the game
-      // * Assert that `Games/<gameId>` has a `turn_order` field, containing properties `0` and `1`, one of which points to user1 and the other to user2
+      it('As user1, start the game', async function() {
+        this.timeout(15000);
+        await supertest(functionsConfig.baseURI)
+        .post('/startGameFunction')
+        .send({
+          gameId,
+        })
+        .expect(200);
+      });
+
+      let gameDoc: Firestore.DocumentSnapshot;
+      it('"Games/<gameId>" exists', async function() {
+        gameDoc = await firestore.doc(`Games/${gameId}`).get();
+        expect(gameDoc.exists).to.be.true;
+      });
+
+      it('Validate the document in Firestore', function() {
+        const data = gameDoc.data();
+
+        expect([data.turn_order['0'], data.turn_order['1']]).to.contain(functionsConfig.user1.uid);
+        expect([data.turn_order['0'], data.turn_order['1']]).to.contain(functionsConfig.user2.uid);
+      });
     });
   });  
 });
