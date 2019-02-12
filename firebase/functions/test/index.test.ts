@@ -211,8 +211,8 @@ describe('Cloud Functions Test Suite', function() {
     });
   });
 
+  let gameId: string;
   describe('Tests for hostGameFunction', function() {
-    let gameId: string;
     describe('Test starting a game', function() {
       describe('Host a game with the "DRAGONS" deck as user1', function() {
         it('Make the HTTP call', async function() {
@@ -266,27 +266,78 @@ describe('Cloud Functions Test Suite', function() {
     });
   });
 
-  // Tests for joinGameFunction
+  describe('Tests for joinGameFunction', function() {
+    describe('Test joining a game', function() {
+      describe('Join the game with the partner commander deck as user2', function() {
+        it('Make the HTTP call', async function() {
+          this.timeout(15000);
+          await supertest(functionsConfig.baseURI)
+          .post('/joinGameFunction')
+          .send({
+            gameId: gameId,
+            player: functionsConfig.user2.uid,
+            deckId: user2DeckId,
+          })
+          .expect(200);
+        });
+      });
 
-  describe('Test joining a game', () => {
-    it('* Join a game with the partner commander deck as user 2', () => {
+      describe('Validate the document in Firestore', function() {
+        let playerDoc: Firestore.DocumentSnapshot;
+        it(`"Games/<gameId>/Players/${functionsConfig.user2.uid}" exists`, async function() {
+          playerDoc = await firestore.doc(`Games/${gameId}/Players/${functionsConfig.user2.uid}`).get();
+          expect(playerDoc.exists).to.be.true;
+        });
 
+        it('Validate player document', function() {
+          expect(playerDoc.data().life).to.equal(40);
+          expect(playerDoc.data().uid).to.equal(functionsConfig.user2.uid);
+          expect(playerDoc.data().meta.deckId).to.equal(user2DeckId);
+        });
+
+        it(`Games/<gameId>/Cards contains 200 documents`, async function() {
+          const cards = await firestore.collection(`Games/${gameId}/Cards`).get();
+          expect(cards.size).to.equal(200);
+        });
+
+        it('Collection contains 3 commanders', async function() {
+          const commander = await firestore.collection(`Games/${gameId}/Cards`)
+            .where('state.zone', '==', Game.Zone.COMMAND)
+            .get();
+          expect(commander.docs).to.have.lengthOf(3);
+        });
+
+        it('Validate commander card document exists for partner commander 1', async function() {
+          const commander = await firestore.collection(`Games/${gameId}/Cards`)
+            .where('scryfall_id', '==', '3b951e0c-a4dd-4a20-87c6-eaa947e33aa4')
+            .get();
+          expect(commander.size).to.equal(1);
+
+          const commanderDoc = commander.docs[0];
+          expect(commanderDoc.data().scryfall_id).to.equal('3b951e0c-a4dd-4a20-87c6-eaa947e33aa4');
+          expect(commanderDoc.data().state.zone).to.equal(Game.Zone.COMMAND);
+          expect(commanderDoc.data().state.owner).to.equal(functionsConfig.user2.uid);
+        });
+
+        it('Validate commander card document exists for partner commander 2', async function() {
+          const commander = await firestore.collection(`Games/${gameId}/Cards`)
+            .where('scryfall_id', '==', '125b552b-45ea-4e0b-94a9-8131c97a04c0')
+            .get();
+          expect(commander.size).to.equal(1);
+
+          const commanderDoc = commander.docs[0];
+          expect(commanderDoc.data().scryfall_id).to.equal('125b552b-45ea-4e0b-94a9-8131c97a04c0');
+          expect(commanderDoc.data().state.zone).to.equal(Game.Zone.COMMAND);
+          expect(commanderDoc.data().state.owner).to.equal(functionsConfig.user2.uid);
+        });
+      });
     });
-
-    // Assert that `Games/<gameId>/Players/<userId>` exists, and has
-    // * `life` set to 40
-    // * `uid` set to
-    // * `meta.deck_id` set to the correct value for the partner commander deck
-
-    // * Assert that `Games/<gameId>/Cards` contains 200 documents
-    // * Assert that the collection contains exactly 1 document where `scryfall_id` equals `3b951e0c-a4dd-4a20-87c6-eaa947e33aa4`, `state.zone` equals `Command`, and `state.owner` equals <userId for user 2>
-    // * Assert that the collection contains exactly 1 document where `scryfall_id` equals `125b552b-45ea-4e0b-94a9-8131c97a04c0`, `state.zone` equals `Command`, and `state.owner` equals <userId for user 2>
   });
 
-  // Tests for startGameFunction
-
-  describe('Start the game', () => {
-    // * As user1, start the game
-    // * Assert that `Games/<gameId>` has a `turn_order` field, containing properties `0` and `1`, one of which points to user1 and the other to user2
-  });
+  describe('Tests for startGameFunction', function() {
+    describe('Start the game', function() {
+      // * As user1, start the game
+      // * Assert that `Games/<gameId>` has a `turn_order` field, containing properties `0` and `1`, one of which points to user1 and the other to user2
+    });
+  });  
 });
