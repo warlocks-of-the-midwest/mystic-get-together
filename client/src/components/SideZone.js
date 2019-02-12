@@ -21,7 +21,10 @@ class SideZone extends Component {
     };
 
     this.loadCardList();
+
     this.toggle = this.toggle.bind(this);
+    this.cardListClick = this.cardListClick.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   /**
@@ -50,8 +53,20 @@ class SideZone extends Component {
   }
 
   /**
+   * Returns the requested entry from the cardInfo array of the highlighted card.
+   * @param {int} index
+   */
+  fetchCurrentCardInfo(index) {
+    const { cardList, currentCard } = this.state;
+    if (cardList.length > currentCard) {
+      return cardList[currentCard][index];
+    }
+    return null;
+  }
+
+  /**
    * Handles onChange events for the modal's searchbar.
-   * @param {e} event
+   * @param {event} event
    */
   handleSearch(event) {
     const val = event.target.value;
@@ -64,8 +79,17 @@ class SideZone extends Component {
     ));
   }
 
-  cardListClick(cardIndex, event) {
-    this.setState({ currentCard: cardIndex });
+  /**
+   * Handles onClick events for the entries in the modal's card list.
+   * @param {event} event
+   */
+  cardListClick(event) {
+    const id = event.target.id.split('_');
+    let index = 0;
+    if (id.length > 1) {
+      [, index] = id;
+    }
+    this.setState({ currentCard: index });
   }
 
   /**
@@ -87,11 +111,13 @@ class SideZone extends Component {
   }
 
   renderCardList() {
+    const { name } = this.props;
     return (
       <ListGroup className="zone-modal-list">
         {this.currentVisibleCardList().map((item) => (
           <ListGroupItem
-            onClick={this.cardListClick.bind(this, item[1])}
+            onClick={this.cardListClick}
+            id={`${name}_${item[1]}`}
           >
             {item[0]}
           </ListGroupItem>
@@ -102,7 +128,7 @@ class SideZone extends Component {
 
   render() {
     const { name } = this.props;
-    const { cardList, currentCard, modal } = this.state;
+    const { modal } = this.state;
     return (
       <Col xs="12" className="border p-1" onClick={this.toggle}>
         <h6
@@ -123,7 +149,7 @@ class SideZone extends Component {
                 <InputGroup>
                   <Input
                     placeholder="Card name..."
-                    onChange={this.handleSearch.bind(this)}
+                    onChange={this.handleSearch}
                   />
                 </InputGroup>
               </Col>
@@ -142,8 +168,16 @@ class SideZone extends Component {
                 </Col>
                 <Col xs="5">
                   <Row>
-                    <HighlightedCard
-                      cardInfo={cardList[currentCard]}
+                    <Card
+                      name={this.fetchCurrentCardInfo(0)}
+                      cost={this.fetchCurrentCardInfo(1)}
+                      image={this.fetchCurrentCardInfo(2)}
+                      type={this.fetchCurrentCardInfo(3)}
+                      set={this.fetchCurrentCardInfo(4)}
+                      text={this.fetchCurrentCardInfo(5)}
+                      power={this.fetchCurrentCardInfo(6)}
+                      divider={this.fetchCurrentCardInfo(6) ? '/' : ''}
+                      toughness={this.fetchCurrentCardInfo(7)}
                     />
                   </Row>
                   <Row>
@@ -164,24 +198,6 @@ SideZone.propTypes = {
   name: PropTypes.string.isRequired,
   cardlist: PropTypes.array.isRequired,
 };
-
-class HighlightedCard extends Component {
-  render() {
-    return (
-      <Card
-        name={this.props.cardInfo[0]}
-        cost={this.props.cardInfo[1]}
-        image={this.props.cardInfo[2]}
-        type={this.props.cardInfo[3]}
-        set={this.props.cardInfo[4]}
-        text={this.props.cardInfo[5]}
-        power={this.props.cardInfo[6]}
-        divider={this.props.cardInfo[6] ? "/" : ""}
-        toughness={this.props.cardInfo[7]}
-      />
-    );
-  }
-}
 
 class ZoneContextMenu extends Component {
   zoneList = ["Graveyard", "Exile", "Library", "Hand", "Battlefield"];
