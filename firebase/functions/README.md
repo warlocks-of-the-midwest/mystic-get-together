@@ -1,6 +1,14 @@
 # Cloud Functions for Mystic the Get-together
 
-Before deploying these functions, make sure to edit `../.firebaserc` to target your Firebase project. You will also need to ensure that you are on the Blaze (pay as you go) plan and then enable the necessary APIs (the `firebase` tool should let you know if anything is awry).
+Before deploying these functions, make sure to edit `../.firebaserc` to target your Firebase project. 
+
+You will also need to ensure that:
+- you are on the Blaze (pay as you go) plan 
+    - this can be done easily from the Firebase console
+    - this requires a billing account to be setup
+- the necessary APIs are enabled
+    - Cloud Firestore API
+        - this can be done from the Google Cloud console
 
 There is configuration required for these functions. Currently, it is just making the WrapAPI key available. You can do so by calling `firebase functions:config:set wrapapi.key="API KEY HERE"`
 
