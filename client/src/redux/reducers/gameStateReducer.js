@@ -2,6 +2,7 @@ import gameActions from '../actions/gameStateActions';
 
 //TODO make a complete initial state
 const initialState = {
+  gameId: 'game1',
   Players: {
     player1: {
       life: 40,
@@ -16,6 +17,18 @@ const initialState = {
             "state.tapped": false,
             "state.owner": "player1",
             "state.zone": "zone1"
+          }
+        },
+        zone2: {
+          card1: {
+            "state.tapped": false,
+            "state.owner": "player1",
+            "state.zone": "zone2"
+          },
+          card2: {
+            "state.tapped": false,
+            "state.owner": "player1",
+            "state.zone": "zone2"
           }
         }
       }

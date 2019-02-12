@@ -1,0 +1,12 @@
+{
+    "DummyCollection" : {
+        "dummyDocument" : {
+            "dummyAttribute" : 0,
+            "DummySubCollection" : {
+                "dummySubCollectionDocument" : {
+                    "dummySubCollectionDocumentAttribute" : 0
+                }
+            }
+        }
+    }
+}
