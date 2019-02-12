@@ -30,13 +30,11 @@ const functionsConfig = {
 describe('Cloud Functions Test Suite', function() {
 
   // Tests for importDeckFunction
-  let user1DeckId: String;
-  let user2DeckId: String;
+  let user1DeckId: string;
+  let user2DeckId: string;
 
   describe('Tests for importDeckFunction', function() {
-    
     describe('Test importing a standard commander deck (1 commander, 99 other)', () => {
-  
       describe('Import a standard commander deck for user1, via Cloud Function', () => {
         it('Make the HTTP call', async function() {
           this.timeout(15000);
@@ -87,7 +85,6 @@ describe('Cloud Functions Test Suite', function() {
     });
   
     describe('Test importing a partner commander deck (2 commanders, 98 other)', function() {
-  
       describe('Import a partner commander deck for user2, via Cloud Functions', function() {
         it('Make the HTTP call', async function() {
           this.timeout(15000);
@@ -126,7 +123,7 @@ describe('Cloud Functions Test Suite', function() {
           expect(numberOfCards).to.equal(100);
         });
       
-        it('The commanders are "Akiri, Line-Slinger" and "Bruse Tarl, Boorish Herder"', () => {
+        it('The commanders are "Akiri, Line-Slinger" and "Bruse Tarl, Boorish Herder"', function() {
           // (Scryfall IDs are 3b951e0c-a4dd-4a20-87c6-eaa947e33aa4 and 125b552b-45ea-4e0b-94a9-8131c97a04c0)
           let commanders = _.filter(deckDoc.data().cards, (value) => {
             return value.board === Decklist.Board.COMMAND;
@@ -216,35 +213,33 @@ describe('Cloud Functions Test Suite', function() {
     });
   });
 
+  describe('Tests for hostGameFunction', function() {
+    let gameId: string;
+    describe('Test starting a game', function() {
+      describe('Host a game with the "DRAGONS" deck as user1', function() {
+        it('Make the HTTP call', async function() {
+          console.log(`user1: ${user1DeckId} and user2: ${user2DeckId}`)
+        });
+      });
   
-
-  // Tests for hostGameFunction
-
-  let gameId;
-  describe('Test starting a game', () => {
-    describe('* Host a game with the DRAGONS deck as user 1', () => {
-      it('api call', async function() {
-        console.log(`user1: ${user1DeckId} and user2: ${user2DeckId}`)
+      describe('data is good', function() {
+        it('* Assert that `Games/<gameId>/Players/<userId>` exists, and has', ()=> {
+          // * `life` set to 40
+          // * `uid` set to
+          // * `meta.deck_id` set to the correct value for the DRAGONS deck
+        });
+      
+        it('* Assert that `Games/<gameId>/Cards` contains 100 documents', () => {
+      
+        });
+      
+        it ('* Assert that the collection contains exactly 1 document where `scryfall_id` equals `7e78b70b-0c67-4f14-8ad7-c9f8e3f59743`, `state.zone` equals `Command`, and `state.owner` equals <userId for user 1>', () => {
+      
+        });
       });
+  
+      
     });
-
-    describe('data is good', function() {
-      it('* Assert that `Games/<gameId>/Players/<userId>` exists, and has', ()=> {
-        // * `life` set to 40
-        // * `uid` set to
-        // * `meta.deck_id` set to the correct value for the DRAGONS deck
-      });
-    
-      it('* Assert that `Games/<gameId>/Cards` contains 100 documents', () => {
-    
-      });
-    
-      it ('* Assert that the collection contains exactly 1 document where `scryfall_id` equals `7e78b70b-0c67-4f14-8ad7-c9f8e3f59743`, `state.zone` equals `Command`, and `state.owner` equals <userId for user 1>', () => {
-    
-      });
-    });
-
-    
   });
 
   // Tests for joinGameFunction
