@@ -5,6 +5,7 @@ import * as supertest from 'supertest';
 import * as Firestore from '@google-cloud/firestore';
 
 import * as Decklist from '../src/decklist';
+import * as Game from '../src/game';
 import request = require('request');
 
 // Firestore client
@@ -250,7 +251,7 @@ describe('Cloud Functions Test Suite', function() {
         let commanderDoc: Firestore.DocumentSnapshot;
         it('Collection contains 1 commander', async function() {
           const commander = await firestore.collection(`Games/${gameId}/Cards`)
-            .where('state.zone', '==', Decklist.Board.COMMAND)
+            .where('state.zone', '==', Game.Zone.COMMAND)
             .get();
           expect(commander.docs).to.have.lengthOf(1);
           commanderDoc = commander.docs[0];
@@ -258,7 +259,7 @@ describe('Cloud Functions Test Suite', function() {
 
         it('Validate commander card document', function() {
           expect(commanderDoc.data().scryfall_id).to.equal('7e78b70b-0c67-4f14-8ad7-c9f8e3f59743');
-          expect(commanderDoc.data().state.zone).to.equal(Decklist.Board.COMMAND);
+          expect(commanderDoc.data().state.zone).to.equal(Game.Zone.COMMAND);
           expect(commanderDoc.data().state.owner).to.equal(functionsConfig.user1.uid);
         });
       });
