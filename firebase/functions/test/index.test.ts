@@ -5,6 +5,7 @@ import * as supertest from 'supertest';
 import * as Firestore from '@google-cloud/firestore';
 
 import * as Decklist from '../src/decklist';
+import request = require('request');
 
 // Firestore client
 const firestore = new Firestore.Firestore({
@@ -139,7 +140,7 @@ describe('Cloud Functions Test Suite', function() {
       })
     });
   
-    describe('Test importing a deck with an invalid or non-existent URI', function() {
+    describe('Test importing a MTGGoldfish deck with an invalid or non-existent URI', function() {
       describe('Import a non-existent deck for user1, via Cloud Functions', function() {
         it('Make the HTTP call', async function() {
           this.timeout(15000);
@@ -165,20 +166,46 @@ describe('Cloud Functions Test Suite', function() {
     });
   });
   
+  describe('Tests for populateDeckFunction', function() {
+    describe('Test populating for a deck', function() {
+      describe('Populate the partner commander deck, including only fields "name" and "id"', function() {
+        let response: supertest.Response;
+        it('Make the HTTP call', async function() {
+          this.timeout(15000);
+          await supertest(functionsConfig.baseURI)
+          .post('/populateDeckFunction')
+          .send({
+            player: functionsConfig.user2.uid,
+            deckId: user2DeckId,
+            include: ['name', 'id'],
+          })
+          .expect(200)
+          .then((res) => {
+            response = res;
+          });
+        });
 
-  // Tests for populateDeckFunction
+        it('Received data for four cards', function() {
+          expect(response.body.cards.length).to.equal(4);
+        });
 
-  describe('Test populating for a deck', () => {
-    // * Populate the partner commander deck, including only the fields `name` and `id`.
-
-    // Assert that we get back data for all four unique cards
-    // * We should see the names `Akiri, Line-Slinger`, `Bruse Tarl, Boorish Herder`, `Mountain`, and `Plains`
+        it('The names for the four cards were returned', function() {
+          const cards = response.body.cards;
+          expect(_.some(cards, { name: 'Akiri, Line-Slinger' })).to.be.true;
+          expect(_.some(cards, { name: 'Bruse Tarl, Boorish Herder' })).to.be.true;
+          expect(_.some(cards, { name: 'Mountain' })).to.be.true;
+          expect(_.some(cards, { name: 'Plains' })).to.be.true;
+        });
+      });
+    });
+  
+    describe('Test populating a deck that does not exist', () => {
+      // * Populate a deck with id `FAKEID`
+      // * Assert that the function returns an error
+    });
   });
 
-  describe('Test populating a deck that does not exist', () => {
-    // * Populate a deck with id `FAKEID`
-    // * Assert that the function returns an error
-  });
+  
 
   // Tests for hostGameFunction
 
