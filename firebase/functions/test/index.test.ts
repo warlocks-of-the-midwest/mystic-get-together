@@ -52,8 +52,8 @@ describe('Cloud Functions Test Suite', function() {
       });
   
       describe('Validate the document in Firestore', function() {
-        let deckDoc:Firestore.DocumentSnapshot;
-        it('"/Users/<uid>/Decks/<deckId>" exists in Firestore', async function() {
+        let deckDoc: Firestore.DocumentSnapshot;
+        it(`"/Users/${functionsConfig.user1.uid}/Decks/<deckId>" exists in Firestore`, async function() {
           this.timeout(5000);
           deckDoc = await firestore.doc(`Users/${functionsConfig.user1.uid}/Decks/${user1DeckId}`).get();
           expect(deckDoc.exists).to.be.true;
@@ -84,19 +84,10 @@ describe('Cloud Functions Test Suite', function() {
       });
     });
   
-
-
-
-
-
-
-
-
-  
     describe('Test importing a partner commander deck (2 commanders, 98 other)', function() {
   
       describe('Import a partner commander deck for user2, via Cloud Functions', function() {
-        it('do it again', async function() {
+        it('Make the HTTP call', async function() {
           this.timeout(15000);
           await supertest(functionsConfig.baseURI)
           .post('/importDeckFunction')
@@ -109,27 +100,42 @@ describe('Cloud Functions Test Suite', function() {
             user2DeckId = res.header['x-deckid'];
           });
         });
-        
       });
   
-      describe('The data is good', function() {
-        it('/Users/<uid>/Decks/<deckId> exists in Firestore', function() {
+      describe('Validate the document in Firestore', function() {
+        let deckDoc: Firestore.DocumentSnapshot;
+        it(`"/Users/${functionsConfig.user2.uid}/Decks/<deckId>" exists in Firestore`, async function() {
+          this.timeout(5000);
+          deckDoc = await firestore.doc(`Users/${functionsConfig.user2.uid}/Decks/${user2DeckId}`).get();
+          expect(deckDoc.exists).to.be.true;
         });
       
-        it('The name of the parsed deck is "Example deck with partner commanders"', () => {
-          // TODO
+        it('The name of the parsed deck is "Example deck with partner commanders"', function() {
+          expect(deckDoc.data().name).to.equal('Example deck with partner commanders');
         });
       
-        it('The sum of all card quantities is 100', () => {
-          // TODO
+        it('The sum of all card quantities is 100', function() {
+          const numberOfCards = _.map(deckDoc.data().cards, (value) => {
+            return value.qty;
+          }).reduce((accumulator, value, key, collection) => {
+            return accumulator + value;
+          }, 0);
+  
+          expect(numberOfCards).to.equal(100);
         });
       
         it('The commanders are "Akiri, Line-Slinger" and "Bruse Tarl, Boorish Herder"', () => {
           // (Scryfall IDs are 3b951e0c-a4dd-4a20-87c6-eaa947e33aa4 and 125b552b-45ea-4e0b-94a9-8131c97a04c0)
-          // TODO
+          let commanders = _.filter(deckDoc.data().cards, (value) => {
+            return value.board === Decklist.Board.COMMAND;
+          });
+          commanders = _.sortBy(commanders, ['id']);
+          
+          expect(commanders.length).to.equal(2);
+          expect(commanders[0].id).to.equal('125b552b-45ea-4e0b-94a9-8131c97a04c0');
+          expect(commanders[1].id).to.equal('3b951e0c-a4dd-4a20-87c6-eaa947e33aa4');
         });
       })
-      
     });
   
     describe('Test importing a deck that is not for commander', () => {
