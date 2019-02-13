@@ -6,7 +6,6 @@ import * as Firestore from '@google-cloud/firestore';
 
 import * as Decklist from '../src/decklist';
 import * as Game from '../src/game';
-import request = require('request');
 
 // Firestore client
 const firestore = new Firestore.Firestore({
