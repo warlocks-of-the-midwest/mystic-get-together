@@ -11,6 +11,34 @@ export function listenToCard(gameId, cardId, callback) {
     });
 }
 
+// Expects an array of queries in the following format:
+// queries = [
+//   query0 = [ "state.controller", "==", "player1" ],
+//   query1 = [ "state.power", ">=", 5 ],
+//   query2 = [ "state.is_token", "!=", true ]
+// ]
+export function listenToCardsByQuery(gameId, queries, callback) {
+  let queryRef = db.collection(`Games/${gameId}/Cards`);
+  queries.forEach(function(query) {
+    queryRef = queryRef.where(query[0], query[1], query[2]);
+  });
+  queryRef.onSnapshot(function(querySnapshot) {
+    querySnapshot.forEach(function(doc) {
+        callback(doc.data());
+    });
+  });
+}
+
+// Listens to all cards in a game
+export function listenToGame(gameId, callback) {
+  db.collection(`Games/${gameId}/Cards`).onSnapshot(
+    function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            callback(doc.data());
+        });
+    });
+}
+
 export function listenToPlayer(gameId, player, callback) {
   db.doc(`Games/${gameId}/Players/${player}`)
     .onSnapshot((doc) => {
@@ -20,12 +48,18 @@ export function listenToPlayer(gameId, player, callback) {
 
 // Game functions
 // Card functions
-export function moveCardToZone(gameId, card, targetZone) {
+async function getCardFromId(gameId, cardId) {
+  const cardDoc = await db.doc(`Games/${gameId}/Cards/${cardId}`).get();
+  return cardDoc.data();
+}
+
+export async function moveCardToZone(gameId, cardId, targetZone) {
+  let card = await getCardFromId(gameId, cardId);
   if (card.state.zone === targetZone) {
     return;
   }
   card.state.zone = targetZone
-  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card)
+  db.doc(`Games/${gameId}/Cards/${cardId}`).set(card)
 }
 
 function setSingleCardPosition(gameId, card, newPosition) {
@@ -33,7 +67,8 @@ function setSingleCardPosition(gameId, card, newPosition) {
   db.doc(`Games/${gameId}/Cards/${card.id}`).set(card)
 }
 
-export function setCardPosition(gameId, card, newPosition) {
+export async function setCardPosition(gameId, cardId, newPosition) {
+  let card = await getCardFromId(gameId, cardId);
   const previousPosition = card.state.position
   db.collection(`Games/${gameId}/Cards/`).get().then(function(querySnapshot) {
     querySnapshot.forEach(function(doc) {
@@ -70,7 +105,7 @@ function shuffleArray(array) {
   return array;
 }
 
-export function shuffle(gameId, targetPlayer) {
+export async function shuffle(gameId, targetPlayerId) {
   const numCards = 100;
   let newOrdering = [];
   for (let i = 0; i < numCards; i++) {
@@ -82,7 +117,7 @@ export function shuffle(gameId, targetPlayer) {
   db.collection(`Games/${gameId}/Cards/`).get().then(function(querySnapshot) {
     querySnapshot.forEach(function(doc) {
       const card = doc.data();
-      if (card.state.zone === "Library") { // Only shuffle library cards
+      if (card.state.controller === targetPlayerId && card.state.zone === "Library") { // Only shuffle library cards
         setSingleCardPosition(gameId, card, newOrdering[i])
         i++;
       }
@@ -90,26 +125,30 @@ export function shuffle(gameId, targetPlayer) {
   });
 }
 
-export function remove(gameId, card) {
-  db.doc(`Games/${gameId}/Cards/${card.id}`).delete()
+export function remove(gameId, cardId) {
+  db.doc(`Games/${gameId}/Cards/${cardId}`).delete()
 }
 
-export function changeController(gameId, card, targetPlayer, targetZone) {
+export async function changeController(gameId, cardId, targetPlayer, targetZone) {
+  let card = await getCardFromId(gameId, cardId);
   card.state.controller = targetPlayer
-  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
+  db.doc(`Games/${gameId}/Cards/${cardId}`).set(card);
 }
 
-export function tap(gameId, card) {
+export async function tap(gameId, cardId) {
+  let card = await getCardFromId(gameId, cardId);
   card.state.tapped = true
-  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
+  db.doc(`Games/${gameId}/Cards/${cardId}`).set(card);
 }
 
-export function untap(gameId, card) {
+export async function untap(gameId, cardId) {
+  let card = await getCardFromId(gameId, cardId);
   card.state.tapped = false
-  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
+  db.doc(`Games/${gameId}/Cards/${cardId}`).set(card);
 }
 
-export function clone(gameId, card, shouldCreateToken) {
+export async function clone(gameId, cardId, shouldCreateToken) {
+  let card = await getCardFromId(gameId, cardId);
   // deep copy the card
   let cardCopy = JSON.parse(JSON.stringify(card))
   cardCopy.state.is_token = shouldCreateToken
@@ -117,9 +156,10 @@ export function clone(gameId, card, shouldCreateToken) {
   db.doc(`Games/${gameId}/Cards/${cardCopy.id}`).set(cardCopy);
 }
 
-export function flip(gameId, card) {
+export async function flip(gameId, cardId) {
+  let card = await getCardFromId(gameId, cardId);
   card.state.face_up = !card.state.face_up
-  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
+  db.doc(`Games/${gameId}/Cards/${cardId}`).set(card);
 }
 
 export function createToken(gameId, tokenScryfallId, targetPlayer, targetZone, power, toughness) {
@@ -143,16 +183,18 @@ export function createToken(gameId, tokenScryfallId, targetPlayer, targetZone, p
   db.doc(`Games/${gameId}/Cards/${newCard.id}`).set(newCard);
 }
 
-export function setCardCounters(gameId, card, counterType, numCounters) {
+export async function setCardCounters(gameId, cardId, counterType, numCounters) {
+  let card = await getCardFromId(gameId, cardId);
   let currentCounters = card.attachments.counters
   currentCounters[counterType] = numCounters
   card.attachments.counters = currentCounters
-  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
+  db.doc(`Games/${gameId}/Cards/${cardId}`).set(card);
 }
 
-export function setAttachedPermanents(gameId, card, attachedPermanents) {
+export async function setAttachedPermanents(gameId, cardId, attachedPermanents) {
+  let card = await getCardFromId(gameId, cardId);
   card.attachments.permanents = attachedPermanents
-  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
+  db.doc(`Games/${gameId}/Cards/${cardId}`).set(card);
 }
 
 //Player functions
