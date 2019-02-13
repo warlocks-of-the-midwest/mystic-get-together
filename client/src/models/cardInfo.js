@@ -2,7 +2,8 @@ import _ from 'lodash';
 
 class CardInfo {
   constructor(cardJson) {
-    const { id, image_uris, mana_cost, name, oracle_text, power, scryfall_id, set_name, toughness, type_line, icon_svg_uri } = cardJson;
+    const { id, image_uris, mana_cost, name, oracle_text, power, scryfall_id, set_name, toughness,
+      type_line, icon_svg_uri, state } = cardJson;
 
     this.id = id;
     this.imgUrl = image_uris.art_crop;
@@ -15,7 +16,7 @@ class CardInfo {
     this.toughness = toughness;
     this.type = type_line;
     this.setImgUrl = icon_svg_uri;
-    this._translateCardState(cardJson);
+    this.state = state;
   }
 
   getId() {
@@ -72,26 +73,6 @@ class CardInfo {
 
   isTapped() {
     return this.state.tapped;
-  }
-
-  _translateCardState(cardJson) {
-    const stateProperties = _.filter(_.keys(cardJson), (propertyName) => _.includes(propertyName, 'state'));
-    const state = _.reduce(stateProperties, (stateObj, propertyName) => {
-      const name = _.last(_.split(propertyName, '.'));
-      return {
-        ...stateObj,
-        [name]: _.get(cardJson, propertyName, null),
-      };
-    }, {});
-    const { power, toughness } = state;
-    if (power) {
-      this.power = power;
-    }
-    if (toughness) {
-      this.toughness = toughness;
-    }
-
-    this.state = { ...state };
   }
 }
 

@@ -42,14 +42,14 @@ class GameContainer extends React.Component {
   }
 
   playerUpdate(data) {
-    console.log('player callback');
-    console.log(data);
+    // console.log('player callback');
+    // console.log(data);
     // TODO update player in reducer array
   }
 
   cardUpdate(data) {
-    console.log('card callback');
-    console.log(data);
+    // console.log('card callback');
+    // console.log(data);
     // TODO update card in reducer array
   }
 
