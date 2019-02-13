@@ -30,6 +30,7 @@ class GameArea extends Component {
 
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
+<<<<<<< HEAD
   }
 
   componentWillReceiveProps(nextProps) {
@@ -37,6 +38,23 @@ class GameArea extends Component {
     this.setState({
       cards,
     });
+=======
+    this.toggleCard = this.toggleCard.bind(this);
+  }
+
+  player1Callback(docData) {
+    const { gameActions } = this.props;
+    gameActions.updatePlayer("player1", docData)
+  }
+
+  toggleCard(card) {
+    if (card.state.tapped) {
+      sdk.untap(this.props.gameState.gameId, card.id)
+    }
+    else {
+      sdk.tap(this.props.gameState.gameId, card.id)
+    }
+>>>>>>> 2762f28b46fd5f56d166348cd14775c73763b3a7
   }
 
   increment(x) {

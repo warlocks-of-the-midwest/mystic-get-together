@@ -21,6 +21,15 @@ const gameStateReducer = (state = initialState, action) => {
         cards,
       };
     }
+    case gameActions.types.UPDATE_CARD: {
+      const newCards = state.Cards;
+      // TODO handling cards getting deleted/removed?
+      newCards[action.payload.card.cardId] = action.payload.card;
+      return {
+        ...state,
+        Cards: newCards,
+      };
+    }
     default:
       return state;
   }

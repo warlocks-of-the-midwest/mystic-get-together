@@ -1,0 +1,11 @@
+#card-top {
+    font-size: 0.9em;
+}
+
+.zone-modal-body {
+    max-height: 500px;
+    overflow-y: auto;
+}
+.zone-modal-list {
+    overflow-y: initial;
+}

@@ -29,12 +29,20 @@ const loadPlayers = (players) => (dispatch) => {
   });
 };
 
+<<<<<<< HEAD
 const loadCards = (cards) => (dispatch) => {
   const newCards = _.map(cards, (card) => new CardInfo(card));
   dispatch({
     type: types.LOAD_CARDS,
     payload: {
       cards: newCards,
+=======
+const updateCard = (card) => (dispatch) => {
+  dispatch({
+    type: types.UPDATE_CARD,
+    payload: {
+      card: card
+>>>>>>> 2762f28b46fd5f56d166348cd14775c73763b3a7
     },
   });
 };
@@ -42,6 +50,10 @@ const loadCards = (cards) => (dispatch) => {
 export default {
   types,
   updatePlayer,
+<<<<<<< HEAD
   loadPlayers,
   loadCards,
+=======
+  updateCard
+>>>>>>> 2762f28b46fd5f56d166348cd14775c73763b3a7
 };
