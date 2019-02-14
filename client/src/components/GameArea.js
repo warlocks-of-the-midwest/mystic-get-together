@@ -38,9 +38,9 @@ class GameArea extends Component {
     this.toggleCard = this.toggleCard.bind(this);
     this.handleToggleSidebarClick = this.handleToggleSidebarClick.bind(this);
 
-    //sdk.listenToPlayer(this.props.gameState.gameId, "player1", this.player1Callback)
-    //sdk.listenToZone(this.props.gameState.gameId, "player1", "zone1", this.player1ZoneCallback)
-    //sdk.listenToZone(this.props.gameState.gameId, "player1", "zone2", this.player1Zone2Callback)
+    sdk.listenToPlayer(this.props.gameState.gameId, "player1", this.player1Callback)
+    sdk.listenToZone(this.props.gameState.gameId, "player1", "zone1", this.player1ZoneCallback)
+    sdk.listenToZone(this.props.gameState.gameId, "player1", "zone2", this.player1Zone2Callback)
   }
 
   player1Callback(docData) {
