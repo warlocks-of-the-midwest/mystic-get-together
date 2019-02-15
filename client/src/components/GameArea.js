@@ -30,11 +30,13 @@ class GameArea extends Component {
       life: 0,
       top_row: [],
       bottom_row: [],
+      isToggleSidebarOn: false,
     };
 
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
+    this.handleToggleSidebarClick = this.handleToggleSidebarClick.bind(this);
   }
 
   player1Callback(docData) {
@@ -60,6 +62,12 @@ class GameArea extends Component {
   decrement(x) {
     this.setState({
       life: Number(this.state.life) - Number(x)
+    });
+  }
+
+  handleToggleSidebarClick() {
+    this.setState({
+      isToggleSidebarOn: !this.state.isToggleSidebarOn,
     });
   }
 
@@ -103,6 +111,10 @@ class GameArea extends Component {
   }
 
   render() {
+    const FULL_LENGTH = 12;
+    const SHORTER_LENGTH = 10;
+    const battfieldFieldColumnLength = this.state.isToggleSidebarOn ? FULL_LENGTH : SHORTER_LENGTH;
+
     return (
       <Container
         fluid
@@ -122,7 +134,9 @@ class GameArea extends Component {
               "flex-basis": "100%"
             }}
           >
-            <NavigationBar life={this.state.life} active="battlefield" />
+            <NavigationBar life={this.state.life} active="battlefield"
+              handleToggleSidebarClick={this.handleToggleSidebarClick}
+            />
           </Col>
 
           <Col xs="2" className="flex-grow-1 flex-shrink-1">
@@ -182,8 +196,9 @@ class GameArea extends Component {
             "flex-basis": "90%"
           }}
         >
+
           <Col
-            xs="10"
+            xs={battfieldFieldColumnLength}
             className="battlefield-col p-0 m-0 flex-grow-1 flex-shrink-1 flex-wrap"
           >
             {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
@@ -282,6 +297,7 @@ class GameArea extends Component {
             </Container>
           </Col>
           {/* Sidebar for exile,graveyard,hand,library  */}
+          {!this.state.isToggleSidebarOn && (
           <Col xs="2" className="sidebar-col p-0 m-0">
             <Container
               fluid
@@ -294,6 +310,7 @@ class GameArea extends Component {
               </Row>
             </Container>
           </Col>
+          )}
         </Row>
       </Container>
     );
