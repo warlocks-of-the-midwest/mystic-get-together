@@ -1,114 +1,62 @@
-import React, { Component } from "react";
-import Axios from "axios";
-import "../styles/Card.css";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import "bootstrap/dist/js/bootstrap.bundle.js";
-import $ from "jquery";
+import '../styles/Card.css';
+
+import 'bootstrap/dist/js/bootstrap.bundle.js';
 
 import {
   Container,
   Row,
   Col,
-  Media
+  Media,
 } from 'reactstrap';
+import * as sdk from '../js-sdk/sdk';
+
 
 class Card extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      popoverOpen: false
+      popoverOpen: false,
     };
+
     this.toggle = this.toggle.bind(this);
-    this.isCreature = this.isCreature.bind(this);
-  }
-
-  url =
-    "https://api.scryfall.com/cards/1d9d8732-9ff2-42e4-bdfc-723cb6a76969?format=json";
-
-  static parseScryfallData(data) {
-    if (data) {
-      var jsonObj = data;
-      var name = jsonObj.name;
-      var mana_cost = jsonObj.mana_cost;
-      var image_uri_art_crop = jsonObj.image_uris.art_crop;
-      var type_line = jsonObj.type_line;
-      var set = jsonObj.set;
-      var set_image =
-        "https://img.scryfall.com/sets/" + set + ".svg?1545627600";
-      var oracle_text = jsonObj.oracle_text;
-      var power = jsonObj.power;
-      var toughness = jsonObj.toughness;
-      var cardInfo = [
-        name,
-        mana_cost,
-        image_uri_art_crop,
-        type_line,
-        set_image,
-        oracle_text,
-        power,
-        toughness
-      ];
-      return cardInfo;
-    }
-  }
-
-  static async getScryFallCardInfo(url) {
-    const responsePromise = async () => {
-      try {
-        const response = await Axios.get(url);
-        return response.data;
-      } catch (e) {
-        console.error(e);
-        return null;
-      }
-    };
-
-    const data = await responsePromise();
-    return Card.parseScryfallData(data);
+    this.toggleCard = this.toggleCard.bind(this);
   }
 
   toggle() {
     this.setState({
-      popoverOpen: !this.state.popoverOpen
+      popoverOpen: !this.state.popoverOpen,
     });
   }
 
-  componentDidMount() {
-    $(function() {
-      $('[data-toggle="popover"]').popover();
-    });
-    this.isCreature();
-  }
-
-  isCreature() {
-    if (this.props.power) {
-      console.log("has power");
-      this.setState(state => ({
-        isCreature: String(this.props.power + "/" + this.props.toughness)
-      }));
+  toggleCard(card) {
+    if (card['state.tapped']) {
+      sdk.untap(card);
     } else {
-      console.log("doesn't have power");
-      this.setState(state => ({
-        isCreature: "non-creature"
-      }));
+      sdk.tap(card);
     }
   }
 
   render() {
+    const { card } = this.props;
+
     return (
       <Container
         fluid
         className="card-container d-flex flex-column justify-content-center mh-100 h-100 mw-100 w-100 border rounded p-0 m-0"
         style={{
-          "overflow-y": "auto",
-          "overflow-x": "hidden"
+          'overflow-y': 'auto',
+          'overflow-x': 'hidden',
         }}
       >
         {/* Card name and mana cost row */}
         <Row
           className="card-name-cost-row d-inline-flex flex-nowrap mw-100 no-gutters flex-nowrap justify-content-between flex-grow-0 flex-shrink-0"
           style={{
-            "font-size": "1vw"
+            'font-size': '1vw',
           }}
         >
           {/* Card name */}
@@ -124,15 +72,15 @@ class Card extends React.Component {
               className="card-name-pop text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-left text-nowrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
-              title={this.props.name}
-              data-content={this.props.name}
+              title={card.getName()}
+              data-content={card.getName()}
               id="Popover"
               style={{
-                textOverflow: "ellipsis",
-                overflow: "hidden"
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
               }}
             >
-              {this.props.name}
+              {card.getName()}
             </button>
           </Col>
 
@@ -150,16 +98,16 @@ class Card extends React.Component {
               className="card-cost-pop text-dark font-weight-bold bg-transparent m-0 p-0 justify-end align-start text-right text-nowrap mh-100 h-100 w-100 mw-100"
               data-toggle="popover"
               data-trigger="focus"
-              title={this.props.name}
-              data-content={this.props.cost}
+              title={card.getName()}
+              data-content={card.getManaCost()}
               id="Popover"
               style={{
-                "text-overflow": "ellipsis",
-                overflow: "hidden",
-                "font-size": ".75vw"
+                'text-overflow': 'ellipsis',
+                overflow: 'hidden',
+                'font-size': '.75vw',
               }}
             >
-              {this.props.cost}
+              {card.getManaCost()}
             </button>
           </Col>
         </Row>
@@ -167,10 +115,10 @@ class Card extends React.Component {
         <Row
           className="card-art-row justify-content-center mw-100 w-100 no-gutters flex-grow-1 flex-shrink-1"
           style={{
-            "flex-basis": "40%",
-            minHeight: "40%",
-            maxHeight: "80%",
-            overflow: "hidden"
+            'flex-basis': '40%',
+            minHeight: '40%',
+            maxHeight: '80%',
+            overflow: 'hidden',
           }}
         >
           <Col xs="12" className="card-art-col p-0 mh-100">
@@ -178,7 +126,7 @@ class Card extends React.Component {
               obj
               className="card-art-image img-fluid d-block mx-auto h-100 mh-100 w-100 mw-100"
               alt="Card Art"
-              src={this.props.image}
+              src={card.getImage()}
             />
           </Col>
         </Row>
@@ -187,17 +135,17 @@ class Card extends React.Component {
         <Row
           className="card-type-set-row justify-content-around no-gutters flex-grow-1 flex-shrink-5"
           style={{
-            "font-size": ".5vw",
-            "flex-basis": "1vw",
-            "max-height": "1vw"
+            'font-size': '.5vw',
+            'flex-basis': '1vw',
+            'max-height': '1vw',
           }}
         >
           {/* Card type */}
           <Col
             className="card-type-col d-flex flex-grow-10 flex-shrink-1 align-items-center px-0 h-100 mh-100 mw-100 w-100 text-left"
             style={{
-              "flex-basis": "50%",
-              overflow: "hidden"
+              'flex-basis': '50%',
+              overflow: 'hidden',
             }}
           >
             <button
@@ -209,22 +157,22 @@ class Card extends React.Component {
               className="card-type-pop text-dark font-weight-bold bg-transparent m-0 p-0 align-items-start align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
-              data-content={this.props.type}
+              data-content={card.getType()}
               id="Popover"
-              value={this.props.type}
+              value={card.getType()}
               style={{
-                "text-overflow": "ellipsis",
-                overflow: "hidden"
+                'text-overflow': 'ellipsis',
+                overflow: 'hidden',
               }}
             >
-              {this.props.type}
+              {card.getType()}
             </button>
           </Col>
           <Col
             className="flex-shrink-10 set-image-col align-items-baseline flex-grow-1 p-0 m-0 mh-100"
             style={{
-              "flex-basis": "10%",
-              overflow: "hidden"
+              'flex-basis': '10%',
+              overflow: 'hidden',
             }}
           >
             {/* Card set image */}
@@ -232,9 +180,9 @@ class Card extends React.Component {
               obj
               className="set-image img-fluid d-block mx-auto align-self-baseline"
               alt="Set Image"
-              src={this.props.set}
+              src={card.getSetImage()}
               style={{
-                "max-height": "100%"
+                'max-height': '100%',
               }}
             />
           </Col>
@@ -244,9 +192,9 @@ class Card extends React.Component {
         <Row
           className="card-text-row no-gutters align-items-stretch flex-grow-1 flex-shrink-10"
           style={{
-            "font-size": ".75vw",
-            "flex-basis": "1.5vw",
-            "max-height": "1.5vw"
+            'font-size': '.75vw',
+            'flex-basis': '1.5vw',
+            'max-height': '1.5vw',
           }}
         >
           <Col
@@ -262,15 +210,15 @@ class Card extends React.Component {
               className="card-text-pop text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-left text-wrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
-              title={this.props.name}
-              data-content={this.props.text}
+              title={card.getName()}
+              data-content={card.getCardText()}
               id="Popover"
               style={{
-                "text-overflow": "ellipsis",
-                overflow: "hidden"
+                'text-overflow': 'ellipsis',
+                overflow: 'hidden',
               }}
             >
-              {this.props.text}
+              {card.getCardText()}
             </button>
           </Col>
         </Row>
@@ -278,10 +226,10 @@ class Card extends React.Component {
         <Row
           className="card-power-toughness-row d-inline-flex no-gutters justify-content-between flex-grow-1 flex-shrink-0"
           style={{
-            overflow: "hidden",
-            flexBasis: "1.4vw",
-            "font-size": ".75vw",
-            "max-height": "1.5vw",
+            overflow: 'hidden',
+            flexBasis: '1.4vw',
+            'font-size': '.75vw',
+            'max-height': '1.5vw',
           }}
         >
           <Col className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end">
@@ -294,18 +242,15 @@ class Card extends React.Component {
               className="card-power-toughness text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-right text-wrap mh-100 h-100 mw-100 w-100"
               data-toggle="popover"
               data-trigger="focus"
-              title={this.props.name}
-              data-content={this.state.isCreature}
+              title={card.getName()}
+              data-content={card.getType()}
               id="Popover"
               style={{
-                "text-overflow": "ellipsis",
-                overflow: "hidden"
+                'text-overflow': 'ellipsis',
+                overflow: 'hidden',
               }}
             >
-              {/* Don't forget to add the divider when inputing power and toughness */}
-              {this.props.power}
-              {this.props.divider}
-              {this.props.toughness}
+              {card.getPowerToughness()}
               {String()}
             </button>
           </Col>
@@ -317,7 +262,7 @@ class Card extends React.Component {
           className="card-power-toughness-row m-0 px-1 flex-grow-5 flex-shrink-3"
           style={
             {
-              "max-height": "15%"
+              'max-height': '15%',
             }
           }
         >
@@ -326,7 +271,7 @@ class Card extends React.Component {
             className="card-power-toughness-col px-1 d-flex flex-shrink-1 flex-grow-2"
             style={
               {
-                "max-height": "2vh"
+                'max-height': '2vh',
               }
             }
           >
@@ -334,13 +279,12 @@ class Card extends React.Component {
               className="card-power-toughness text-right text-nowrap"
               style={
                 {
-                  "font-size": "45%",
-                  "text-overflow": "hidden"
+                  'font-size': '45%',
+                  'text-overflow': 'hidden',
                 }
               }
             >
-              {/* Don't forget to add the divider when inputting power and toughness */}
-              {this.props.power}{this.props.divider}{this.props.toughness}
+              {card.getPowerToughness()}
             </p>
           </Col>
         </Row>
@@ -349,5 +293,9 @@ class Card extends React.Component {
     );
   }
 }
+
+Card.propTypes = {
+  card: PropTypes.shape({}).isRequired,
+};
 
 export default Card;

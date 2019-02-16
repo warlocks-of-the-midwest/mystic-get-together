@@ -1,13 +1,13 @@
-import db, { FIREBASE_FUNCTION_BASE_URL } from './fire.js';
-import firebase from 'firebase'
+import firebase from 'firebase';
 import axios from 'axios';
 import uuidv4 from 'uuid/v4';
+import db, { FIREBASE_FUNCTION_BASE_URL } from './fire.js';
 
 // Listeners
 export function listenToCard(gameId, cardId, callback) {
   db.doc(`Games/${gameId}/Cards/${cardId}`)
     .onSnapshot((doc) => {
-      callback(doc.data())
+      callback(doc.data());
     });
 }
 
@@ -19,12 +19,12 @@ export function listenToCard(gameId, cardId, callback) {
 // ]
 export function listenToCardsByQuery(gameId, queries, callback) {
   let queryRef = db.collection(`Games/${gameId}/Cards`);
-  queries.forEach(function(query) {
+  queries.forEach((query) => {
     queryRef = queryRef.where(query[0], query[1], query[2]);
   });
-  queryRef.onSnapshot(function(querySnapshot) {
-    querySnapshot.forEach(function(doc) {
-        callback(doc.data());
+  queryRef.onSnapshot((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      callback(doc.data());
     });
   });
 }
@@ -32,18 +32,37 @@ export function listenToCardsByQuery(gameId, queries, callback) {
 // Listens to all cards in a game
 export function listenToGame(gameId, callback) {
   db.collection(`Games/${gameId}/Cards`).onSnapshot(
-    function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-            callback(doc.data());
-        });
-    });
+    (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        callback(doc.data());
+      });
+    }
+  );
 }
 
 export function listenToPlayer(gameId, player, callback) {
   db.doc(`Games/${gameId}/Players/${player}`)
     .onSnapshot((doc) => {
-      callback(doc.data())
+      callback(doc.data());
     });
+}
+
+export async function loadPlayers(gameId) {
+  const querySnapshot = await db.collection(`Games/${gameId}/Players`).get();
+  const result = [];
+  querySnapshot.forEach((doc) => {
+    result.push(doc.data());
+  });
+  return result;
+}
+
+export async function loadCards(gameId) {
+  const querySnapshot = await db.collection(`Games/${gameId}/Cards`).get();
+  const result = [];
+  querySnapshot.forEach((doc) => {
+    result.push(doc.data());
+  });
+  return result;
 }
 
 // Game functions
@@ -54,46 +73,46 @@ async function getCardFromId(gameId, cardId) {
 }
 
 export async function moveCardToZone(gameId, cardId, targetZone) {
-  let card = await getCardFromId(gameId, cardId);
+  const card = await getCardFromId(gameId, cardId);
   if (card.state.zone === targetZone) {
     return;
   }
-  card.state.zone = targetZone
-  db.doc(`Games/${gameId}/Cards/${cardId}`).set(card)
+  card.state.zone = targetZone;
+  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
 }
 
 function setSingleCardPosition(gameId, card, newPosition) {
-  card.state.position = newPosition
-  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card)
+  card.state.position = newPosition;
+  db.doc(`Games/${gameId}/Cards/${card.id}`).set(card);
 }
 
 export async function setCardPosition(gameId, cardId, newPosition) {
-  let card = await getCardFromId(gameId, cardId);
-  const previousPosition = card.state.position
-  db.collection(`Games/${gameId}/Cards/`).get().then(function(querySnapshot) {
-    querySnapshot.forEach(function(doc) {
+  const card = await getCardFromId(gameId, cardId);
+  const previousPosition = card.state.position;
+  db.collection(`Games/${gameId}/Cards/`).get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
       const otherCardData = doc.data();
       // Move all other cards that are now below this one down.
       if (otherCardData.id !== card.id) {
-        const cardPosition = otherCardData.state.position
+        const cardPosition = otherCardData.state.position;
         if (cardPosition > previousPosition && cardPosition <= newPosition) {
-          setSingleCardPosition(gameId, otherCardData, cardPosition - 1)
-        }
-        else if (cardPosition >= newPosition && cardPosition < previousPosition) {
-          setSingleCardPosition(gameId, otherCardData, cardPosition + 1)
+          setSingleCardPosition(gameId, otherCardData, cardPosition - 1);
+        } else if (cardPosition >= newPosition && cardPosition < previousPosition) {
+          setSingleCardPosition(gameId, otherCardData, cardPosition + 1);
         }
       } else {
-        setSingleCardPosition(gameId, card, newPosition)
+        setSingleCardPosition(gameId, card, newPosition);
       }
     });
   });
 }
 
-//https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 function shuffleArray(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
+  let currentIndex = array.length; let temporaryValue; let
+    randomIndex;
   // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
+  while (currentIndex !== 0) {
     // Pick a remaining element...
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
@@ -107,18 +126,18 @@ function shuffleArray(array) {
 
 export async function shuffle(gameId, targetPlayerId) {
   const numCards = 100;
-  let newOrdering = [];
+  const newOrdering = [];
   for (let i = 0; i < numCards; i++) {
     newOrdering.push(i);
   }
   shuffleArray(newOrdering);
 
   let i = 0;
-  db.collection(`Games/${gameId}/Cards/`).get().then(function(querySnapshot) {
-    querySnapshot.forEach(function(doc) {
+  db.collection(`Games/${gameId}/Cards/`).get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
       const card = doc.data();
-      if (card.state.controller === targetPlayerId && card.state.zone === "Library") { // Only shuffle library cards
-        setSingleCardPosition(gameId, card, newOrdering[i])
+      if (card.state.controller === targetPlayerId && card.state.zone === 'Library') { // Only shuffle library cards
+        setSingleCardPosition(gameId, card, newOrdering[i]);
         i++;
       }
     });
@@ -126,46 +145,46 @@ export async function shuffle(gameId, targetPlayerId) {
 }
 
 export function remove(gameId, cardId) {
-  db.doc(`Games/${gameId}/Cards/${cardId}`).delete()
+  db.doc(`Games/${gameId}/Cards/${cardId}`).delete();
 }
 
 export async function changeController(gameId, cardId, targetPlayer, targetZone) {
-  let card = await getCardFromId(gameId, cardId);
-  card.state.controller = targetPlayer
+  const card = await getCardFromId(gameId, cardId);
+  card.state.controller = targetPlayer;
   db.doc(`Games/${gameId}/Cards/${cardId}`).set(card);
 }
 
 export async function tap(gameId, cardId) {
-  let card = await getCardFromId(gameId, cardId);
-  card.state.tapped = true
+  const card = await getCardFromId(gameId, cardId);
+  card.state.tapped = true;
   db.doc(`Games/${gameId}/Cards/${cardId}`).set(card);
 }
 
 export async function untap(gameId, cardId) {
-  let card = await getCardFromId(gameId, cardId);
-  card.state.tapped = false
+  const card = await getCardFromId(gameId, cardId);
+  card.state.tapped = false;
   db.doc(`Games/${gameId}/Cards/${cardId}`).set(card);
 }
 
 export async function clone(gameId, cardId, shouldCreateToken) {
-  let card = await getCardFromId(gameId, cardId);
+  const card = await getCardFromId(gameId, cardId);
   // deep copy the card
-  let cardCopy = JSON.parse(JSON.stringify(card))
-  cardCopy.state.is_token = shouldCreateToken
+  const cardCopy = JSON.parse(JSON.stringify(card));
+  cardCopy.state.is_token = shouldCreateToken;
   cardCopy.id = uuidv4();
   db.doc(`Games/${gameId}/Cards/${cardCopy.id}`).set(cardCopy);
 }
 
 export async function flip(gameId, cardId) {
-  let card = await getCardFromId(gameId, cardId);
-  card.state.face_up = !card.state.face_up
+  const card = await getCardFromId(gameId, cardId);
+  card.state.face_up = !card.state.face_up;
   db.doc(`Games/${gameId}/Cards/${cardId}`).set(card);
 }
 
 export function createToken(gameId, tokenScryfallId, targetPlayer, targetZone, power, toughness) {
   const newCard = {
-    'id': uuidv4(),
-    'scryfall_id': tokenScryfallId,
+    id: uuidv4(),
+    scryfall_id: tokenScryfallId,
     'state.owner': targetPlayer,
     'state.controller': targetPlayer,
     'state.zone': targetZone,
@@ -178,46 +197,46 @@ export function createToken(gameId, tokenScryfallId, targetPlayer, targetZone, p
     'state.power': power,
     'state.toughness': toughness,
     'attachments.counters': {},
-    'attachments.permanents': {}
-  }
+    'attachments.permanents': {},
+  };
   db.doc(`Games/${gameId}/Cards/${newCard.id}`).set(newCard);
 }
 
 export async function setCardCounters(gameId, cardId, counterType, numCounters) {
-  let card = await getCardFromId(gameId, cardId);
-  let currentCounters = card.attachments.counters
-  currentCounters[counterType] = numCounters
-  card.attachments.counters = currentCounters
+  const card = await getCardFromId(gameId, cardId);
+  const currentCounters = card.attachments.counters;
+  currentCounters[counterType] = numCounters;
+  card.attachments.counters = currentCounters;
   db.doc(`Games/${gameId}/Cards/${cardId}`).set(card);
 }
 
 export async function setAttachedPermanents(gameId, cardId, attachedPermanents) {
-  let card = await getCardFromId(gameId, cardId);
-  card.attachments.permanents = attachedPermanents
+  const card = await getCardFromId(gameId, cardId);
+  card.attachments.permanents = attachedPermanents;
   db.doc(`Games/${gameId}/Cards/${cardId}`).set(card);
 }
 
-//Player functions
+// Player functions
 export function updateLife(gameId, player, newLife) {
   db.doc(`Games/${gameId}/Players/${player}`)
     .update({
-      life: newLife
-    })
+      life: newLife,
+    });
 }
 
 export function setPlayerCounters(gameId, player, counterType, numCounters) {
   let currentCounters;
-  db.doc(`Games/${gameId}/Players/${player}`).get().then(function(doc) {
-    currentCounters = doc.data().counters
-    currentCounters[counterType] = numCounters
+  db.doc(`Games/${gameId}/Players/${player}`).get().then((doc) => {
+    currentCounters = doc.data().counters;
+    currentCounters[counterType] = numCounters;
     db.doc(`Games/${gameId}/Players/${player}`)
       .update({
-        counters: currentCounters
-      })
+        counters: currentCounters,
+      });
   });
 }
 
-//TODO we don't currently store any data for game status like this
+// TODO we don't currently store any data for game status like this
 export function loseGame(player) {
 }
 export function winGame(player) {
@@ -225,11 +244,11 @@ export function winGame(player) {
 export function drawGame() {
 }
 
-//Deck functions
+// Deck functions
 export function getAvailableDecks(user) {
   let deckData;
-  return db.doc(`Users/${user}`).get().then(function(doc) {
-    deckData = doc.data().decks
+  return db.doc(`Users/${user}`).get().then((doc) => {
+    deckData = doc.data().decks;
     return Object.keys(deckData);
   });
 }
@@ -253,11 +272,10 @@ export function getAvailableDecks(user) {
 export async function importDeck(player, uri) {
   await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/importDeckFunction`, {
     params: {
-        player,
-        uri
-    }
+      player,
+      uri,
+    },
   });
-  return;
 }
 
 /**
@@ -270,8 +288,8 @@ export async function importDeck(player, uri) {
 export async function parseDeck(uri) {
   const response = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/parseDeckFunction`, {
     params: {
-        uri
-    }
+      uri,
+    },
   });
   return response.data;
 }
@@ -290,10 +308,10 @@ export async function parseDeck(uri) {
 export async function populateDeck(player, deckId, ...include) {
   const response = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/populateDeckFunction`, {
     params: {
-        player,
-        deckId,
-        ...include && { include }
-    }
+      player,
+      deckId,
+      ...include && { include },
+    },
   });
   return response.data;
 }
@@ -311,9 +329,9 @@ export async function populateDeck(player, deckId, ...include) {
 export async function hostGame(player, deckId) {
   const response = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/hostGameFunction`, {
     params: {
-        player,
-        deckId
-    }
+      player,
+      deckId,
+    },
   });
   return response.headers['x-gameid'];
 }
@@ -331,12 +349,11 @@ export async function hostGame(player, deckId) {
 export async function joinGame(gameId, player, deckId) {
   await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/joinGameFunction`, {
     params: {
-        gameId,
-        player,
-        deckId
-    }
+      gameId,
+      player,
+      deckId,
+    },
   });
-  return;
 }
 
 /**
@@ -350,8 +367,7 @@ export async function joinGame(gameId, player, deckId) {
 export async function startGame(gameId) {
   await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/startGameFunction`, {
     params: {
-        gameId
-    }
+      gameId,
+    },
   });
-  return;
 }
