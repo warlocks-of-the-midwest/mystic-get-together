@@ -17,6 +17,7 @@ import Sidebar from './Sidebar';
 
 import '../styles/GameArea.css';
 import '../styles/Card.css';
+import { Zones } from '../constants.js';
 
 class GameArea extends Component {
   constructor(props) {
@@ -214,27 +215,29 @@ class GameArea extends Component {
                 >
                   <>
 
-                    {_.map(cards, (card) => (
-                      <Col
-                        xs="2"
-                        style={{
-                          'min-width': '80px',
-                          'max-height': '50%',
-                        }}
-                        className="no-gutters"
-                      >
+                    {cards
+                      .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
+                      .map((card) => (
                         <Col
-                          xs="11"
-                          className="mh-100 h-100 no-gutters"
+                          xs="2"
+                          style={{
+                            'min-width': '80px',
+                            'max-height': '50%',
+                          }}
+                          className="no-gutters"
                         >
-                          <Card card={card} />
+                          <Col
+                            xs="11"
+                            className="mh-100 h-100 no-gutters"
+                          >
+                            <Card card={card} />
+                          </Col>
+                          <Col
+                            xs="1"
+                            className="mh-100 h-100 no-gutters"
+                          />
                         </Col>
-                        <Col
-                          xs="1"
-                          className="mh-100 h-100 no-gutters"
-                        />
-                      </Col>
-                    ))}
+                      ))}
                   </>
                 </Col>
               </Row>
