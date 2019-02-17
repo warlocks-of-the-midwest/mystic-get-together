@@ -120,9 +120,22 @@ export interface Card {
  * @param deck The deck to process
  */
 const createCards = function(player: string, deck: Decklist.Deck): Array<Card> {
-    const library: Array<Decklist.IdentifiedCard> = _.filter(deck.cards, (card: Decklist.IdentifiedCard) => {
+    let library: Array<Decklist.IdentifiedCard> = _.filter(deck.cards, (card: Decklist.IdentifiedCard) => {
         return card.board === Decklist.Board.MAIN;
+    });
+    // expand cards with qty > 1
+    library = _.flatMap(library, (card: Decklist.IdentifiedCard) => {
+        if (card.qty > 1) {
+            const expandedCards = [];
+            for (let count = 0; count < card.qty; count++) {
+                expandedCards.push(card);
+            }
+            return expandedCards;
+        } else {
+            return [card];
+        }
     }).sort(() => uuidv4()); // shuffle
+
     const commandZone: Array<Decklist.IdentifiedCard> = _.filter(deck.cards, (card: Decklist.IdentifiedCard) => {
         return card.board === Decklist.Board.COMMAND;
     });
