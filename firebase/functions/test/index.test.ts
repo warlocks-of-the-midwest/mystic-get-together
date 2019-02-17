@@ -41,12 +41,12 @@ describe('Cloud Functions Test Suite', function() {
           await supertest(functionsConfig.baseURI)
           .post('/importDeckFunction')
           .send({
-              player: functionsConfig.user1.uid,
+              uid: functionsConfig.user1.uid,
               uri: functionsConfig.user1.deckURI,
           })
-          .expect(200)
+          .expect(201)
           .then(function (res) {
-            user1DeckId = res.header['x-deckid'];
+            user1DeckId = res.body.deckId;
           });
         });
       });
@@ -91,12 +91,12 @@ describe('Cloud Functions Test Suite', function() {
           await supertest(functionsConfig.baseURI)
           .post('/importDeckFunction')
           .send({
-            player: functionsConfig.user2.uid,
+            uid: functionsConfig.user2.uid,
             uri: functionsConfig.user2.deckURI,
           })
-          .expect(200)
+          .expect(201)
           .then(function (res) {
-            user2DeckId = res.header['x-deckid'];
+            user2DeckId = res.body.deckId;
           });
         });
       });
@@ -144,7 +144,7 @@ describe('Cloud Functions Test Suite', function() {
           await supertest(functionsConfig.baseURI)
           .post('/importDeckFunction')
           .send({
-            player: functionsConfig.user1.uid,
+            uid: functionsConfig.user1.uid,
             uri: 'https://www.mtggoldfish.com/deck/9999999999',
           })
           .expect(500); // TODO would be great to get a 400 back and a useful error message
@@ -169,7 +169,7 @@ describe('Cloud Functions Test Suite', function() {
           await supertest(functionsConfig.baseURI)
           .post('/populateDeckFunction')
           .send({
-            player: functionsConfig.user2.uid,
+            uid: functionsConfig.user2.uid,
             deckId: user2DeckId,
             include: ['name', 'id'],
           })
@@ -200,7 +200,7 @@ describe('Cloud Functions Test Suite', function() {
           await supertest(functionsConfig.baseURI)
           .post('/populateDeckFunction')
           .send({
-            player: functionsConfig.user2.uid,
+            uid: functionsConfig.user2.uid,
             deckId: 'FAKEID',
             include: ['name', 'id'],
           })
@@ -219,12 +219,12 @@ describe('Cloud Functions Test Suite', function() {
           await supertest(functionsConfig.baseURI)
           .post('/hostGameFunction')
           .send({
-            player: functionsConfig.user1.uid,
+            uid: functionsConfig.user1.uid,
             deckId: user1DeckId,
           })
           .expect(201)
           .then((res) => {
-            gameId = res.header['x-gameid'];
+            gameId = res.body.gameId;
           })
         });
       });
@@ -274,10 +274,10 @@ describe('Cloud Functions Test Suite', function() {
           .post('/joinGameFunction')
           .send({
             gameId: gameId,
-            player: functionsConfig.user2.uid,
+            uid: functionsConfig.user2.uid,
             deckId: user2DeckId,
           })
-          .expect(200);
+          .expect(204);
         });
       });
 
@@ -342,7 +342,7 @@ describe('Cloud Functions Test Suite', function() {
         .send({
           gameId,
         })
-        .expect(200);
+        .expect(204);
       });
 
       let gameDoc: Firestore.DocumentSnapshot;

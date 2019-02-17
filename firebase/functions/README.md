@@ -34,19 +34,19 @@ export FIREBASE_FUNCTION_BASE_URL=https://us-central1-mystic-the-get-together-8e
 
 # Import a deck from MTGGoldfish for a player
 importDeckFunction() {
-    http -v POST "${FIREBASE_FUNCTION_BASE_URL}/${0}" player=eric uri=https://www.mtggoldfish.com/deck/1511674
+    http -v POST "${FIREBASE_FUNCTION_BASE_URL}/${0}" uid=eric uri=https://www.mtggoldfish.com/deck/1511674
 }
 
 # A player hosts a game using a specific deck that player owns
 # The deckId can be gleaned from the headers of the importDeckFunction response
 hostGameFunction() {
-    http -v POST "${FIREBASE_FUNCTION_BASE_URL}/${0}" player=eric deckId=?
+    http -v POST "${FIREBASE_FUNCTION_BASE_URL}/${0}" uid=eric deckId=?
 }
 
 # A player joins an existing game using a specific deck that player owns
 # The gameId can be gleaned from the headres of the hostGameFunction response
 joinGameFunction() {
-    http -v POST "${FIREBASE_FUNCTION_BASE_URL}/${0}" player=anthony deckId=?
+    http -v POST "${FIREBASE_FUNCTION_BASE_URL}/${0}" uid=anthony deckId=?
 }
 
 # Start the target game by determining the turn order
@@ -57,7 +57,7 @@ startGameFunction() {
 # Clients may want to get Scryfall data for cards in the game
 # The deckId value is set as part of the player document
 populateDeckFunction() {
-    http -v POST "${FIREBASE_FUNCTION_BASE_URL}/${0}" player=eric deckId=? include:='["id"]'
+    http -v POST "${FIREBASE_FUNCTION_BASE_URL}/${0}" uid=eric deckId=? include:='["id"]'
 }
 
 # Of use for a deck editor
