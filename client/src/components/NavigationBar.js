@@ -29,6 +29,10 @@ class NavigationBar extends Component {
     };
   }
 
+  propTypes: {
+    handleToggleSidebarClick: React.PropTypes.func
+  }
+
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
@@ -117,6 +121,10 @@ class NavigationBar extends Component {
                   <DropdownItem>
                     Anthony
 									</DropdownItem>
+
+                  <DropdownItem onClick={this.props.handleToggleSidebarClick}>
+                    Toggle Sidebar
+                  </DropdownItem>
 
                   <DropdownItem>
                     Option 1
