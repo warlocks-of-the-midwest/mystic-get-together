@@ -1,6 +1,6 @@
 function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+}
 
 /**
  * Attempts some operation up to 5 times, waiting 1 second between attempts.
