@@ -30,7 +30,7 @@ and copying the key file to `service-account-credentials.json`
 
 ## API Examples
 ```bash
-export FIREBASE_FUNCTION_BASE_URL=https://us-central1-mystic-the-get-together-8e05e.cloudfunctions.net
+export FIREBASE_FUNCTION_BASE_URL=https://us-central1-mystic-the-get-together-test.cloudfunctions.net
 
 # Import a deck from MTGGoldfish for a player
 importDeckFunction() {

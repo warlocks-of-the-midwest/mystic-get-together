@@ -3,9 +3,12 @@ import { expect } from 'chai';
 import * as _ from 'lodash';
 import * as supertest from 'supertest';
 import * as Firestore from '@google-cloud/firestore';
+import * as admin from 'firebase-admin';
 
 import * as Decklist from '../src/decklist';
 import * as Game from '../src/game';
+
+import * as TestUtils from './test-utils';
 
 // Firestore client
 const firestore = new Firestore.Firestore({
@@ -13,6 +16,12 @@ const firestore = new Firestore.Firestore({
   // This file is NOT checked in to Git
   keyFilename: 'service-account-credentials.json',
   timestampsInSnapshots: true
+});
+
+// Admin SDK
+const app: admin.app.App = admin.initializeApp({
+  credential: admin.credential.cert('service-account-credentials.json'),
+  databaseURL: 'https://mystic-the-get-together-test.firebaseio.com'
 });
 
 const functionsConfig = {
@@ -29,13 +38,65 @@ const functionsConfig = {
 
 describe('Cloud Functions Test Suite', function() {
 
+  const createdUserUID: string = 'create-user-test';
+  const createdUserName: string = 'Nicol Bolas';
+
+  describe('Tests for createUserDocumentFunction', function() {
+    describe('Test that the user document is created when a user is created', function() {
+      it('Create the user', async function() {
+        const request: admin.auth.CreateRequest = {
+          uid: createdUserUID,
+          displayName: createdUserName,
+        };
+        const userRecord: admin.auth.UserRecord = await admin.auth().createUser(request);
+        expect(userRecord.uid).to.equal(createdUserUID);
+      });
+
+      it(`The "Users/${createdUserUID}" document should exist and have uid and username populated`, async function() {
+        const userDoc: Firestore.DocumentReference = await firestore.doc(`Users/${createdUserUID}`);
+        const userDocExists: boolean = await TestUtils.attempt(async () => {
+          const snapshot = await userDoc.get();
+          if (!snapshot.exists) {
+            return Promise.reject(new Error('Snapshot should exist'));
+          }
+          return snapshot.exists;
+        });
+        expect(userDocExists).to.be.true;
+
+        const snapshot = await userDoc.get();
+        expect(snapshot.data().uid).to.equal(createdUserUID);
+        expect(snapshot.data().username).to.equal(createdUserName);
+      });
+    });
+  });
+
+  describe('Tests for deleteUserDocumentFunction', function() {
+    describe('Test that the user document is deleted when a user is deleted', function() {
+      it('Delete the user', async function() {
+        await admin.auth().deleteUser(createdUserUID);
+      });
+
+      it(`The "Users/${createdUserUID}" document should not exist`, async function() {
+        const userDoc: Firestore.DocumentReference = await firestore.doc(`Users/${createdUserUID}`);
+        const userDocExists: boolean = await TestUtils.attempt(async () => {
+          const snapshot = await userDoc.get();
+          if (snapshot.exists) {
+            return Promise.reject(new Error('Snapshot should not exist'));
+          }
+          return snapshot.exists;
+        });
+        expect(userDocExists).to.be.false;
+      });
+    });
+  });
+
   // Tests for importDeckFunction
   let user1DeckId: string;
   let user2DeckId: string;
 
   describe('Tests for importDeckFunction', function() {
-    describe('Test importing a standard commander deck (1 commander, 99 other)', () => {
-      describe('Import a standard commander deck for user1, via Cloud Function', () => {
+    describe('Test importing a standard commander deck (1 commander, 99 other)', function() {
+      describe('Import a standard commander deck for user1, via Cloud Function', function() {
         it('Make the HTTP call', async function() {
           this.timeout(15000);
           await supertest(functionsConfig.baseURI)
@@ -358,5 +419,11 @@ describe('Cloud Functions Test Suite', function() {
         expect([data.turn_order['0'], data.turn_order['1']]).to.contain(functionsConfig.user2.uid);
       });
     });
-  });  
+  });
+
+  describe('Clean up Admin SDK', function() {
+    it('Delete the app', async function() {
+      await app.delete();
+    });
+  });
 });
