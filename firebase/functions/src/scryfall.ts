@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as createError from 'http-errors';
+import * as Response from './response';
 
 /**
  * Return the cannonical set code for the provided set code.
@@ -52,14 +52,20 @@ export async function getCardData(params: CardParams): Promise<any> {
             return response.data;
         } else {
             console.error('Failed to get card', params);
-            throw createError(500);
+            throw new Response.FunctionError(
+                Response.Messages.SCRYFALL_ERROR,
+                Response.Errors.SCRYFALL_ERROR,
+            );
         }
     } catch (e) {
-        if (e instanceof createError.HttpError) {
+        if (e instanceof Response.FunctionError) {
             throw e;
         } else {
             console.error('Network request to scryfall failed', e)
-            throw createError(500);
+            throw new Response.FunctionError(
+                Response.Messages.SCRYFALL_ERROR,
+                Response.Errors.SCRYFALL_ERROR,
+            );
         }
     }
 }
@@ -77,14 +83,20 @@ export async function getCardDataForID(id: string): Promise<any> {
             return response.data;
         } else {
             console.error('Failed to get card', id);
-            throw createError(500);
+            throw new Response.FunctionError(
+                Response.Messages.SCRYFALL_ERROR,
+                Response.Errors.SCRYFALL_ERROR,
+            );
         }
     } catch (e) {
-        if (e instanceof createError.HttpError) {
+        if (e instanceof Response.FunctionError) {
             throw e;
         } else {
             console.error('Network request to scryfall failed', e)
-            throw createError(500);
+            throw new Response.FunctionError(
+                Response.Messages.SCRYFALL_ERROR,
+                Response.Errors.SCRYFALL_ERROR,
+            );
         }
     }
 }
