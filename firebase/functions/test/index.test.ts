@@ -222,6 +222,24 @@ describe('Cloud Functions Test Suite', function() {
       });
     });
   });
+
+  describe('Tests for updateUserDocumentWithDeck', function() {
+    it(`User ${functionsConfig.user1.uid} should list the DRAGONS deck`, async function() {
+      this.timeout(5000);
+      const userDocRef = firestore.doc(`Users/${functionsConfig.user1.uid}`);
+      const userDoc = await TestUtils.attempt(async () => {
+        const tempDoc = await userDocRef.get();
+        if (!tempDoc.data().decks[user1DeckId]) {
+          throw new Error(`Expected decks[${user1DeckId}] to exist`);
+        }
+        return tempDoc;
+      })
+      const deckInfo = userDoc.data().decks[user1DeckId];
+      expect(deckInfo).to.not.be.undefined;
+      expect(deckInfo.id).to.equal(user1DeckId);
+      expect(deckInfo.name).to.equal('DRAGONS');
+    });
+  });
   
   describe('Tests for populateDeckFunction', function() {
     describe('Test populating for a deck', function() {

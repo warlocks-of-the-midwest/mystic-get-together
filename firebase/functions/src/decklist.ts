@@ -56,7 +56,9 @@ export interface Deck {
     // The name of the deck
     name: string,
     // The cards in the deck, where the key is the Scryfall ID
-    cards: any,
+    cards: {
+        [key: string]: IdentifiedCard,
+    },
     // Optional information about the imported deck
     import_info?: {
         // The URI from which the deck was imported
