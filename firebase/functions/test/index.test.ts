@@ -53,6 +53,7 @@ describe('Cloud Functions Test Suite', function() {
       });
 
       it(`The "Users/${createdUserUID}" document should exist and have uid and username populated`, async function() {
+        this.timeout(15000);
         const userDoc: Firestore.DocumentReference = await firestore.doc(`Users/${createdUserUID}`);
         const userDocExists: boolean = await TestUtils.attempt(async () => {
           const snapshot = await userDoc.get();
@@ -77,6 +78,7 @@ describe('Cloud Functions Test Suite', function() {
       });
 
       it(`The "Users/${createdUserUID}" document should not exist`, async function() {
+        this.timeout(15000);
         const userDoc: Firestore.DocumentReference = await firestore.doc(`Users/${createdUserUID}`);
         const userDocExists: boolean = await TestUtils.attempt(async () => {
           const snapshot = await userDoc.get();
@@ -415,8 +417,8 @@ describe('Cloud Functions Test Suite', function() {
       it('Validate the document in Firestore', function() {
         const data = gameDoc.data();
 
-        expect([data.turn_order['0'], data.turn_order['1']]).to.contain(functionsConfig.user1.uid);
-        expect([data.turn_order['0'], data.turn_order['1']]).to.contain(functionsConfig.user2.uid);
+        expect(data.turn_order).to.contain(functionsConfig.user1.uid);
+        expect(data.turn_order).to.contain(functionsConfig.user2.uid);
       });
     });
   });
