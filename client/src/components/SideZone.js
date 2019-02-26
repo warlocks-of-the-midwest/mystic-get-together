@@ -8,6 +8,7 @@ import {
   ListGroup, ListGroupItem,
 } from 'reactstrap';
 import Card from './Card.js';
+import CardList from './CardList.js';
 import SideZoneContextMenu from './SideZoneContextMenu.js';
 import '../styles/Zones.css';
 
@@ -71,28 +72,9 @@ class SideZone extends Component {
     });
   }
 
-  renderCardList() {
-    const { cardList, searchTerm } = this.state;
-    return (
-      <ListGroup className="zone-modal-list">
-        {cardList
-          .filter((card) => _.includes(card.getName().toLowerCase(), searchTerm))
-          .map((card) => (
-            <ListGroupItem
-              key={card.getName()}
-              onClick={this.cardListClick}
-              id={card.getId()}
-            >
-              {card.getName()}
-            </ListGroupItem>
-          ))}
-      </ListGroup>
-    );
-  }
-
   render() {
     const { name } = this.props;
-    const { currentCard, modal } = this.state;
+    const { currentCard, modal, cardList, searchTerm } = this.state;
 
     return (
       <Col xs="12" className="border p-1" onClick={this.toggle}>
@@ -129,7 +111,11 @@ class SideZone extends Component {
             <Container fluid>
               <Row>
                 <Col className="zone-modal-body">
-                  {this.renderCardList()}
+                  <CardList
+                    listClickHandler={this.cardListClick}
+                    cardList={cardList}
+                    searchTerm={searchTerm}
+                  />
                 </Col>
                 <Col xs="5">
                   <Row>
