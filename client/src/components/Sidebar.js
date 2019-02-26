@@ -8,6 +8,7 @@ import {
 } from 'reactstrap';
 
 import SideZone from './SideZone';
+import LibraryZone from './LibraryZone';
 import { Zones } from '../constants';
 
 import '../styles/Sidebar.css';
@@ -17,6 +18,7 @@ class Sidebar extends Component {
     const { cards } = this.props;
     const exile = _.filter(cards, (card) => _.get(card, 'state.zone') === Zones.EXILE);
     const graveyard = _.filter(cards, (card) => _.get(card, 'state.zone') === Zones.GRAVEYARD);
+    const library = _.filter(cards, (card) => _.get(card, 'state.zone') === Zones.LIBRARY);
 
     return (
       <Container
@@ -51,21 +53,9 @@ class Sidebar extends Component {
             cardList={graveyard}
           />
           {/* Library */}
-          <Col
-            xs="12"
-            className="border p-1"
-          >
-            <h6
-              className="font-weight-bold text-wrap"
-              style={
-                {
-                  'font-size': '50%',
-                }
-              }
-            >
-              Library
-            </h6>
-          </Col>
+          <LibraryZone
+            cardList={library}
+          />
         </Row>
       </Container>
     );

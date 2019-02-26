@@ -5,7 +5,6 @@ import {
   Col, Row, Container,
   Modal, ModalHeader, ModalBody,
   Input, InputGroup,
-  ListGroup, ListGroupItem,
 } from 'reactstrap';
 import Card from './Card.js';
 import CardList from './CardList.js';

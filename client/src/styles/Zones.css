@@ -9,3 +9,7 @@
 .zone-modal-list {
     overflow-y: initial;
 }
+
+.library-function-buttons {
+  margin: auto;
+}
