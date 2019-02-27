@@ -53,6 +53,7 @@ describe('Cloud Functions Test Suite', function() {
       });
 
       it(`The "Users/${createdUserUID}" document should exist and have uid and username populated`, async function() {
+        this.timeout(15000);
         const userDoc: Firestore.DocumentReference = await firestore.doc(`Users/${createdUserUID}`);
         const userDocExists: boolean = await TestUtils.attempt(async () => {
           const snapshot = await userDoc.get();
@@ -77,6 +78,7 @@ describe('Cloud Functions Test Suite', function() {
       });
 
       it(`The "Users/${createdUserUID}" document should not exist`, async function() {
+        this.timeout(15000);
         const userDoc: Firestore.DocumentReference = await firestore.doc(`Users/${createdUserUID}`);
         const userDocExists: boolean = await TestUtils.attempt(async () => {
           const snapshot = await userDoc.get();
@@ -218,6 +220,24 @@ describe('Cloud Functions Test Suite', function() {
           expect(decks.size).to.equal(1);
         });
       });
+    });
+  });
+
+  describe('Tests for updateUserDocumentWithDeck', function() {
+    it(`User ${functionsConfig.user1.uid} should list the DRAGONS deck`, async function() {
+      this.timeout(5000);
+      const userDocRef = firestore.doc(`Users/${functionsConfig.user1.uid}`);
+      const userDoc = await TestUtils.attempt(async () => {
+        const tempDoc = await userDocRef.get();
+        if (!tempDoc.data().decks[user1DeckId]) {
+          throw new Error(`Expected decks[${user1DeckId}] to exist`);
+        }
+        return tempDoc;
+      })
+      const deckInfo = userDoc.data().decks[user1DeckId];
+      expect(deckInfo).to.not.be.undefined;
+      expect(deckInfo.id).to.equal(user1DeckId);
+      expect(deckInfo.name).to.equal('DRAGONS');
     });
   });
   
@@ -415,8 +435,8 @@ describe('Cloud Functions Test Suite', function() {
       it('Validate the document in Firestore', function() {
         const data = gameDoc.data();
 
-        expect([data.turn_order['0'], data.turn_order['1']]).to.contain(functionsConfig.user1.uid);
-        expect([data.turn_order['0'], data.turn_order['1']]).to.contain(functionsConfig.user2.uid);
+        expect(data.turn_order).to.contain(functionsConfig.user1.uid);
+        expect(data.turn_order).to.contain(functionsConfig.user2.uid);
       });
     });
   });

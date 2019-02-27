@@ -3,7 +3,7 @@ function sleep(ms: number) {
 }
 
 /**
- * Attempts some operation up to 5 times, waiting 1 second between attempts.
+ * Attempts some operation up to 10 times, waiting 1 second between attempts.
  * 
  * @param operation The operation to attempt, which should return a Promise.
  * If the Promise resolves, then that value is returned. If it rejects, then
@@ -13,7 +13,7 @@ function sleep(ms: number) {
 export const attempt = async function(operation: () => Promise<any>): Promise<any> {
     let attempts: number = 0;
     let error: Error;
-    while (attempts < 5) {
+    while (attempts < 10) {
         try {
             attempts++;
             return await operation();

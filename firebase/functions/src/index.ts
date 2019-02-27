@@ -15,3 +15,4 @@ export const startGameFunction = Game.startGameFunction;
 // User Functions
 export const createUserDocumentFunction = User.createUserDocument;
 export const deleteUserDocumentFunction = User.deleteUserDocument;
+export const updateUserDocumentWithDeckFunction = User.updateUserDocumentWithDeck;
