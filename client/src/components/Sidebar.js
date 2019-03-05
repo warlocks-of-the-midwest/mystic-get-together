@@ -8,7 +8,7 @@ import {
 } from 'reactstrap';
 
 import SideZoneModal from './SideZoneModal';
-import LibraryZone from './LibraryZone';
+import LibraryModal from './LibraryModal';
 import withZone from './withZone';
 import { Zones } from '../constants';
 
@@ -23,6 +23,7 @@ class Sidebar extends Component {
 
     const GraveyardWithModal = withZone(SideZoneModal, 'Graveyard', graveyard);
     const ExileWithModal = withZone(SideZoneModal, 'Exile', exile);
+    const LibraryWithModal = withZone(LibraryModal, 'Library', library);
 
     return (
       <Container
@@ -50,10 +51,7 @@ class Sidebar extends Component {
           </Col>
           <ExileWithModal />
           <GraveyardWithModal />
-          {/* Library */}
-          <LibraryZone
-            cardList={library}
-          />
+          <LibraryWithModal />
         </Row>
       </Container>
     );

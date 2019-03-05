@@ -12,14 +12,13 @@ import CardList from './CardList.js';
 import SideZoneContextMenu from './SideZoneContextMenu.js';
 import '../styles/Zones.css';
 
-class LibraryZone extends Component {
+class LibraryModal extends Component {
   constructor(props) {
     super(props);
 
     const { cardList } = this.props;
 
     this.state = {
-      modalOpen: false,
       modalFunction: 'search',
       searchTerm: '',
       currentCard: null,
@@ -27,6 +26,7 @@ class LibraryZone extends Component {
     };
 
     this.setModalFunction = this.setModalFunction.bind(this);
+
     this.toggleModalState = this.toggleModalState.bind(this);
     this.cardListClick = this.cardListClick.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -52,12 +52,10 @@ class LibraryZone extends Component {
    * Toggles the modal state. Also resets this.state.currentSearchTerm.
    */
   toggleModalState() {
-    this.setState((prevState) => (
-      {
-        modalOpen: !prevState.modalOpen,
-        currentSearchTerm: '',
-      }
-    ));
+    const { modalToggle } = this.props;
+
+    this.setState({ searchTerm: '' });
+    modalToggle();
   }
 
   /**
@@ -128,79 +126,73 @@ class LibraryZone extends Component {
   }
 
   render() {
-    const { name } = this.props;
-    const { currentCard, modalOpen } = this.state;
+    const { name, modalOpen } = this.props;
+    const { currentCard } = this.state;
 
     return (
-      <Col xs="12" className="border p-1" onClick={this.toggleModalState}>
-        <h6
-          className="font-weight-bold text-wrap"
-          style={{ 'font-size': '50%' }}
-        >
-          Library
-        </h6>
-        <Modal
-          isOpen={modalOpen}
-          toggle={this.toggleModalState}
-          centered
-          size="lg"
-        >
-          <ModalHeader toggle={this.toggleModalState}>
+      <Modal
+        isOpen={modalOpen}
+        toggle={this.toggleModalState}
+        centered
+        size="lg"
+      >
+        <ModalHeader toggle={this.toggleModalState}>
+          <Row>
+            <h3>Library</h3>
+          </Row>
+        </ModalHeader>
+        <ModalBody>
+          <Container fluid>
             <Row>
-              <h3>Library</h3>
-            </Row>
-          </ModalHeader>
-          <ModalBody>
-            <Container fluid>
-              <Row>
-                <Col className="zone-modal-body">
-                  <Row>
-                    <ButtonGroup className="library-function-buttons">
-                      <Button
-                        type="radio"
-                        name="radio"
-                        id="lib_search"
-                        onClick={this.setModalFunction}
-                      >
-                        Search
-                      </Button>
-                      <Button
-                        type="radio"
-                        name="radio"
-                        id="lib_manipulate"
-                        onClick={this.setModalFunction}
-                      >
-                        Manipulate
-                      </Button>
-                    </ButtonGroup>
-                  </Row>
-                  {this.renderLibModalBody()}
-                </Col>
-                <Col xs="5">
-                  <Row>
-                    {currentCard && (
-                      <Card
-                        card={currentCard}
-                      />
-                    )}
-                  </Row>
-                  <Row>
-                    <SideZoneContextMenu
-                      name={name}
+              <Col className="zone-modal-body">
+                <Row>
+                  <ButtonGroup className="library-function-buttons">
+                    <Button
+                      type="radio"
+                      name="radio"
+                      id="lib_search"
+                      onClick={this.setModalFunction}
+                    >
+                      Search
+                    </Button>
+                    <Button
+                      type="radio"
+                      name="radio"
+                      id="lib_manipulate"
+                      onClick={this.setModalFunction}
+                    >
+                      Manipulate
+                    </Button>
+                  </ButtonGroup>
+                </Row>
+                {this.renderLibModalBody()}
+              </Col>
+              <Col xs="5">
+                <Row>
+                  {currentCard && (
+                    <Card
+                      card={currentCard}
                     />
-                  </Row>
-                </Col>
-              </Row>
-            </Container>
-          </ModalBody>
-        </Modal>
-      </Col>
+                  )}
+                </Row>
+                <Row>
+                  <SideZoneContextMenu
+                    name={name}
+                  />
+                </Row>
+              </Col>
+            </Row>
+          </Container>
+        </ModalBody>
+      </Modal>
     );
   }
 }
-LibraryZone.propTypes = {
-  name: PropTypes.string.isRequired,
+LibraryModal.propTypes = {
   cardList: PropTypes.array.isRequired,
+  modalToggle: PropTypes.func.isRequired,
+  modalOpen: PropTypes.bool.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
-export default LibraryZone;
+export default LibraryModal;

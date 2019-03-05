@@ -10,7 +10,7 @@ function withZone(WrappedModal, name, zoneCardList) {
       super(props);
 
       this.state = {
-        modal: false,
+        modalOpen: false,
       };
 
       this.toggle = this.toggle.bind(this);
@@ -22,14 +22,14 @@ function withZone(WrappedModal, name, zoneCardList) {
     toggle() {
       this.setState((prevState) => (
         {
-          modal: !prevState.modal,
+          modalOpen: !prevState.modalOpen,
         }
       ));
     }
 
 
     render() {
-      const { modal } = this.state;
+      const { modalOpen } = this.state;
       return (
         <Col xs="12" className="border p-1" onClick={this.toggle}>
           <h6
@@ -38,7 +38,12 @@ function withZone(WrappedModal, name, zoneCardList) {
           >
             {name}
           </h6>
-          <WrappedModal cardList={zoneCardList} modalToggle={this.toggle} modal={modal} name={name} />
+          <WrappedModal
+            cardList={zoneCardList}
+            modalToggle={this.toggle}
+            modalOpen={modalOpen}
+            name={name}
+          />
         </Col>
       );
     }

@@ -23,7 +23,7 @@ class SideZoneModal extends Component {
       cardList,
     };
 
-    this.toggleModalClearSearch = this.toggleModalClearSearch.bind(this);
+    this.toggleModalState = this.toggleModalState.bind(this);
     this.cardListClick = this.cardListClick.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
   }
@@ -38,7 +38,7 @@ class SideZoneModal extends Component {
   /**
    * Resets the current search term, then toggles modal state.
    */
-  toggleModalClearSearch() {
+  toggleModalState() {
     const { modalToggle } = this.props;
 
     this.setState({ searchTerm: '' });
@@ -69,17 +69,17 @@ class SideZoneModal extends Component {
   }
 
   render() {
-    const { name, modal } = this.props;
+    const { name, modalOpen } = this.props;
     const { currentCard, cardList, searchTerm } = this.state;
 
     return (
       <Modal
-        isOpen={modal}
-        toggle={this.toggleModalClearSearch}
+        isOpen={modalOpen}
+        toggle={this.toggleModalState}
         centered
         size="lg"
       >
-        <ModalHeader toggle={this.toggleModalClearSearch}>
+        <ModalHeader toggle={this.toggleModalState}>
           <Row>
             <Col>
               <InputGroup>
@@ -130,7 +130,7 @@ class SideZoneModal extends Component {
 SideZoneModal.propTypes = {
   cardList: PropTypes.array.isRequired,
   modalToggle: PropTypes.func.isRequired,
-  modal: PropTypes.bool.isRequired,
+  modalOpen: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
 };
 
