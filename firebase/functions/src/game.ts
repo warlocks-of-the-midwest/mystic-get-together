@@ -321,7 +321,7 @@ const startGameHelper = async function(gameId: string): Promise<void> {
                 .map((doc) => doc.id)
                 .sort(() => uuidv4());
             
-            await gameDocRef.set({ turn_order: { ...playerOrder } }, { merge: true })
+            await gameDocRef.set({ turn_order: playerOrder }, { merge: true });
             return;
         } else {
             throw new Response.FunctionError(
