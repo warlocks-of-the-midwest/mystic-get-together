@@ -6,8 +6,17 @@ import { bindActionCreators } from 'redux';
 
 import * as sdk from '../js-sdk/sdk';
 
+import '../styles/GameContainer.css';
+
 import GameArea from '../components/GameArea';
+import Battlefield from '../components/Battlefield';
 import gameStateActions from '../redux/actions/gameStateActions';
+
+import {
+  Container,
+  Row,
+  Col,
+} from 'reactstrap';
 
 const GAME_ID = 'pCc44llUV5JVRjfl0YqZ'; // hard-coded for debugging
 
@@ -80,9 +89,24 @@ class GameContainer extends React.Component {
     const { gameState } = this.props;
 
     return (
-      <GameArea
-        cards={gameState.cards}
-      />
+      <Container>
+        <Row>
+          <Col>
+            <Battlefield cards={gameState.cards}/>
+          </Col>
+          <Col>
+            <Battlefield cards={gameState.cards}/>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Battlefield cards={gameState.cards}/>
+          </Col>
+          <Col>
+            <Battlefield cards={gameState.cards}/>
+          </Col>
+        </Row>
+      </Container> 
     );
   }
 }

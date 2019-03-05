@@ -14,6 +14,7 @@ import Card from './Card.js';
 
 import NavigationBar from './NavigationBar';
 import Sidebar from './Sidebar';
+import Battlefield from './Battlefield';
 
 import '../styles/GameArea.css';
 import '../styles/Card.css';
@@ -70,58 +71,6 @@ class GameArea extends Component {
     this.setState({
       isToggleSidebarOn: !this.state.isToggleSidebarOn,
     });
-  }
-
-  lifeComponent() {
-    return (
-      <Row>
-        <Col className="d-inline-flex">
-          <h5>Life: </h5> <h5 className="">{this.state.life}</h5>
-        </Col>
-        <Col xs="12" className="d-inline-flex">
-          <ButtonGroup className="d-flex" size="sm">
-            <Button
-              outline
-              color="success"
-              onClick={() => this.increment(1)}
-              type="submit"
-            >
-              +1
-            </Button>
-            <Button
-              outline
-              color="warning"
-              onClick={() => this.decrement(1)}
-              type="submit"
-              block
-            >
-              -1
-            </Button>
-          </ButtonGroup>
-        </Col>
-        <Col className="d-inline-flex">
-          <ButtonGroup className="d-flex" size="sm">
-            <Button
-              outline
-              color="primary"
-              onClick={() => this.increment(5)}
-              type="submit"
-            >
-              +5
-            </Button>
-            <Button
-              outline
-              color="danger"
-              onClick={() => this.decrement(5)}
-              type="submit"
-              block
-            >
-              -5
-            </Button>
-          </ButtonGroup>
-        </Col>
-      </Row>
-    );
   }
 
   render() {
@@ -219,56 +168,9 @@ class GameArea extends Component {
             className="battlefield-col p-0 m-0 flex-grow-1 flex-shrink-1 flex-wrap"
           >
             {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
-            <Container
-              fluid
-              className="cards-rows-container mh-100 h-100 p-0 m-0"
-            >
-              {/* Top row of battlefield */}
-              <Row className="top-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border">
-                {/* Main area for cards */}
-                <Col
-                  xs="12"
-                  className="top-cards-row-col d-flex flex-wrap justify-content-start flex-shrink-1 mh-100 h-100 mw-100 w-100 p-0 m-0"
-                >
-                  <>
-
-                    {cards
-                      .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
-                      .map((card) => (
-                        <Col
-                          xs="2"
-                          style={{
-                            'min-width': '80px',
-                            'max-height': '50%',
-                          }}
-                          className="no-gutters"
-                        >
-                          <Col
-                            xs="11"
-                            className="mh-100 h-100 no-gutters"
-                          >
-                            <Card card={card} />
-                          </Col>
-                          <Col
-                            xs="1"
-                            className="mh-100 h-100 no-gutters"
-                          />
-                        </Col>
-                      ))}
-                  </>
-                </Col>
-              </Row>
-
-              {/* Bottom row of cards */}
-              <Row className="bottom-cards-row mh-50 h-50 mw-100 w-100 p-0 m-0 border">
-                <Col
-                  xs="12"
-                  className="battlefield-bottom d-inline-flex flex-wrap justify-content-start card-row card-row-top m-0 p-0"
-                >
-                  {'placeholder text - bottom row'}
-                </Col>
-              </Row>
-            </Container>
+            <Battlefield
+              cards={cards}
+            />
           </Col>
           {/* Sidebar for exile,graveyard,hand,library  */}
           {!isToggleSidebarOn && (

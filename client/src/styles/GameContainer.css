@@ -1,0 +1,18 @@
+html, body, #app, #app>div, body>div, body>div>div, .container {
+    height: 100%;
+}
+
+.row {
+    height: 50%;
+}
+
+.row>.col {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+#root>div>.container {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+}
