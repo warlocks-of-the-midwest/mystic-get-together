@@ -7,8 +7,9 @@ import {
   Col,
 } from 'reactstrap';
 
-import SideZone from './SideZone';
+import SideZoneModal from './SideZoneModal';
 import LibraryZone from './LibraryZone';
+import withZone from './withZone';
 import { Zones } from '../constants';
 
 import '../styles/Sidebar.css';
@@ -19,6 +20,9 @@ class Sidebar extends Component {
     const exile = _.filter(cards, (card) => _.get(card, 'state.zone') === Zones.EXILE);
     const graveyard = _.filter(cards, (card) => _.get(card, 'state.zone') === Zones.GRAVEYARD);
     const library = _.filter(cards, (card) => _.get(card, 'state.zone') === Zones.LIBRARY);
+
+    const GraveyardWithModal = withZone(SideZoneModal, 'Graveyard', graveyard);
+    const ExileWithModal = withZone(SideZoneModal, 'Exile', exile);
 
     return (
       <Container
@@ -44,14 +48,8 @@ class Sidebar extends Component {
               Hand
             </h6>
           </Col>
-          <SideZone
-            name="Exile"
-            cardList={exile}
-          />
-          <SideZone
-            name="Graveyard"
-            cardList={graveyard}
-          />
+          <ExileWithModal />
+          <GraveyardWithModal />
           {/* Library */}
           <LibraryZone
             cardList={library}
