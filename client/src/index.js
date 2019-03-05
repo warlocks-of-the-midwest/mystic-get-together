@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import configureStore from './redux/store';
 
@@ -19,10 +19,10 @@ const app = () => (
 
 ReactDOM.render(
   <Router>
-    <div>
-      <Route exact path="/landingPage" component={LandingPage} />
-      <Route exact path="/" component={app} />
-    </div>
+    <Switch>
+      <Route exact path="/" component={LandingPage} />
+      <Route exact path="/board" component={app} />
+    </Switch>
   </Router>,
   document.getElementById('root')
 );

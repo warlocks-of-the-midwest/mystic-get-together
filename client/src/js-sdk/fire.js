@@ -1,5 +1,5 @@
-import firebase from 'firebase'
-import 'firebase/firestore'
+import firebase from 'firebase';
+import 'firebase/firestore';
 
 var config = {
     apiKey: "AIzaSyD-ZDutz248kz-PYKtJ7oEGQe6wNWVm6qU",
@@ -11,8 +11,10 @@ var config = {
 };
 
 export const app = firebase.initializeApp(config);
-var db = firebase.firestore(app);
+export const auth = firebase.auth();
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
 
+var db = firebase.firestore(app);
 db.settings({
     timestampsInSnapshots: true
 });
