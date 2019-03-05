@@ -7,8 +7,9 @@ import {
   Modal, ModalHeader, ModalBody,
   Input, InputGroup,
 } from 'reactstrap';
-import Card from './Card.js';
+
 import CardList from './CardList.js';
+import CurrentCard from './CurrentCard.js';
 import SideZoneContextMenu from './SideZoneContextMenu.js';
 import '../styles/Zones.css';
 
@@ -169,11 +170,7 @@ class LibraryModal extends Component {
               </Col>
               <Col xs="5">
                 <Row>
-                  {currentCard && (
-                    <Card
-                      card={currentCard}
-                    />
-                  )}
+                  <CurrentCard currentCard={currentCard} />
                 </Row>
                 <Row>
                   <SideZoneContextMenu
