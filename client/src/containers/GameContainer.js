@@ -3,20 +3,18 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import * as sdk from '../js-sdk/sdk';
-
-import '../styles/GameContainer.css';
-
-import GameArea from '../components/GameArea';
-import Battlefield from '../components/Battlefield';
-import gameStateActions from '../redux/actions/gameStateActions';
-
 import {
   Container,
   Row,
   Col,
 } from 'reactstrap';
+
+import * as sdk from '../js-sdk/sdk';
+
+import '../styles/GameContainer.css';
+
+import Battlefield from '../components/Battlefield';
+import gameStateActions from '../redux/actions/gameStateActions';
 
 const GAME_ID = 'pCc44llUV5JVRjfl0YqZ'; // hard-coded for debugging
 
@@ -90,23 +88,31 @@ class GameContainer extends React.Component {
 
     return (
       <Container>
-        <Row>
+        <Row
+          style={{
+            height: '50%',
+          }}
+        >
           <Col>
-            <Battlefield cards={gameState.cards}/>
+            <Battlefield cards={gameState.cards} />
           </Col>
           <Col>
-            <Battlefield cards={gameState.cards}/>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Battlefield cards={gameState.cards}/>
-          </Col>
-          <Col>
-            <Battlefield cards={gameState.cards}/>
+            <Battlefield cards={gameState.cards} />
           </Col>
         </Row>
-      </Container> 
+        <Row
+          style={{
+            height: '50%',
+          }}
+        >
+          <Col>
+            <Battlefield cards={gameState.cards} />
+          </Col>
+          <Col>
+            <Battlefield cards={gameState.cards} />
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

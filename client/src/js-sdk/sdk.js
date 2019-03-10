@@ -1,4 +1,3 @@
-import firebase from 'firebase';
 import axios from 'axios';
 import uuidv4 from 'uuid/v4';
 import db, { FIREBASE_FUNCTION_BASE_URL } from './fire.js';

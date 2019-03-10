@@ -2,10 +2,6 @@ html, body, #app, #app>div, body>div, body>div>div, .container {
     height: 100%;
 }
 
-.row {
-    height: 50%;
-}
-
 .row>.col {
     padding-right: 0;
     padding-left: 0;
