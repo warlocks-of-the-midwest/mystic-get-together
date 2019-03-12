@@ -16,7 +16,6 @@ import NavigationBar from './NavigationBar';
 import Sidebar from './Sidebar';
 import Battlefield from './Battlefield';
 
-import '../styles/GameArea.css';
 import '../styles/Card.css';
 import { Zones } from '../constants.js';
 
@@ -167,8 +166,9 @@ class GameArea extends Component {
             xs={battfieldFieldColumnLength}
             className="battlefield-col p-0 m-0 flex-grow-1 flex-shrink-1 flex-wrap"
           >
-            {/* Battlefield area. Battlefield is split into two rows. Top and bottom. */}
+            {/* Battlefield area. */}
             <Battlefield
+              useStubs={false}
               cards={cards}
             />
           </Col>

@@ -8,6 +8,7 @@ import {
 } from 'reactstrap';
 
 import CardStub from './CardStub.js';
+import Card from './Card.js';
 
 import { Zones } from '../constants.js';
 
@@ -28,8 +29,16 @@ class Battlefield extends Component {
     });
   }
 
+  CardComponent(props) {
+    if (props.isStub) {
+      return <CardStub card={props.card} />;
+    }
+    return <Card card={props.card} />;
+  }
+
   render() {
     const { cards } = this.state;
+    const { useStubs } = this.props;
 
     return (
       <Container
@@ -47,7 +56,9 @@ class Battlefield extends Component {
           }}
         >
           {/* Main area for cards */}
-          <Row>
+          <Row
+            className="m-0"
+          >
             {cards
               .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
               .map((card) => (
@@ -63,7 +74,7 @@ class Battlefield extends Component {
                       transform: 'translateY(-50%)',
                     }}
                   >
-                    <CardStub card={card} />
+                    <this.CardComponent isStub={useStubs} card={card} />
                   </Col>
                   <Col
                     xs="1"
@@ -78,10 +89,12 @@ class Battlefield extends Component {
         <Row
           className="p-0 m-0 border"
           style={{
-            height: '50%'
+            height: '50%',
           }}
         >
-          <Row>
+          <Row
+            className="m-0"
+          >
             {cards
               .filter((card) => _.get(card, 'state.zone') === Zones.EXILE)
               .map((card) => (
@@ -97,7 +110,7 @@ class Battlefield extends Component {
                       transform: 'translateY(-50%)',
                     }}
                   >
-                    <CardStub card={card} />
+                    <this.CardComponent isStub={useStubs} card={card} />
                   </Col>
                   <Col
                     xs="1"
@@ -114,6 +127,7 @@ class Battlefield extends Component {
 
 Battlefield.propTypes = {
   cards: PropTypes.array.isRequired,
+  useStubs: PropTypes.bool.isRequired,
 };
 
 export default Battlefield;

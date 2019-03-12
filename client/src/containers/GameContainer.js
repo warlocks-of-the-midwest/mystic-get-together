@@ -14,6 +14,7 @@ import * as sdk from '../js-sdk/sdk';
 import '../styles/GameContainer.css';
 
 import Battlefield from '../components/Battlefield';
+import GameArea from '../components/GameArea';
 import gameStateActions from '../redux/actions/gameStateActions';
 
 const GAME_ID = 'pCc44llUV5JVRjfl0YqZ'; // hard-coded for debugging
@@ -94,10 +95,10 @@ class GameContainer extends React.Component {
           }}
         >
           <Col>
-            <Battlefield cards={gameState.cards} />
+            <Battlefield cards={gameState.cards} useStubs />
           </Col>
           <Col>
-            <Battlefield cards={gameState.cards} />
+            <Battlefield cards={gameState.cards} useStubs />
           </Col>
         </Row>
         <Row
@@ -106,10 +107,10 @@ class GameContainer extends React.Component {
           }}
         >
           <Col>
-            <Battlefield cards={gameState.cards} />
+            <Battlefield cards={gameState.cards} useStubs />
           </Col>
           <Col>
-            <Battlefield cards={gameState.cards} />
+            <Battlefield cards={gameState.cards} useStubs />
           </Col>
         </Row>
       </Container>

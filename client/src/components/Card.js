@@ -40,10 +40,6 @@ class Card extends React.Component {
     }
   }
 
-  testFunction(props) {
-
-  }
-
   render() {
     const { card } = this.props;
 
