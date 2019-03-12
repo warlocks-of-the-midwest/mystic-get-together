@@ -1,57 +1,33 @@
 import gameActions from '../actions/gameStateActions';
 
-//TODO make a complete initial state
 const initialState = {
-  gameId: 'game1',
-  Players: {
-    player1: {
-      life: 40,
-      Zones: {
-        zone1: {
-          card1: {
-            "state.tapped": false,
-            "state.owner": "player1",
-            "state.zone": "zone1"
-          },
-          card2: {
-            "state.tapped": false,
-            "state.owner": "player1",
-            "state.zone": "zone1"
-          }
-        },
-        zone2: {
-          card1: {
-            "state.tapped": false,
-            "state.owner": "player1",
-            "state.zone": "zone2"
-          },
-          card2: {
-            "state.tapped": false,
-            "state.owner": "player1",
-            "state.zone": "zone2"
-          }
-        }
-      }
-    }
-  }
+  cards: [],
+  players: [],
 };
 
 const gameStateReducer = (state = initialState, action) => {
   switch (action.type) {
-    case gameActions.types.UPDATE_PLAYER: {
-      let newPlayers = state.Players
-      newPlayers[action.payload.playerName] = {...newPlayers[action.payload.playerName], ...action.payload.playerData};
+    case gameActions.types.LOAD_PLAYERS: {
+      const { players } = action.payload;
       return {
         ...state,
-        Players: newPlayers
+        players,
       };
     }
-    case gameActions.types.UPDATE_ZONE: {
-      let newPlayers = state.Players
-      newPlayers[action.payload.playerName].Zones[action.payload.zoneName] = action.payload.zoneData
+    case gameActions.types.LOAD_CARDS: {
+      const { cards } = action.payload;
       return {
         ...state,
-        Players: newPlayers
+        cards,
+      };
+    }
+    case gameActions.types.UPDATE_CARD: {
+      const newCards = state.Cards;
+      // TODO handling cards getting deleted/removed?
+      newCards[action.payload.card.cardId] = action.payload.card;
+      return {
+        ...state,
+        Cards: newCards,
       };
     }
     default:

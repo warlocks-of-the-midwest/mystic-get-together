@@ -1,11 +1,11 @@
 import * as Firestore from '@google-cloud/firestore';
 import * as functions from 'firebase-functions';
 const uuidv4 = require('uuid/v4');
-import * as createError from 'http-errors';
 import * as _ from 'lodash';
 
 import * as Util from './util';
 import * as Decklist from './decklist';
+import * as Response from './response';
 
 // Firestore client - as a Cloud Function, this is
 // all the setup we need
@@ -120,15 +120,28 @@ export interface Card {
  * @param deck The deck to process
  */
 const createCards = function(player: string, deck: Decklist.Deck): Array<Card> {
-    const library: Array<Decklist.IdentifiedCard> = _.filter(deck.cards, (card: Decklist.IdentifiedCard) => {
+    let library: Array<Decklist.IdentifiedCard> = _.filter(deck.cards, (card: Decklist.IdentifiedCard) => {
         return card.board === Decklist.Board.MAIN;
+    });
+    // expand cards with qty > 1
+    library = _.flatMap(library, (card: Decklist.IdentifiedCard) => {
+        if (card.qty > 1) {
+            const expandedCards = [];
+            for (let count = 0; count < card.qty; count++) {
+                expandedCards.push(card);
+            }
+            return expandedCards;
+        } else {
+            return [card];
+        }
     }).sort(() => uuidv4()); // shuffle
+
     const commandZone: Array<Decklist.IdentifiedCard> = _.filter(deck.cards, (card: Decklist.IdentifiedCard) => {
         return card.board === Decklist.Board.COMMAND;
     });
 
     const cards: Array<Card> = _.map(commandZone, (card: Decklist.IdentifiedCard) => {
-        return <Card> {
+        const firestoreCard: Card = {
             id: uuidv4(),
             scryfall_id: card.id,
             state: {
@@ -153,10 +166,11 @@ const createCards = function(player: string, deck: Decklist.Deck): Array<Card> {
                 }
             }
         };
+        return firestoreCard;
     });
 
     cards.push(..._.map(library, (card: Decklist.IdentifiedCard, position: number) => {
-        return <Card> {
+        const firestoreCard: Card = {
             id: uuidv4(),
             scryfall_id: card.id,
             state: {
@@ -180,7 +194,8 @@ const createCards = function(player: string, deck: Decklist.Deck): Array<Card> {
                     }
                 }
             }
-        }
+        };
+        return firestoreCard;
     }));
 
     return cards;
@@ -190,29 +205,32 @@ const createCards = function(player: string, deck: Decklist.Deck): Array<Card> {
  * Create the player document, initializing all fields, as well as all Zones.
  * 
  * @param gameRef A DocumentReference to the game
- * @param player The uid of the player
+ * @param uid The uid of the player
  * @param deck The player's deck
  */
-const createPlayerInFirestore = async function(gameRef: Firestore.DocumentReference, player: string,
+const createPlayerInFirestore = async function(gameRef: Firestore.DocumentReference, uid: string,
     deck: any, deckId: string): Promise<void> {
-        const basePlayerDoc = createBasePlayerDocument(player, deckId);
+        const basePlayerDoc = createBasePlayerDocument(uid, deckId);
         try {
-            await gameRef.collection('Players').doc(player).create(basePlayerDoc);
+            await gameRef.collection('Players').doc(uid).create(basePlayerDoc);
         } catch (e) {
             if (e.message.includes('ALREADY_EXISTS')) {
-                throw createError(409, null, {
-                    headers: {
-                        'X-Reason': 'The target player is already in the game'
-                    }
-                });
+                throw new Response.FunctionError(
+                    Response.Messages.TARGET_PLAYER_EXISTS_IN_GAME,
+                    Response.Errors.TARGET_PLAYER_EXISTS_IN_GAME,
+                    409,
+                );
             } else {
                 console.error('Caught unrecognized error creating player document', e);
-                throw createError(500);
+                throw new Response.FunctionError(
+                    Response.Messages.FIREBASE_ERROR,
+                    Response.Errors.FIREBASE_ERROR,
+                );
             }
         }
 
         const cardsRef = gameRef.collection('Cards');
-        const cards: Array<Card> = createCards(player, deck);
+        const cards: Array<Card> = createCards(uid, deck);
 
         try {
             await Promise.all(_.map(cards, (card: Card) => {
@@ -220,7 +238,10 @@ const createPlayerInFirestore = async function(gameRef: Firestore.DocumentRefere
             }));
         } catch (e) {
             console.error('Caught error initializing cards', e)
-            throw createError(500);
+            throw new Response.FunctionError(
+                Response.Messages.FIREBASE_ERROR,
+                Response.Errors.FIREBASE_ERROR,
+            );
         }
     }
 
@@ -228,33 +249,27 @@ const createPlayerInFirestore = async function(gameRef: Firestore.DocumentRefere
  * Host a game by creating a new game document and adding the player and her
  * deck to the game.
  * 
- * @param player The uid of the player
+ * @param uid The uid of the player
  * @param deckId The deck document ID
  */
-const hostGameHelper = async function(player: string, deckId: string): Promise<string> {
-    const deckDoc = await Util.getDeck(player, deckId);
+const hostGameHelper = async function(uid: string, deckId: string): Promise<string> {
+    const deckDoc = await Util.getDeck(uid, deckId);
     const deck = deckDoc.data();
     const baseGameDoc = {};
     try {
         const gameDocRef = await firestore.collection('Games').add(baseGameDoc);
         console.info('Created new game at: ' + gameDocRef.path);
-        try {
-            await createPlayerInFirestore(gameDocRef, player, deck, deckId);
-            return Promise.resolve(gameDocRef.id);
-        } catch (e) {
-            if (e instanceof createError.HttpError) {
-                throw e;
-            } else {
-                console.error('Caught error creating player in Firestore', e)
-                throw createError(500);
-            }
-        }
+        await createPlayerInFirestore(gameDocRef, uid, deck, deckId);
+        return Promise.resolve(gameDocRef.id);
     } catch (e) {
-        if (e instanceof createError.HttpError) {
+        if (e instanceof Response.FunctionError) {
             throw e;
         } else {
             console.error('Caught error adding base game document', e)
-            throw createError(500);
+            throw new Response.FunctionError(
+                Response.Messages.FIREBASE_ERROR,
+                Response.Errors.FIREBASE_ERROR,
+            );
         }
     }
 }
@@ -263,29 +278,32 @@ const hostGameHelper = async function(player: string, deckId: string): Promise<s
  * Join a game by adding the player and her deck to the game.
  * 
  * @param gameId The game document ID
- * @param player The uid of the player
+ * @param uid The uid of the player
  * @param deckId The deck document ID
  */
-const joinGameHelper = async function(gameId: string, player: string, deckId: string): Promise<void> {
-    const deckDoc = await Util.getDeck(player, deckId);
+const joinGameHelper = async function(gameId: string, uid: string, deckId: string): Promise<void> {
+    const deckDoc = await Util.getDeck(uid, deckId);
     const deck = deckDoc.data();
-    const gameDocRef = firestore.collection('Games').doc(gameId);
-    let gameDoc;
+    const gameDocRef: Firestore.DocumentReference = firestore.collection('Games').doc(gameId);
+    let gameDoc: Firestore.DocumentSnapshot;
     try {
         gameDoc = await gameDocRef.get();
     } catch (e) {
         console.error('Caught error getting game document', e)
-        throw createError(500);
+        throw new Response.FunctionError(
+            Response.Messages.FIREBASE_ERROR,
+            Response.Errors.FIREBASE_ERROR,
+        );
     }
     if (!gameDoc.exists) {
-        throw createError(400, null, {
-            headers: {
-                'X-Reason': 'The target game does not exist'
-            }
-        });
+        throw new Response.FunctionError(
+            Response.Messages.GAME_DOES_NOT_EXIST,
+            Response.Errors.GAME_DOES_NOT_EXIST,
+            400,
+        );
     }
     
-    return createPlayerInFirestore(gameDocRef, player, deck, deckId);
+    return createPlayerInFirestore(gameDocRef, uid, deck, deckId);
 }
 
 /**
@@ -303,21 +321,24 @@ const startGameHelper = async function(gameId: string): Promise<void> {
                 .map((doc) => doc.id)
                 .sort(() => uuidv4());
             
-            await gameDocRef.set({ turn_order: { ...playerOrder } }, { merge: true })
+            await gameDocRef.set({ turn_order: playerOrder }, { merge: true });
             return;
         } else {
-            throw createError(400, 'Bad Request', {
-                headers: {
-                    'X-Reason': 'The game document does not exist' 
-                }
-            });
+            throw new Response.FunctionError(
+                Response.Messages.GAME_DOES_NOT_EXIST,
+                Response.Errors.GAME_DOES_NOT_EXIST,
+                400,
+            );
         }
     } catch (e) {
-        if (e instanceof createError.HttpError) {
+        if (e instanceof Response.FunctionError) {
             throw e;
         } else {
             console.error('Caught error determining turn order', e);
-            throw createError(500);
+            throw new Response.FunctionError(
+                Response.Messages.FIREBASE_ERROR,
+                Response.Errors.FIREBASE_ERROR,
+            );
         }
         
     }
@@ -335,29 +356,45 @@ export const hostGameFunction = functions.https.onRequest((request, response) =>
         return;
     }
     
-    const { player, deckId } = request.body;
+    const { uid, deckId } = request.body;
 
-    if (!player) {
+    if (!uid) {
+        const body: Response.MissingRequiredParameterResponse = {
+            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+            parameter: 'uid',
+            description: 'The uid of the player that will host the game.'
+        };
         response
             .status(400)
-            .send('Body must include "player" attribute denoting host player\'s uid');
+            .send(body);
         return;
     }
     if (!deckId) {
+        const body: Response.MissingRequiredParameterResponse = {
+            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+            parameter: 'deckId',
+            description: 'The id of the deck that the player will use.'
+        };
         response
             .status(400)
-            .send('Body must include "deckId" attribute denoting host player\'s desired deck ID');
+            .send(body);
         return;
     }
 
-    console.log('Creating new game with hosting player ' + player);
+    console.log('Creating new game with hosting player ' + uid);
     console.log('Using deck with ID ' + deckId);
 
-    hostGameHelper(player, deckId)
+    hostGameHelper(uid, deckId)
         .then((gameDocId) => {
-            response.status(201)
-                .header('X-GameID', gameDocId)
-                .send();
+            const body: Response.GameCreatedResponse = {
+                message: Response.Messages.GAME_CREATED,
+                gameId: gameDocId,
+            };
+            response
+                .status(201)
+                .send(body);
         })
         .catch((error) => {
             Util.errorResponseMapper(error, response);
@@ -375,34 +412,51 @@ export const joinGameFunction = functions.https.onRequest((request, response) =>
         return;
     }
     
-    const { gameId, player, deckId } = request.body;
+    const { gameId, uid, deckId } = request.body;
 
     if (!gameId) {
+        const body: Response.MissingRequiredParameterResponse = {
+            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+            parameter: 'gameId',
+            description: 'The id of the game to join.',
+        };
         response
             .status(400)
-            .send('Body must include "gameId" attribute denoting target game\'s ID');
+            .send(body);
         return;
     }
-    if (!player) {
+    if (!uid) {
+        const body: Response.MissingRequiredParameterResponse = {
+            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+            parameter: 'uid',
+            description: 'The uid of the player that will join the game.',
+        };
         response
             .status(400)
-            .send('Body must include "player" attribute denoting host player\'s uid');
+            .send(body);
         return;
     }
     if (!deckId) {
+        const body: Response.MissingRequiredParameterResponse = {
+            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+            parameter: 'deckId',
+            description: 'The id of the deck that the player will use.',
+        };
         response
             .status(400)
-            .send('Body must include "deckId" attribute denoting host player\'s desired deck ID');
+            .send(body);
         return;
     }
 
-    console.log('Joining existing game (' + gameId + ') with hosting player ' + player);
+    console.log('Joining existing game (' + gameId + ') as player ' + uid);
     console.log('Using deck with ID ' + deckId);
 
-    joinGameHelper(gameId, player, deckId)
+    joinGameHelper(gameId, uid, deckId)
         .then(() => {
-            response.status(200)
-                .send();
+            response.send(204);
         })
         .catch((error) => {
             Util.errorResponseMapper(error, response);
@@ -425,15 +479,21 @@ export const startGameFunction = functions.https.onRequest((request, response) =
     const { gameId } = request.body;
 
     if (!gameId) {
+        const body: Response.MissingRequiredParameterResponse = {
+            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+            parameter: 'gameId',
+            description: 'The id of the game to join.',
+        };
         response
             .status(400)
-            .send('Body must include "gameId" attribute denoting target game\'s ID');
+            .send(body);
         return;
     }
 
     startGameHelper(gameId)
         .then(() => {
-            response.send('Game is ready to start.');
+            response.send(204);
         })
         .catch((error) => {
             Util.errorResponseMapper(error, response);

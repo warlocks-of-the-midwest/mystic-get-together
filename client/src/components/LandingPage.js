@@ -5,7 +5,7 @@ class LandingPage extends Component {
   render() {
     return (
       <div>
-        <img src={require('../components/images/lotus.jpg')} alt="lotus" className="lotus" />
+        <img src={require('../lotus.jpg')} alt="lotus" className="lotus" />
         <div>
           <h1 className="mystic">Mystic The Get-Together</h1>
           <div className="buttonsAndSelect">
