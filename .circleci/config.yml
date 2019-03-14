@@ -49,9 +49,9 @@ jobs:
       - run:
         name: Deploy Cloud Functions to Firebase TEST Environment
         command: |
-        cd firebase
-        firebase use test
-        firebase deploy --token=$FIREBASE_TOKEN
+          cd firebase
+          firebase use test
+          firebase deploy --token=$FIREBASE_TOKEN
   
   test-firebase-cloud-functions:
     docker:
@@ -76,9 +76,9 @@ jobs:
       - run:
         name: Execute Firebase Cloud Functions Tests
         command: |
-        cd firebase/functions
-        echo $SERVICE_ACCOUNT_CREDENTIALS_JSON > service-account-credentials.json
-        npm run fb-clean && npm test
+          cd firebase/functions
+          echo $SERVICE_ACCOUNT_CREDENTIALS_JSON > service-account-credentials.json
+          npm run fb-clean && npm test
 
   test-firebase-security-rules:
     docker:
@@ -103,9 +103,9 @@ jobs:
       - run:
         name: Execute Firestore Security Rules Tests
         command: |
-        cd firebase/tests/firestore-rules
-        echo $SERVICE_ACCOUNT_CREDENTIALS_JSON > service-account-credentials.json
-        npm test
+          cd firebase/tests/firestore-rules
+          echo $SERVICE_ACCOUNT_CREDENTIALS_JSON > service-account-credentials.json
+          npm test
 
 
 workflows:
