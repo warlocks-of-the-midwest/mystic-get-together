@@ -115,7 +115,7 @@ workflows:
       - deploy-firebase-test
       - test-firebase-cloud-functions:
           requires:
-            - deply-firebase-test
+            - deploy-firebase-test
       - test-firebase-security-rules:
           requires:
             - test-firebase-cloud-functions
