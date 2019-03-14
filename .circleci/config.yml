@@ -3,8 +3,9 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2.1
-orbs:
-  firebase-deploy: cloudliner/firebase-deploy@0.0.2
+# orbs:
+#   firebase-deploy: cloudliner/firebase-deploy@0.0.2
+#   hello: circleci/hello-build@0.0.5
 general:
   branches:
     only:
@@ -13,7 +14,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:8.15.0
+      - image: eeeeeric/circleci-docker-image:latest
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -25,8 +26,13 @@ jobs:
     steps:
       - checkout
       - run: cd firebase
-      - firebase-deploy/deploy:
-        token: "$FIREBASE_TOKEN"
+      - run:
+             name: Deploy Cloud Functions to Firebase
+             command: firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
+
+      # - hello/hello
+      # - firebase-deploy/deploy:
+      #   token: "$FIREBASE_TOKEN"
 
     #   # Download and cache dependencies
     #   - restore_cache:
