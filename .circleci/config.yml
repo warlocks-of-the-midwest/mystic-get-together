@@ -31,59 +31,59 @@ jobs:
           firebase use test
           firebase deploy --token=$FIREBASE_TOKEN
   
-  test-firebase-cloud-functions:
-    docker:
-      - image: eeeeeric/circleci-docker-image:latest
-    working_directory: ~/mystic-the-get-together
-    steps:
-      - checkout
-      - restore_cache:
-        keys:
-          - functions-dependencies-{{ checksum "firebase/functions/package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - functions-dependencies-
-      - run: 
-        name: Install Node Dependencies for Cloud Functions
-        command: |
-          cd firebase/functions
-          npm install
-      - save_cache:
-        paths:
-          - firebase/functions/node_modules
-        key: functions-dependencies-{{ checksum "firebase/functions/package.json" }}
-      - run:
-        name: Execute Firebase Cloud Functions Tests
-        command: |
-          cd firebase/functions
-          echo $SERVICE_ACCOUNT_CREDENTIALS_JSON > service-account-credentials.json
-          npm run fb-clean && npm test
+  # test-firebase-cloud-functions:
+  #   docker:
+  #     - image: eeeeeric/circleci-docker-image:latest
+  #   working_directory: ~/mystic-the-get-together
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #       keys:
+  #         - functions-dependencies-{{ checksum "firebase/functions/package.json" }}
+  #         # fallback to using the latest cache if no exact match is found
+  #         - functions-dependencies-
+  #     - run: 
+  #       name: Install Node Dependencies for Cloud Functions
+  #       command: |
+  #         cd firebase/functions
+  #         npm install
+  #     - save_cache:
+  #       paths:
+  #         - firebase/functions/node_modules
+  #       key: functions-dependencies-{{ checksum "firebase/functions/package.json" }}
+  #     - run:
+  #       name: Execute Firebase Cloud Functions Tests
+  #       command: |
+  #         cd firebase/functions
+  #         echo $SERVICE_ACCOUNT_CREDENTIALS_JSON > service-account-credentials.json
+  #         npm run fb-clean && npm test
 
-  test-firebase-security-rules:
-    docker:
-      - image: eeeeeric/circleci-docker-image:latest
-    working_directory: ~/mystic-the-get-together
-    steps:
-      - checkout
-      - restore_cache:
-        keys:
-          - security-rules-dependencies-{{ checksum "firebase/tests/firestore-rules/package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - security-rules-dependencies-
-      - run: 
-        name: Install Node Dependencies for Security Rules Tests
-        command: |
-          cd firebase/tests/firestore-rules
-          npm install
-      - save_cache:
-        paths:
-          - firebase/tests/firestore-rules/node_modules
-        key: security-rules-dependencies-{{ checksum "firebase/tests/firestore-rules/package.json" }}
-      - run:
-        name: Execute Firestore Security Rules Tests
-        command: |
-          cd firebase/tests/firestore-rules
-          echo $SERVICE_ACCOUNT_CREDENTIALS_JSON > service-account-credentials.json
-          npm test
+  # test-firebase-security-rules:
+  #   docker:
+  #     - image: eeeeeric/circleci-docker-image:latest
+  #   working_directory: ~/mystic-the-get-together
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #       keys:
+  #         - security-rules-dependencies-{{ checksum "firebase/tests/firestore-rules/package.json" }}
+  #         # fallback to using the latest cache if no exact match is found
+  #         - security-rules-dependencies-
+  #     - run: 
+  #       name: Install Node Dependencies for Security Rules Tests
+  #       command: |
+  #         cd firebase/tests/firestore-rules
+  #         npm install
+  #     - save_cache:
+  #       paths:
+  #         - firebase/tests/firestore-rules/node_modules
+  #       key: security-rules-dependencies-{{ checksum "firebase/tests/firestore-rules/package.json" }}
+  #     - run:
+  #       name: Execute Firestore Security Rules Tests
+  #       command: |
+  #         cd firebase/tests/firestore-rules
+  #         echo $SERVICE_ACCOUNT_CREDENTIALS_JSON > service-account-credentials.json
+  #         npm test
 
 workflows:
   version: 2
