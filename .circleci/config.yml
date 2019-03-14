@@ -85,14 +85,14 @@ jobs:
   #         echo $SERVICE_ACCOUNT_CREDENTIALS_JSON > service-account-credentials.json
   #         npm test
 
-workflows:
-  version: 2
-  test:
-    jobs:
-      - deploy-firebase-test
-      - test-firebase-cloud-functions:
-        requires:
-          - deploy-firebase-test
-      - test-firebase-security-rules:
-        requires:
-          - deploy-firebase-test
+# workflows:
+#   version: 2
+#   test:
+#     jobs:
+#       - deploy-firebase-test
+#       - test-firebase-cloud-functions:
+#         requires:
+#           - deploy-firebase-test
+#       - test-firebase-security-rules:
+#         requires:
+#           - deploy-firebase-test
