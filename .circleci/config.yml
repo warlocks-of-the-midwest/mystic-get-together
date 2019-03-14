@@ -11,25 +11,25 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys:
-          - functions-dependencies-{{ checksum "firebase/functions/package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - functions-dependencies-
+          keys:
+            - functions-dependencies-{{ checksum "firebase/functions/package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - functions-dependencies-
       - run: 
-        name: Install Node Dependencies for Cloud Functions
-        command: |
-          cd firebase/functions
-          npm install
+          name: Install Node Dependencies for Cloud Functions
+          command: |
+            cd firebase/functions
+            npm install
       - save_cache:
-        paths:
-          - firebase/functions/node_modules
-        key: functions-dependencies-{{ checksum "firebase/functions/package.json" }}
+          paths:
+            - firebase/functions/node_modules
+          key: functions-dependencies-{{ checksum "firebase/functions/package.json" }}
       - run:
-        name: Deploy Cloud Functions to Firebase TEST Environment
-        command: |
-          cd firebase
-          firebase use test
-          firebase deploy --token=$FIREBASE_TOKEN
+          name: Deploy Cloud Functions to Firebase TEST Environment
+          command: |
+            cd firebase
+            firebase use test
+            firebase deploy --token=$FIREBASE_TOKEN
   
   # test-firebase-cloud-functions:
   #   docker:
