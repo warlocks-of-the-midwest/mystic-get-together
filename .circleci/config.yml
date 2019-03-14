@@ -3,70 +3,119 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2.1
-# orbs:
-#   firebase-deploy: cloudliner/firebase-deploy@0.0.2
-#   hello: circleci/hello-build@0.0.5
-general:
-  branches:
-    only:
-      - circleci
 jobs:
-  build:
+  # build-firebase:
+  #   docker:
+  #     - image: eeeeeric/circleci-docker-image:latest
+  #   working_directory: ~/mystic-the-get-together
+  #   steps:
+  #     - checkout
+  #     # Download and cache dependencies
+  #     - restore_cache:
+  #         keys:
+  #           - v1-dependencies-{{ checksum "firebase/functions/package.json" }}
+  #           # fallback to using the latest cache if no exact match is found
+  #           - v1-dependencies-
+  #     - run: 
+  #       name: Install Node Dependencies for Cloud Functions
+  #       command: |
+  #         cd firebase/functions
+  #         npm install
+  #     - save_cache:
+  #         paths:
+  #           - firebase/functions/node_modules
+  #         key: v1-dependencies-{{ checksum "firebase/functions/package.json" }}
+
+  deploy-firebase-test:
     docker:
-      # specify the version you desire here
       - image: eeeeeric/circleci-docker-image:latest
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
     working_directory: ~/mystic-the-get-together
-
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - functions-dependencies-{{ checksum "firebase/functions/package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - functions-dependencies-
+      - run: 
+        name: Install Node Dependencies for Cloud Functions
+        command: |
+          cd firebase/functions
+          npm install
+      - save_cache:
+          paths:
+            - firebase/functions/node_modules
+          key: functions-dependencies-{{ checksum "firebase/functions/package.json" }}
       - run:
-             name: Deploy Cloud Functions to Firebase
-             command: |
-              cd firebase/functions
-              npm install
-              firebase use test
-              firebase deploy --only functions --token=$FIREBASE_TOKEN
+        name: Deploy Cloud Functions to Firebase TEST Environment
+        command: |
+        cd firebase
+        firebase use test
+        firebase deploy --token=$FIREBASE_TOKEN
+  
+  test-firebase-cloud-functions:
+    docker:
+      - image: eeeeeric/circleci-docker-image:latest
+    working_directory: ~/mystic-the-get-together
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - functions-dependencies-{{ checksum "firebase/functions/package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - functions-dependencies-
+      - run: 
+        name: Install Node Dependencies for Cloud Functions
+        command: |
+          cd firebase/functions
+          npm install
+      - save_cache:
+          paths:
+            - firebase/functions/node_modules
+          key: functions-dependencies-{{ checksum "firebase/functions/package.json" }}
+      - run:
+        name: Execute Firebase Cloud Functions Tests
+        command: |
+        cd firebase/functions
+        echo $SERVICE_ACCOUNT_CREDENTIALS_JSON > service-account-credentials.json
+        npm run fb-clean && npm test
 
-      # - hello/hello
-      # - firebase-deploy/deploy:
-      #   token: "$FIREBASE_TOKEN"
+  test-firebase-security-rules:
+    docker:
+      - image: eeeeeric/circleci-docker-image:latest
+    working_directory: ~/mystic-the-get-together
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - security-rules-dependencies-{{ checksum "firebase/tests/firestore-rules/package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - security-rules-dependencies-
+      - run: 
+        name: Install Node Dependencies for Cloud Functions
+        command: |
+          cd firebase/tests/firestore-rules
+          npm install
+      - save_cache:
+          paths:
+            - firebase/tests/firestore-rules/node_modules
+          key: security-rules-dependencies-{{ checksum "firebase/tests/firestore-rules/package.json" }}
+      - run:
+        name: Execute Firestore Security Rules Tests
+        command: |
+        cd firebase/tests/firestore-rules
+        echo $SERVICE_ACCOUNT_CREDENTIALS_JSON > service-account-credentials.json
+        npm test
 
-    #   # Download and cache dependencies
-    #   - restore_cache:
-    #       keys:
-    #         - v1-dependencies-{{ checksum "package.json" }}
-    #         # fallback to using the latest cache if no exact match is found
-    #         - v1-dependencies-
 
-    #   - run: yarn install
-
-    #   - save_cache:
-    #       paths:
-    #         - node_modules
-    #       key: v1-dependencies-{{ checksum "package.json" }}
-
-    #   # run tests!
-    #   - run: yarn test
-    # test:
-
-
-# workflows:
-#   version: 2
-#   build-test-and-deploy:
-#     jobs:
-#       - build
-#       - test1:
-#           requires:
-#             - build
-#       - test2:
-#           requires:
-#             - test1
-#       - deploy:
-#           requires:
-#             - test2
+workflows:
+  version: 2
+  test:
+    jobs:
+      - deploy-firebase-test
+      - test-firebase-cloud-functions:
+          requires:
+            - deply-firebase-test
+      - test-firebase-security-rules:
+          requires:
+            - test-firebase-cloud-functions
