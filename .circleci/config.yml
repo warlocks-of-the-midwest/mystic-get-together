@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - checkout
-      - ls -la
+      - run: ls -la
     #   # Download and cache dependencies
     #   - restore_cache:
     #       keys:
