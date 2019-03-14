@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/polyfill": "^7.2.5",
     "axios": "^0.18.0",
     "bootstrap": "^4.2.1",
     "firebase": "5.7.3",
@@ -25,6 +26,9 @@
     "build": "react-scripts build",
     "deploy": "firebase deploy",
     "test": "react-scripts test",
+    "sdk" : "babel src/js-sdk/ --out-dir src/js-sdk-lib --presets=@babel/env && jest --testPathPattern=src/js-sdk-lib/",
+    "build-sdk": "babel src/js-sdk/ --out-dir src/js-sdk-lib --presets=@babel/env",
+    "test-sdk": "jest --testPathPattern=src/js-sdk-lib/",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -37,10 +41,14 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
     "eslint": "^5.13.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.11.1"
+    "eslint-plugin-react": "^7.11.1",
+    "jest": "^24.0.0"
   }
 }
