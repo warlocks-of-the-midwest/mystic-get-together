@@ -56,6 +56,7 @@ jobs:
           command: |
             cd firebase/functions
             echo $SERVICE_ACCOUNT_CREDENTIALS_JSON > service-account-credentials.json
+            firebase use test
             npm run fb-clean && npm test
 
   # test-firebase-security-rules:
