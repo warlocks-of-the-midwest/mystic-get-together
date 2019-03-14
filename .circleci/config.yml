@@ -25,10 +25,12 @@ jobs:
 
     steps:
       - checkout
-      - run: cd firebase
       - run:
              name: Deploy Cloud Functions to Firebase
-             command: firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
+             command: |
+              cd firebase
+              firebase use test
+              firebase deploy --only functions --token=$FIREBASE_TOKEN
 
       # - hello/hello
       # - firebase-deploy/deploy:
