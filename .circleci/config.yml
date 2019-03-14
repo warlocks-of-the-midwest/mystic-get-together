@@ -29,7 +29,7 @@ jobs:
              name: Deploy Cloud Functions to Firebase
              command: |
               cd firebase/functions
-              npm run install
+              npm install
               firebase use test
               firebase deploy --only functions --token=$FIREBASE_TOKEN
 
