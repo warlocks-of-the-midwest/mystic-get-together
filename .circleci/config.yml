@@ -25,9 +25,8 @@ jobs:
     steps:
       - checkout
       - run: cd firebase
-      - run: echo $TEST_VAR
-      # - firebase-deploy:
-      #   token: $FIREBASE_DEPLOY_TOKEN
+      - firebase-deploy:
+        token: $FIREBASE_TOKEN
     #   # Download and cache dependencies
     #   - restore_cache:
     #       keys:
