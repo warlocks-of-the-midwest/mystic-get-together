@@ -10,6 +10,7 @@ import {
 
 import CardList from './CardList.js';
 import CurrentCard from './CurrentCard.js';
+import LibraryManipulation from './LibraryManipulation.js';
 import SideZoneContextMenu from './SideZoneContextMenu.js';
 import '../styles/Zones.css';
 
@@ -89,7 +90,7 @@ class LibraryModal extends Component {
 
     if (modalFunction === 'search') {
       modalBody = (
-        <ModalBody classname="library-modal-body">
+        <ModalBody className="library-modal-body">
           <Row>
             <InputGroup>
               <Input
@@ -111,14 +112,7 @@ class LibraryModal extends Component {
       modalBody = (
         <ModalBody classname="library-modal-body">
           <Row>
-            <h6>Library Manipulation Things here</h6>
-          </Row>
-          <Row>
-            <CardList
-              listClickHandler={this.cardListClick}
-              cardList={cardList}
-              searchTerm=""
-            />
+            <LibraryManipulation />
           </Row>
         </ModalBody>
       );
