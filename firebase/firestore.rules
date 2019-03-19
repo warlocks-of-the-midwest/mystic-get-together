@@ -1,7 +1,25 @@
 service cloud.firestore {
   match /databases/{database}/documents {
+
     match /{document=**} {
-      allow read, write;
+      // Allow reads globally if authenticated
+      allow read: if request.auth.uid != null;
+    }
+
+    match /Games/{game} {
+
+      match /Players/{player} {
+        // Only players may update their own data
+        allow update: if request.auth.uid == player;
+      }
+
+      match /Cards/{card} {
+        // Only players in the game may create new cards (e.g. tokens)
+        allow create: if get(/databases/$(database)/documents/Games/$(game)/Players/$(request.auth.uid)) != null && 
+          request.resource.data.state.zone == 'Battlefield';
+        // Only allow updates from the card's controller
+        allow update: if request.auth.uid == resource.data.state.controller;
+      }
     }
   }
 }
