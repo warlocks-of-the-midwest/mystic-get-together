@@ -95,10 +95,10 @@ class GameContainer extends React.Component {
           }}
         >
           <Col>
-            <Battlefield cards={gameState.cards} useStubs />
+            <Battlefield cards={gameState.cards} useStubs strongBorder />
           </Col>
           <Col>
-            <Battlefield cards={gameState.cards} useStubs />
+            <Battlefield cards={gameState.cards} useStubs strongBorder />
           </Col>
         </Row>
         <Row
@@ -107,10 +107,10 @@ class GameContainer extends React.Component {
           }}
         >
           <Col>
-            <Battlefield cards={gameState.cards} useStubs />
+            <Battlefield cards={gameState.cards} useStubs strongBorder />
           </Col>
           <Col>
-            <Battlefield cards={gameState.cards} useStubs />
+            <Battlefield cards={gameState.cards} useStubs strongBorder />
           </Col>
         </Row>
       </Container>

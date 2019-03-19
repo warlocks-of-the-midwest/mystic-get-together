@@ -38,7 +38,7 @@ class Battlefield extends Component {
 
   render() {
     const { cards } = this.state;
-    const { useStubs } = this.props;
+    const { useStubs, strongBorder } = this.props;
 
     return (
       <Container
@@ -46,7 +46,7 @@ class Battlefield extends Component {
         className="cards-rows-container p-0 m-0"
         style={{
           height: '100%',
-          border: 'solid',
+          border: strongBorder ? 'solid' : 'none',
         }}
       >
         {/* Top row of battlefield */}
@@ -129,6 +129,7 @@ class Battlefield extends Component {
 Battlefield.propTypes = {
   cards: PropTypes.array.isRequired,
   useStubs: PropTypes.bool.isRequired,
+  strongBorder: PropTypes.bool.isRequired,
 };
 
 export default Battlefield;
