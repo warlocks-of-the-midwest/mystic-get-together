@@ -46,6 +46,7 @@ class Battlefield extends Component {
         className="cards-rows-container p-0 m-0"
         style={{
           height: '100%',
+          border: 'solid',
         }}
       >
         {/* Top row of battlefield */}

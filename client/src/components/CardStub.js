@@ -33,13 +33,6 @@ class CardStub extends React.Component {
           <Col>
             <div
               className="truncated-text"
-              style={{
-                'vertical-align': 'text-bottom',
-                'font-size': '0.8rem',
-                'text-overflow': 'ellipsis',
-                overflow: 'hidden',
-                'white-space': 'nowrap',
-              }}
             >
               {card.getName()}
             </div>
@@ -59,33 +52,37 @@ class CardStub extends React.Component {
             />
           </Col>
         </Row>
-        {/* Power and toughness if creature */}
+        {/* Type, and Power and toughness if creature */}
         <Row
           style={{
             height: 'auto',
           }}
         >
-          <Col>
-            <span
-              style={{
-                'vertical-align': 'text-bottom',
-                'font-size': '0.8rem',
-                float: 'left',
-              }}
+          <Col
+            style={{
+              'max-width': '70%',
+            }}
+          >
+            <div
+              className="truncated-text"
             >
               {card.getShortType()}
-            </span>
+            </div>
           </Col>
-          <Col>
-            <span
+          <Col
+            style={{
+              'max-width': '30%',
+            }}
+          >
+            <div
               style={{
                 'vertical-align': 'text-bottom',
                 'font-size': '0.8rem',
-                float: 'right',
+                'text-align': 'right',
               }}
             >
               {card.getPowerToughness()}
-            </span>
+            </div>
           </Col>
         </Row>
       </Container>

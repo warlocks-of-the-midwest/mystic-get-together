@@ -2,7 +2,17 @@
   background-color: rgba(0,0,0,0.5);
 }
 
+.truncated-text {
+  vertical-align: text-bottom;
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .truncated-text:hover {
   overflow: visible;
+  white-space: normal;
+  height: auto;
 }
 
