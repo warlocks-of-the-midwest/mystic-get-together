@@ -1,68 +1,66 @@
-import React, { Component } from 'react';
+import React, { useState, useContext } from 'react';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 
+import { UserContext } from '../context/userContext';
 import { auth, googleProvider } from '../js-sdk/fire';
-import * as sdk from '../js-sdk/sdk';
 
-import lotus from '../lotus.jpg';
 import '../styles/LandingPage.css';
 
-class LandingPage extends Component {
-  constructor(props) {
-    super(props);
+const LandingPage = (props) => {
+  const currentUser = useContext(UserContext);
+  const [isImportModalOpen, toggleImportModal] = useState(false);
+  const [deckUri, updateDeckUri] = useState('');
 
-    this.state = {
-      user: null,
-    };
+  const signIn = async () => {
+    auth.signInWithPopup(googleProvider);
+  };
 
-    this.signIn = this.signIn.bind(this);
-  }
+  const handleImportInput = (e) => {
+    updateDeckUri(e.target.value);
+  };
 
-  componentDidMount() {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        console.log('signed in');
-        console.log(user);
-        this.setState({
-          user,
-        });
-      } else {
-        console.log('signed out');
-        this.setState({
-          user: null,
-        });
-      }
-    });
-  }
+  const handleSubmit = () => {
+    // call importDeckFunction() cloud function with deckUri and user uid
+    console.log(deckUri);
+  };
 
-  async signIn() {
-    const userData = await auth.signInWithPopup(googleProvider);
-  }
+  const toggle = () => {
+    toggleImportModal(!isImportModalOpen);
+  };
 
-  renderButtons() {
-    const { user } = this.state;
+  const renderButtons = () => {
     const loginButton = (
-      <button className="btn" onClick={this.signIn} type="button">Login</button>
+      <button className="btn" onClick={signIn} type="button">Login</button>
     );
     const gameButtons = (
       <div className="stacked">
         <a className="btn" href="/">Host Game</a>
         <a className="btn" href="/">Join Game</a>
-        <a className="btn" href="/">Show Deck</a>
+        <a className="btn" onClick={toggleImportModal}>Import Deck</a>
+        <a className="btn">Log Out</a>
       </div>
     );
-    return user ? gameButtons : loginButton;
-  }
+    return currentUser ? gameButtons : loginButton;
+  };
 
-  render() {
-    return (
-      <div className="lotus">
-        {/* <h1 className="mystic">Mystic The Get-Together</h1> */}
-        <div className="buttonsAndSelect">
-          {this.renderButtons()}
-        </div>
+  return (
+    <div className="lotus">
+      {/* <h1 className="mystic">Mystic The Get-Together</h1> */}
+      <div className="buttonsAndSelect">
+        {renderButtons()}
       </div>
-    );
-  }
-}
+      <Modal isOpen={isImportModalOpen} toggle={toggleImportModal}>
+        <ModalHeader toggle={toggleImportModal}>Import Deck</ModalHeader>
+        <ModalBody>
+          <Input placeholder="https://www.mtggoldfish.com/deck/" onChange={handleImportInput} />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleSubmit}>Import</Button>
+          <Button color="secondary" onClick={toggle}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
+};
 
 export default LandingPage;
