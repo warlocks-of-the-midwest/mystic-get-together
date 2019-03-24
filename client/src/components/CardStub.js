@@ -5,87 +5,60 @@ import '../styles/Card.css';
 
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 
-import {
-  Container,
-  Row,
-  Col,
-  Media,
-} from 'reactstrap';
-
-
 class CardStub extends React.Component {
   render() {
     const { card } = this.props;
 
     return (
-      <Container
+      <div
         style={{
           'border-style': 'solid',
           'border-width': '0.1rem',
+          height: '100%',
+          display: 'grid',
+          'grid-template-rows': 'repeat(8, 1fr)',
         }}
       >
         {/* Card name */}
-        <Row
+        <div
+          className="truncated-text"
+        >
+          {card.getName()}
+        </div>
+        {/* Card image */}
+        <div
           style={{
-            height: 'auto',
+            'background-image': `url(${card.getImage()})`,
+            'background-repeat': 'no-repeat',
+            'background-size': 'contain',
+            'grid-row': 'span 6',
+          }}
+        />
+        {/* Shortened type and Power/Toughness */}
+        <div
+          style={{
+            display: 'flex',
           }}
         >
-          <Col>
-            <div
-              className="truncated-text"
-            >
-              {card.getName()}
-            </div>
-          </Col>
-        </Row>
-        {/* Image row with a col wrapper to control size of image */}
-        <Row>
-          <Col>
-            <Media
-              obj
-              style={{
-                width: '100%',
-                height: 'auto',
-              }}
-              alt="Card Art"
-              src={card.getImage()}
-            />
-          </Col>
-        </Row>
-        {/* Type, and Power and toughness if creature */}
-        <Row
-          style={{
-            height: 'auto',
-          }}
-        >
-          <Col
+          <div
+            className="truncated-text"
             style={{
-              'max-width': '70%',
+              flex: '0 0 70%',
             }}
           >
-            <div
-              className="truncated-text"
-            >
-              {card.getShortType()}
-            </div>
-          </Col>
-          <Col
+            {card.getShortType()}
+          </div>
+          <div
             style={{
-              'max-width': '30%',
+              'font-size': '0.8rem',
+              'text-align': 'right',
+              flex: '1',
             }}
           >
-            <div
-              style={{
-                'vertical-align': 'text-bottom',
-                'font-size': '0.8rem',
-                'text-align': 'right',
-              }}
-            >
-              {card.getPowerToughness()}
-            </div>
-          </Col>
-        </Row>
-      </Container>
+            {card.getPowerToughness()}
+          </div>
+        </div>
+      </div>
     );
   }
 }

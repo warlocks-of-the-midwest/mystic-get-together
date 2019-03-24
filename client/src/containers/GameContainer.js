@@ -3,19 +3,13 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-  Container,
-  Row,
-  Col,
-} from 'reactstrap';
 
 import * as sdk from '../js-sdk/sdk';
 
 import '../styles/GameContainer.css';
 
-import Battlefield from '../components/Battlefield';
-import GameArea from '../components/GameArea';
 import gameStateActions from '../redux/actions/gameStateActions';
+import FullBattlefield from '../components/FullBattlefield';
 
 const GAME_ID = 'pCc44llUV5JVRjfl0YqZ'; // hard-coded for debugging
 
@@ -88,32 +82,7 @@ class GameContainer extends React.Component {
     const { gameState } = this.props;
 
     return (
-      <Container>
-        <Row
-          style={{
-            height: '50%',
-          }}
-        >
-          <Col>
-            <Battlefield cards={gameState.cards} useStubs strongBorder />
-          </Col>
-          <Col>
-            <Battlefield cards={gameState.cards} useStubs strongBorder />
-          </Col>
-        </Row>
-        <Row
-          style={{
-            height: '50%',
-          }}
-        >
-          <Col>
-            <Battlefield cards={gameState.cards} useStubs strongBorder />
-          </Col>
-          <Col>
-            <Battlefield cards={gameState.cards} useStubs strongBorder />
-          </Col>
-        </Row>
-      </Container>
+      <FullBattlefield cards={gameState.cards} useStubs strongBorder />
     );
   }
 }

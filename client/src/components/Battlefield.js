@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import {
-  Container,
-  Row,
-  Col,
-} from 'reactstrap';
 
 import CardStub from './CardStub.js';
 import Card from './Card.js';
@@ -41,7 +36,7 @@ class Battlefield extends Component {
     const { useStubs, strongBorder } = this.props;
 
     return (
-      <Container
+      <div
         fluid
         className="cards-rows-container p-0 m-0"
         style={{
@@ -49,79 +44,21 @@ class Battlefield extends Component {
           border: strongBorder ? 'solid' : 'none',
         }}
       >
-        {/* Top row of battlefield */}
-        <Row
-          className="p-0 m-0 border"
+        <div
           style={{
-            height: '50%',
+            display: 'grid',
+            'grid-template-columns': 'repeat(auto-fill, 150px)',
+            gap: '10px',
+            margin: '5px',
           }}
         >
-          {/* Main area for cards */}
-          <Row
-            className="m-0"
-          >
-            {cards
-              .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
-              .map((card) => (
-                <Col
-                  xs="2"
-                  className="no-gutters"
-                >
-                  <Col
-                    xs="12"
-                    className="no-gutters"
-                    style={{
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                    }}
-                  >
-                    <this.CardComponent isStub={useStubs} card={card} />
-                  </Col>
-                  <Col
-                    xs="1"
-                    className="no-gutters"
-                  />
-                </Col>
-              ))}
-          </Row>
-        </Row>
-
-        {/* Bottom row of cards */}
-        <Row
-          className="p-0 m-0 border"
-          style={{
-            height: '50%',
-          }}
-        >
-          <Row
-            className="m-0"
-          >
-            {cards
-              .filter((card) => _.get(card, 'state.zone') === Zones.EXILE)
-              .map((card) => (
-                <Col
-                  xs="2"
-                  className="no-gutters"
-                >
-                  <Col
-                    xs="12"
-                    className="no-gutters"
-                    style={{
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                    }}
-                  >
-                    <this.CardComponent isStub={useStubs} card={card} />
-                  </Col>
-                  <Col
-                    xs="1"
-                    className="no-gutters"
-                  />
-                </Col>
-              ))}
-          </Row>
-        </Row>
-      </Container>
+          {cards
+            .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
+            .map((card) => (
+              <this.CardComponent isStub={useStubs} card={card} />
+            ))}
+        </div>
+      </div>
     );
   }
 }
