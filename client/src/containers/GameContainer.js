@@ -10,6 +10,7 @@ import '../styles/GameContainer.css';
 
 import gameStateActions from '../redux/actions/gameStateActions';
 import FullBattlefield from '../components/FullBattlefield';
+import GameArea from '../components/GameArea';
 
 const GAME_ID = 'pCc44llUV5JVRjfl0YqZ'; // hard-coded for debugging
 
@@ -82,7 +83,7 @@ class GameContainer extends React.Component {
     const { gameState } = this.props;
 
     return (
-      <FullBattlefield cards={gameState.cards} useStubs strongBorder />
+      <GameArea cards={gameState.cards} />
     );
   }
 }
