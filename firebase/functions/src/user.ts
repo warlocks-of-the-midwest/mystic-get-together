@@ -1,5 +1,6 @@
 import * as Firestore from '@google-cloud/firestore';
 import * as functions from 'firebase-functions';
+import * as _ from 'lodash';
 
 // Firestore client - as a Cloud Function, this is
 // all the setup we need
@@ -58,3 +59,28 @@ export const deleteUserDocument = functions.auth.user().onDelete(
             console.error(`Could not delete user document for ${user.uid}`, e);
         }
 });
+
+/**
+ * When a deck is created, add it the user's decks summary.
+ * 
+ * NOTE: We don't support deleting decks yet.
+ */
+export const updateUserDocumentWithDeck = functions.firestore
+    .document('Users/{userId}/Decks/{deckId}').onCreate(
+        async (snapshot: Firestore.DocumentSnapshot, context: functions.EventContext) => {
+            const deck = snapshot.data();
+            const deckInfo: DeckInfo = {
+                id: snapshot.id,
+                ... _.pick(deck, ['name']),
+            };
+
+            try {
+                await firestore.doc(`Users/${context.params.userId}`).update({
+                    [`decks.${snapshot.id}`]: deckInfo,
+                });
+            } catch (e) {
+                console.error(`Could not update user document for ${context.params.userId}` + 
+                    ` to include deck info for ${context.params.deckId}`, e);
+            }
+            
+        });
