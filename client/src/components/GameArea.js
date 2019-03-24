@@ -10,14 +10,11 @@ import {
   ButtonGroup,
 } from 'reactstrap';
 
-import Card from './Card.js';
-
 import NavigationBar from './NavigationBar';
 import Sidebar from './Sidebar';
 import Battlefield from './Battlefield';
 
 import '../styles/Card.css';
-import { Zones } from '../constants.js';
 
 class GameArea extends Component {
   constructor(props) {

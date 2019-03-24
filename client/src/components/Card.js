@@ -5,12 +5,6 @@ import '../styles/Card.css';
 
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 
-import {
-  Container,
-  Row,
-  Col,
-  Media,
-} from 'reactstrap';
 import * as sdk from '../js-sdk/sdk';
 
 
@@ -18,18 +12,8 @@ class Card extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      popoverOpen: false,
-    };
-
     this.toggle = this.toggle.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
-  }
-
-  toggle() {
-    this.setState({
-      popoverOpen: !this.state.popoverOpen,
-    });
   }
 
   toggleCard(card) {
@@ -49,15 +33,40 @@ class Card extends React.Component {
           'border-style': 'solid',
           'border-width': '0.1rem',
           height: '100%',
+          'max-width': '150px',
           display: 'grid',
-          'grid-template-rows': 'repeat(8, 1fr)',
+          'grid-template-rows': 'repeat(11, 1fr)',
+          'grid-template-columns': 'minmax(0, 1fr)',
         }}
       >
-        {/* Card name */}
+        {/* Card name and mana cost */}
         <div
-          className="truncated-text"
+          style={{
+            display: 'flex',
+          }}
         >
-          {card.getName()}
+          <div
+            className="truncated-text"
+            style={{
+              flex: '0 0 55%',
+            }}
+          >
+            {card.getName()}
+            <div
+              className="truncated-text-tooltip"
+            >
+              {card.getName()}
+            </div>
+          </div>
+          <div
+            style={{
+              'font-size': '0.5rem',
+              'text-align': 'right',
+              flex: '1',
+            }}
+          >
+            {card.getManaCost()}
+          </div>
         </div>
         {/* Card image */}
         <div
@@ -68,7 +77,7 @@ class Card extends React.Component {
             'grid-row': 'span 6',
           }}
         />
-        {/* Shortened type and Power/Toughness */}
+        {/* Card type and set image */}
         <div
           style={{
             display: 'flex',
@@ -78,106 +87,47 @@ class Card extends React.Component {
             className="truncated-text"
             style={{
               flex: '0 0 70%',
+              'font-size': '0.6rem',
             }}
           >
-            {card.getShortType()}
+            {card.getType()}
+            <div
+              className="truncated-text-tooltip"
+            >
+              {card.getType()}
+            </div>
           </div>
           <div
             style={{
-              'font-size': '0.8rem',
-              'text-align': 'right',
               flex: '1',
+              'background-image': `url(${card.getSetImage()})`,
+              'background-repeat': 'no-repeat',
+              'background-size': 'contain',
+              'background-position': 'right',
             }}
+          />
+        </div>
+        {/* Card text */}
+        <div
+          className="card-text"
+        >
+          {card.getCardText()}
+          <div
+            className="card-text-tooltip"
           >
-            {card.getPowerToughness()}
+            {card.getCardText()}
           </div>
         </div>
+        {/* Power/Toughness */}
+        <div
+          style={{
+            'font-size': '0.6rem',
+            'text-align': 'right',
+          }}
+        >
+          {card.getPowerToughness()}
+        </div>
       </div>
-
-
-      // <Container
-      //   fluid
-      //   className="card-container d-flex flex-column justify-content-center border rounded p-0 m-0"
-      //   style={{
-      //     'overflow-y': 'auto',
-      //     'overflow-x': 'hidden',
-      //   }}
-      // >
-      //   {/* Image row with a col wrapper to control size of image */}
-      //   <Row
-      //     className="card-art-row justify-content-center no-gutters flex-grow-1 flex-shrink-1"
-      //     style={{
-      //       'flex-basis': '40%',
-      //       //minHeight: '40%',
-      //       //maxHeight: '80%',
-      //       overflow: 'hidden',
-      //     }}
-      //   >
-      //     <Col xs="12" className="card-art-col p-0 ">
-      //       <Media
-      //         obj
-      //         className="card-art-image img-fluid d-block mx-auto"
-      //         alt="Card Art"
-      //         src={card.getImage()}
-      //       />
-      //     </Col>
-      //   </Row>
-      //   {/* Power and toughness if creature */}
-      //   <Row
-      //     className="card-power-toughness-row d-inline-flex no-gutters justify-content-between flex-grow-1 flex-shrink-0"
-      //     style={{
-      //       overflow: 'hidden',
-      //       flexBasis: '1.4vw',
-      //       'font-size': '.75vw',
-      //       //'max-height': '1.5vw',
-      //     }}
-      //   >
-      //     <Col className="px-0 d-flex flex-shrink-0 flex-grow-2">
-      //       <button
-      //         tabIndex="0"
-      //         color="link"
-      //         block
-      //         size="sm"
-      //         className="text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-left text-wrap "
-      //         data-toggle="popover"
-      //         data-trigger="focus"
-      //         title={card.getName()}
-      //         data-content={card.getType()}
-      //         id="Popover"
-      //         style={{
-      //           'text-overflow': 'ellipsis',
-      //           overflow: 'hidden',
-      //         }}
-      //       >
-      //         Creature
-      //         {String()}
-      //       </button>
-      //     </Col>
-      //     <Col className="card-power-toughness-col px-0 d-flex flex-shrink-0 flex-grow-2 justify-content-end">
-      //       <button
-      //         tabIndex="0"
-      //         type="button"
-      //         color="link"
-      //         block
-      //         size="sm"
-      //         className="card-power-toughness text-dark font-weight-bold bg-transparent m-0 p-0 align-top text-right text-wrap "
-      //         data-toggle="popover"
-      //         data-trigger="focus"
-      //         title={card.getName()}
-      //         data-content={card.getType()}
-      //         id="Popover"
-      //         style={{
-      //           'text-overflow': 'ellipsis',
-      //           overflow: 'hidden',
-      //         }}
-      //       >
-      //         {card.getPowerToughness()}
-      //         {String()}
-      //       </button>
-      //     </Col>
-      //   </Row>
-
-      // </Container>
     );
   }
 }
