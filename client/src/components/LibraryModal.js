@@ -110,9 +110,9 @@ class LibraryModal extends Component {
       );
     } else if (modalFunction === 'manipulate') {
       modalBody = (
-        <ModalBody classname="library-modal-body">
+        <ModalBody className="library-modal-body">
           <Row>
-            <LibraryManipulation />
+            <LibraryManipulation cardClickHandler={this.cardListClick} cardList={cardList} />
           </Row>
         </ModalBody>
       );
