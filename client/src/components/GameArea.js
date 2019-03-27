@@ -17,7 +17,7 @@ import Sidebar from './Sidebar';
 
 import '../styles/GameArea.css';
 import '../styles/Card.css';
-import { Zones } from '../constants.js';
+import { Zones } from '../helpers.js';
 
 class GameArea extends Component {
   constructor(props) {

@@ -7,6 +7,7 @@ import configureStore from './redux/store';
 import { UserProvider } from './context/userContext';
 import GameContainer from './containers/GameContainer';
 import LandingPage from './components/LandingPage';
+import withAuthentication from './withAuthentication';
 
 import * as serviceWorker from './serviceWorker';
 
@@ -19,7 +20,7 @@ const App = () => (
       <Router>
         <Switch>
           <Route exact path="/" component={LandingPage} />
-          <Route exact path="/board" component={GameContainer} />
+          <Route exact path="/board" component={withAuthentication(GameContainer)} />
         </Switch>
       </Router>
     </Provider>

@@ -6,8 +6,8 @@ import { auth, googleProvider } from '../js-sdk/fire';
 
 import '../styles/LandingPage.css';
 
-const LandingPage = (props) => {
-  const currentUser = useContext(UserContext);
+const LandingPage = () => {
+  const user = useContext(UserContext);
   const [isImportModalOpen, toggleImportModal] = useState(false);
   const [deckUri, updateDeckUri] = useState('');
 
@@ -28,20 +28,22 @@ const LandingPage = (props) => {
     toggleImportModal(!isImportModalOpen);
   };
 
-  const renderButtons = () => {
-    const loginButton = (
-      <button className="btn" onClick={signIn} type="button">Login</button>
-    );
-    const gameButtons = (
-      <div className="stacked">
-        <a className="btn" href="/">Host Game</a>
-        <a className="btn" href="/">Join Game</a>
-        <a className="btn" onClick={toggleImportModal}>Import Deck</a>
-        <a className="btn">Log Out</a>
-      </div>
-    );
-    return currentUser ? gameButtons : loginButton;
-  };
+  const loginButton = (
+    <button className="btn" onClick={signIn} type="button">Login</button>
+  );
+
+  const gameButtons = (
+    <div className="stacked">
+      <a className="btn" href="/">Host Game</a>
+      <a className="btn" href="/">Join Game</a>
+      <a className="btn" onClick={toggleImportModal}>Import Deck</a>
+      <a className="btn">Log Out</a>
+    </div>
+  );
+
+  const renderButtons = () => (user ? gameButtons : loginButton);
+
+  console.log(user);
 
   return (
     <div className="lotus">
