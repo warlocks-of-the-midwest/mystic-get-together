@@ -7,7 +7,7 @@ import configureStore from './redux/store';
 import { UserProvider } from './context/userContext';
 import GameContainer from './containers/GameContainer';
 import LandingPage from './components/LandingPage';
-import withAuthentication from './withAuthentication';
+import withAuthentication from './components/withAuthentication';
 
 import * as serviceWorker from './serviceWorker';
 

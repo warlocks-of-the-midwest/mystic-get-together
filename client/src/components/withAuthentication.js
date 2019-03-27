@@ -3,21 +3,25 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Spinner } from 'reactstrap';
 
-import { UserContext } from './context/userContext';
-import { isFirebaseInitialized } from './js-sdk/fire';
-import { Centered } from './helpers';
+import { UserContext } from '../context/userContext';
+import { isFirebaseInitialized } from '../js-sdk/fire';
+import { Centered } from '../helpers';
 
 const withAuthentication = (WrappedComponent) => (props) => {
   const user = useContext(UserContext);
   const [isInitialized, setInitialized] = useState(false);
 
-  useEffect(async () => {
-    await isFirebaseInitialized();
-    setInitialized(true);
+  useEffect(() => {
+    const heartbeat = async () => {
+      await isFirebaseInitialized();
+      setInitialized(true);
+    };
+
+    heartbeat();
   }, []);
 
   if (isInitialized) {
-    return user ? <WrappedComponent {...props} /> : <Redirect to={{ pathname: '/' }} />;
+    return user ? <WrappedComponent {...props} /> : <Redirect to="/" />;
   }
 
   return (
