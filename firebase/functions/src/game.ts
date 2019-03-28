@@ -1,11 +1,13 @@
 import * as Firestore from '@google-cloud/firestore';
 import * as functions from 'firebase-functions';
-const uuidv4 = require('uuid/v4');
 import * as _ from 'lodash';
 
 import * as Util from './util';
 import * as Decklist from './decklist';
 import * as Response from './response';
+
+const uuidv4 = require('uuid/v4');
+const cors = require('cors')({ origin: true });
 
 // Firestore client - as a Cloud Function, this is
 // all the setup we need
@@ -348,119 +350,122 @@ const startGameHelper = async function(gameId: string): Promise<void> {
  * This Function creates a new game with the player and her deck.
  */
 export const hostGameFunction = functions.https.onRequest((request, response) => {
-    if (request.method !== 'POST') {
-        response
-            .status(405)
-            .header('Allow', 'POST')
-            .send('Method Not Allowed');
-        return;
-    }
-    
-    const { uid, deckId } = request.body;
+    return cors(request, response, () => {
+        if (request.method !== 'POST') {
+            response.status(405)
+                .header('Allow', 'POST')
+                .send('Method Not Allowed');
+            return;
+        }
+        
+        const { uid, deckId } = request.body;
 
-    if (!uid) {
-        const body: Response.MissingRequiredParameterResponse = {
-            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
-            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
-            parameter: 'uid',
-            description: 'The uid of the player that will host the game.'
-        };
-        response
-            .status(400)
-            .send(body);
-        return;
-    }
-    if (!deckId) {
-        const body: Response.MissingRequiredParameterResponse = {
-            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
-            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
-            parameter: 'deckId',
-            description: 'The id of the deck that the player will use.'
-        };
-        response
-            .status(400)
-            .send(body);
-        return;
-    }
-
-    console.log('Creating new game with hosting player ' + uid);
-    console.log('Using deck with ID ' + deckId);
-
-    hostGameHelper(uid, deckId)
-        .then((gameDocId) => {
-            const body: Response.GameCreatedResponse = {
-                message: Response.Messages.GAME_CREATED,
-                gameId: gameDocId,
+        if (!uid) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'uid',
+                description: 'The uid of the player that will host the game.'
             };
             response
-                .status(201)
+                .status(400)
                 .send(body);
-        })
-        .catch((error) => {
-            Util.errorResponseMapper(error, response);
-        })
+            return;
+        }
+        if (!deckId) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'deckId',
+                description: 'The id of the deck that the player will use.'
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
+
+        console.log('Creating new game with hosting player ' + uid);
+        console.log('Using deck with ID ' + deckId);
+
+        hostGameHelper(uid, deckId)
+            .then((gameDocId) => {
+                const body: Response.GameCreatedResponse = {
+                    message: Response.Messages.GAME_CREATED,
+                    gameId: gameDocId,
+                };
+                response
+                    .status(201)
+                    .send(body);
+            })
+            .catch((error) => {
+                Util.errorResponseMapper(error, response);
+            });
+    });
 });
 
 /**
  * This Function adds a player to an existing game.
  */
 export const joinGameFunction = functions.https.onRequest((request, response) => {
-    if (request.method !== 'POST') {
-        response.status(405)
-            .header('Allow', 'POST')
-            .send('Method Not Allowed');
-        return;
-    }
-    
-    const { gameId, uid, deckId } = request.body;
+    return cors(request, response, () => {
+        if (request.method !== 'POST') {
+            response.status(405)
+                .header('Allow', 'POST')
+                .send('Method Not Allowed');
+            return;
+        }
+        
+        const { gameId, uid, deckId } = request.body;
 
-    if (!gameId) {
-        const body: Response.MissingRequiredParameterResponse = {
-            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
-            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
-            parameter: 'gameId',
-            description: 'The id of the game to join.',
-        };
-        response
-            .status(400)
-            .send(body);
-        return;
-    }
-    if (!uid) {
-        const body: Response.MissingRequiredParameterResponse = {
-            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
-            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
-            parameter: 'uid',
-            description: 'The uid of the player that will join the game.',
-        };
-        response
-            .status(400)
-            .send(body);
-        return;
-    }
-    if (!deckId) {
-        const body: Response.MissingRequiredParameterResponse = {
-            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
-            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
-            parameter: 'deckId',
-            description: 'The id of the deck that the player will use.',
-        };
-        response
-            .status(400)
-            .send(body);
-        return;
-    }
+        if (!gameId) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'gameId',
+                description: 'The id of the game to join.',
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
+        if (!uid) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'uid',
+                description: 'The uid of the player that will join the game.',
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
+        if (!deckId) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'deckId',
+                description: 'The id of the deck that the player will use.',
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
 
-    console.log('Joining existing game (' + gameId + ') as player ' + uid);
-    console.log('Using deck with ID ' + deckId);
+        console.log('Joining existing game (' + gameId + ') as player ' + uid);
+        console.log('Using deck with ID ' + deckId);
 
-    joinGameHelper(gameId, uid, deckId)
-        .then(() => {
-            response.send(204);
-        })
-        .catch((error) => {
-            Util.errorResponseMapper(error, response);
-        })
+        joinGameHelper(gameId, uid, deckId)
+            .then(() => {
+                response.send(204);
+            })
+            .catch((error) => {
+                Util.errorResponseMapper(error, response);
+            });
+    });
 });
 
 /**
@@ -469,33 +474,35 @@ export const joinGameFunction = functions.https.onRequest((request, response) =>
  * the turn order).
  */
 export const startGameFunction = functions.https.onRequest((request, response) => {
-    if (request.method !== 'POST') {
-        response.status(405)
-            .header('Allow', 'POST')
-            .send('Method Not Allowed');
-        return;
-    }
-    
-    const { gameId } = request.body;
+    return cors(request, response, () => {
+        if (request.method !== 'POST') {
+            response.status(405)
+                .header('Allow', 'POST')
+                .send('Method Not Allowed');
+            return;
+        }
+        
+        const { gameId } = request.body;
 
-    if (!gameId) {
-        const body: Response.MissingRequiredParameterResponse = {
-            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
-            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
-            parameter: 'gameId',
-            description: 'The id of the game to join.',
-        };
-        response
-            .status(400)
-            .send(body);
-        return;
-    }
+        if (!gameId) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'gameId',
+                description: 'The id of the game to join.',
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
 
-    startGameHelper(gameId)
-        .then(() => {
-            response.send(204);
-        })
-        .catch((error) => {
-            Util.errorResponseMapper(error, response);
-        })
+        startGameHelper(gameId)
+            .then(() => {
+                response.send(204);
+            })
+            .catch((error) => {
+                Util.errorResponseMapper(error, response);
+            });
+    });
 });
