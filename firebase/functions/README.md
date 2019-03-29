@@ -46,7 +46,7 @@ hostGameFunction() {
 # A player joins an existing game using a specific deck that player owns
 # The gameId can be gleaned from the headres of the hostGameFunction response
 joinGameFunction() {
-    http -v POST "${FIREBASE_FUNCTION_BASE_URL}/${0}" uid=anthony deckId=?
+    http -v POST "${FIREBASE_FUNCTION_BASE_URL}/${0}" uid=anthony deckId=? gameId=?
 }
 
 # Start the target game by determining the turn order

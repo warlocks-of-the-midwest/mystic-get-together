@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { auth } from '../js-sdk/fire';
+import { auth, googleProvider } from '../js-sdk/fire';
 
 export const UserContext = React.createContext();
 
@@ -17,8 +17,16 @@ export const UserProvider = ({ children }) => {
     });
   }, []);
 
+  const signIn = async () => {
+    auth.signInWithPopup(googleProvider);
+  };
+
+  const signOut = async () => {
+    auth.signOut();
+  };
+
   return (
-    <UserContext.Provider value={user}>
+    <UserContext.Provider value={{ user, signIn, signOut }}>
       {children}
     </UserContext.Provider>
   );
