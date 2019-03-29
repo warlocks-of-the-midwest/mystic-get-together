@@ -8,7 +8,7 @@ import { isFirebaseInitialized } from '../js-sdk/fire';
 import { Centered } from '../helpers';
 
 const withAuthentication = (WrappedComponent) => (props) => {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [isInitialized, setInitialized] = useState(false);
 
   useEffect(() => {
