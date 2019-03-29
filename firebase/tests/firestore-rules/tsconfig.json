@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "lib": ["es6"],
+      "module": "commonjs",
+      "noImplicitReturns": true,
+      "outDir": "lib",
+      "sourceMap": true,
+      "target": "es6",
+      // This solves a problem with duplicate type definitions for Firestore coming from
+      // the Firebase and Google Cloud SDKs
+      "skipLibCheck": true,
+    },
+    "compileOnSave": true,
+    "include": [
+      "src"
+    ]
+  }
+  
