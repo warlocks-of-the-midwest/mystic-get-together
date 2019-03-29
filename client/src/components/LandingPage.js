@@ -54,7 +54,7 @@ const LandingPage = () => {
         toggleHostModal(!isHostModalOpen);
         break;
       case 'join':
-        toggleJoinModal(!isHostModalOpen);
+        toggleJoinModal(!isJoinModalOpen);
         break;
       default:
         // this is so that clicking outside the modal closes it too
