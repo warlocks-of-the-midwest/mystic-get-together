@@ -100,7 +100,7 @@ describe('Cloud Functions Test Suite', function() {
     describe('Test importing a standard commander deck (1 commander, 99 other)', function() {
       describe('Import a standard commander deck for user1, via Cloud Function', function() {
         it('Make the HTTP call', async function() {
-          this.timeout(15000);
+          // this.timeout(15000);
           await supertest(functionsConfig.baseURI)
           .post('/importDeckFunction')
           .send({
