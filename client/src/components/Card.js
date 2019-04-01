@@ -14,7 +14,7 @@ import {
 import * as sdk from '../js-sdk/sdk';
 
 
-class Card extends React.Component {
+class Card extends Component {
   constructor(props) {
     super(props);
 

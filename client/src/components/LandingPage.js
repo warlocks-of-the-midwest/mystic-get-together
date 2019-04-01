@@ -4,7 +4,7 @@ import HostGameModal from './HostGameModal';
 import JoinGameModal from './JoinGameModal';
 
 import { UserContext } from '../context/userContext';
-import { importDeck, hostGame, joinGame } from '../api';
+import { importDeck, hostGame, joinGame } from '../js-sdk/sdk';
 
 import '../styles/LandingPage.css';
 
@@ -20,10 +20,10 @@ const LandingPage = () => {
 
   const gameButtons = (
     <div className="stacked">
-      <a className="btn" onClick={toggleHostModal}>Host Game</a>
-      <a className="btn" onClick={toggleJoinModal}>Join Game</a>
-      <a className="btn" onClick={toggleImportModal}>Import Deck</a>
-      <a className="btn" onClick={signOut}>Log Out</a>
+      <button type="button" className="btn" onClick={toggleHostModal}>Host Game</button>
+      <button type="button" className="btn" onClick={toggleJoinModal}>Join Game</button>
+      <button type="button" className="btn" onClick={toggleImportModal}>Import Deck</button>
+      <button type="button" className="btn" onClick={signOut}>Log Out</button>
     </div>
   );
 
@@ -67,7 +67,6 @@ const LandingPage = () => {
 
   return (
     <div className="lotus">
-      {/* <h1 className="mystic">Mystic The Get-Together</h1> */}
       <div className="buttonsAndSelect">
         {user ? gameButtons : loginButton}
       </div>

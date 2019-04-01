@@ -36,7 +36,6 @@ withAuthentication.defaultProps = {
 };
 
 withAuthentication.propTypes = {
-  component: PropTypes.shape({}).isRequired,
   user: PropTypes.shape({}),
 };
 

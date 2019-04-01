@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 class Player {
   constructor(playerJson) {
     const { uid, username, life } = playerJson;

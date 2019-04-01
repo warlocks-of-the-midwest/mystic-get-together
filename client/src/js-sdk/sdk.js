@@ -1,4 +1,3 @@
-import firebase from 'firebase';
 import axios from 'axios';
 import uuidv4 from 'uuid/v4';
 import db, { FIREBASE_FUNCTION_BASE_URL } from './fire.js';
@@ -65,7 +64,6 @@ export async function loadCards(gameId) {
   return result;
 }
 
-// Game functions
 // Card functions
 async function getCardFromId(gameId, cardId) {
   const cardDoc = await db.doc(`Games/${gameId}/Cards/${cardId}`).get();
@@ -264,18 +262,23 @@ export function getAvailableDecks(user) {
  * This wraps the 'importDeckFunction', which imports a deck from MTGGoldfish
  * for the given player.
  *
- * @param {string} player The name of the player, e.g. eric
+ * @param {string} uid The uid of the player, e.g. xxxxxxxxxxxxx
  * @param {string} uri The uri of the deck, e.g. https://www.mtggoldfish.com/deck/1325288
  *
  * @returns nothing
  */
-export async function importDeck(player, uri) {
-  await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/importDeckFunction`, {
-    params: {
-      player,
+export async function importDeck(uid, uri) {
+  try {
+    const res = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/importDeckFunction`, {
+      uid,
       uri,
-    },
-  });
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return res;
+  } catch (ex) {
+    console.log(ex);
+    return ex;
+  }
 }
 
 /**
@@ -286,12 +289,15 @@ export async function importDeck(player, uri) {
  * @returns The parsed deck
  */
 export async function parseDeck(uri) {
-  const response = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/parseDeckFunction`, {
-    params: {
+  try {
+    const res = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/parseDeckFunction`, {
       uri,
-    },
-  });
-  return response.data;
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return res;
+  } catch (ex) {
+    console.log(ex);
+  }
 }
 
 /**
@@ -316,24 +322,30 @@ export async function populateDeck(player, deckId, ...include) {
   return response.data;
 }
 
+// Game functions
+
 /**
  * This wraps the 'hostGameFunction', which creates a new game containing
  * the specified player, with her board state initialized using the specified
  * deck.
  *
- * @param {string} player The name of the player, e.g. eric
+ * @param {string} uid The name of the player, e.g. xxxxxxxx
  * @param {string} deckId The ID of the deck belonging to the given player
  *
  * @returns {string} The game ID
  */
-export async function hostGame(player, deckId) {
-  const response = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/hostGameFunction`, {
-    params: {
-      player,
+export async function hostGame(uid, deckId) {
+  try {
+    const res = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/hostGameFunction`, {
+      uid,
       deckId,
-    },
-  });
-  return response.headers['x-gameid'];
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return res;
+  } catch (ex) {
+    console.log(ex);
+    return (ex);
+  }
 }
 
 /**
@@ -341,19 +353,23 @@ export async function hostGame(player, deckId) {
  * the specified player, intializing her board state using the specified deck.
  *
  * @param {string} gameId The game ID, as returned by 'hostGame'
- * @param {string} player The name of the player, e.g. eric
+ * @param {string} uid The name of the player, e.g. xxxxxxxxx
  * @param {string} deckId The ID of the deck belonging to the given player
  *
  * @returns nothing
  */
-export async function joinGame(gameId, player, deckId) {
-  await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/joinGameFunction`, {
-    params: {
-      gameId,
-      player,
+export async function joinGame(uid, deckId, gameId) {
+  try {
+    const res = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/joinFunction`, {
+      uid,
       deckId,
-    },
-  });
+      gameId,
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return res;
+  } catch (ex) {
+    console.log(ex);
+  }
 }
 
 /**
@@ -365,9 +381,13 @@ export async function joinGame(gameId, player, deckId) {
  * @returns nothing
  */
 export async function startGame(gameId) {
-  await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/startGameFunction`, {
-    params: {
+  try {
+    const res = await axios.post(`${FIREBASE_FUNCTION_BASE_URL}/hostGameFunction`, {
       gameId,
-    },
-  });
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return res;
+  } catch (ex) {
+    console.log(ex);
+  }
 }

@@ -22,4 +22,4 @@ db.settings({
 });
 
 export default db;
-export const FIREBASE_FUNCTION_BASE_URL = '';
+export const FIREBASE_FUNCTION_BASE_URL = 'https://us-central1-mystic-get-together.cloudfunctions.net';
