@@ -2,13 +2,13 @@ import React from 'react';
 import './styles/index.css';
 
 export const Zones = {
-  LIBRARY: 'library',
-  HAND: 'hand',
-  BATTLEFIELD: 'battlefield',
-  GRAVEYARD: 'graveyard',
-  STACK: 'stack',
-  EXILE: 'exile',
-  COMMAND: 'command',
+  LIBRARY: 'Library',
+  HAND: 'Hand',
+  BATTLEFIELD: 'Battlefield',
+  GRAVEYARD: 'Graveyard',
+  STACK: 'Stack',
+  EXILE: 'Exile',
+  COMMAND: 'Command',
 };
 
 export const Centered = ({ children }) => (
