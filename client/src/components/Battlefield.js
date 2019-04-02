@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import CardStub from './CardStub.js';
 import Card from './Card.js';
 
 import { Zones } from '../constants.js';
@@ -22,13 +21,6 @@ class Battlefield extends Component {
     this.setState({
       cards,
     });
-  }
-
-  CardComponent(props) {
-    if (props.isStub) {
-      return <CardStub card={props.card} />;
-    }
-    return <Card card={props.card} />;
   }
 
   render() {
@@ -55,7 +47,7 @@ class Battlefield extends Component {
           {cards
             .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
             .map((card) => (
-              <this.CardComponent isStub={useStubs} card={card} />
+              <Card isStub={useStubs} card={card} />
             ))}
         </div>
       </div>

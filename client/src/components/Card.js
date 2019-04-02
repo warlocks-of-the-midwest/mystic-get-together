@@ -24,9 +24,76 @@ class Card extends React.Component {
     }
   }
 
-  render() {
-    const { card } = this.props;
+  CardImage(props) {
+    return (
+      <div
+        style={{
+          'background-image': `url(${props.card.getImage()})`,
+          'background-repeat': 'no-repeat',
+          'background-size': 'contain',
+          'grid-row': 'span 6',
+        }}
+      />
+    );
+  }
 
+  CardStub(props) {
+    const { card } = props;
+
+    return (
+      <div
+        style={{
+          'border-style': 'solid',
+          'border-width': '0.1rem',
+          height: '100%',
+          display: 'grid',
+          'grid-template-rows': 'repeat(8, 1fr)',
+        }}
+      >
+        {/* Card name */}
+        <div
+          className="truncated-text"
+        >
+          {card.getName()}
+        </div>
+        {/* Card image */}
+        <this.CardImage card={card} />
+        {/* Shortened type and Power/Toughness */}
+        <div
+          style={{
+            display: 'flex',
+          }}
+        >
+          <div
+            className="truncated-text"
+            style={{
+              flex: '0 0 70%',
+            }}
+          >
+            {card.getShortType()}
+          </div>
+          <div
+            style={{
+              'font-size': '0.8rem',
+              'text-align': 'right',
+              flex: '1',
+            }}
+          >
+            {card.getPowerToughness()}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    const { card, isStub } = this.props;
+
+    if (isStub) {
+      return this.CardStub(this.props);
+    }
+
+    // Full card component
     return (
       <div
         style={{
@@ -69,14 +136,7 @@ class Card extends React.Component {
           </div>
         </div>
         {/* Card image */}
-        <div
-          style={{
-            'background-image': `url(${card.getImage()})`,
-            'background-repeat': 'no-repeat',
-            'background-size': 'contain',
-            'grid-row': 'span 6',
-          }}
-        />
+        <this.CardImage card={card} />
         {/* Card type and set image */}
         <div
           style={{
@@ -134,6 +194,7 @@ class Card extends React.Component {
 
 Card.propTypes = {
   card: PropTypes.shape({}).isRequired,
+  isStub: PropTypes.bool.isRequired,
 };
 
 export default Card;
