@@ -10,8 +10,6 @@ import {
 import SideZone from './SideZone';
 import { Zones } from '../constants';
 
-import '../styles/Sidebar.css';
-
 class Sidebar extends Component {
   render() {
     const { cards } = this.props;
