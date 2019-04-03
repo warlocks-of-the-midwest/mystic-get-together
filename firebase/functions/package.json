@@ -13,13 +13,14 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "firebase-functions": "2.2.0",
-    "firebase-admin": "7.0.0",
     "@google-cloud/firestore": "0.19.0",
-    "uuid": "3.3.2",
-    "express": "4.16.4",
     "axios": "0.18.0",
-    "lodash": "4.17.11"
+    "cors": "^2.8.5",
+    "express": "4.16.4",
+    "firebase-admin": "7.0.0",
+    "firebase-functions": "2.2.0",
+    "lodash": "4.17.11",
+    "uuid": "3.3.2"
   },
   "devDependencies": {
     "@types/chai": "4.1.7",

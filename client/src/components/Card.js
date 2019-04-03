@@ -8,7 +8,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.js';
 import * as sdk from '../js-sdk/sdk';
 
 
-class Card extends React.Component {
+class Card extends Component {
   constructor(props) {
     super(props);
 

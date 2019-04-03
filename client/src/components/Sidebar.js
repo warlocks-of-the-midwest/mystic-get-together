@@ -8,7 +8,7 @@ import {
 } from 'reactstrap';
 
 import SideZone from './SideZone';
-import { Zones } from '../constants';
+import { Zones } from '../helpers';
 
 class Sidebar extends Component {
   render() {
