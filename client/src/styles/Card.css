@@ -1,3 +1,58 @@
 .tapped {
   background-color: rgba(0,0,0,0.5);
 }
+
+.truncated-text {
+  vertical-align: text-bottom;
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.truncated-text-tooltip {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  top: -15px;
+  font-size: 0.8rem;
+}
+
+.truncated-text:hover .truncated-text-tooltip {
+  visibility: visible;
+  text-align: center;
+  position: absolute;
+  z-index: 1;
+}
+
+.card-text {
+  font-size: 0.6rem;
+  grid-row: span 2;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 0.6rem;
+  max-height: 2.4rem;
+}
+
+.card-text-tooltip {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  top: -15px;
+  font-size: 0.8rem;
+}
+
+.card-text:hover .card-text-tooltip {
+  visibility: visible;
+  text-align: center;
+  position: absolute;
+  z-index: 1;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  padding: 2px;
+  width: 150px;
+}
+
