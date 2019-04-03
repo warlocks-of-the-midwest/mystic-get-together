@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import Card from './Card.js';
 
-import { Zones } from '../constants.js';
+import { Zones } from '../helpers';
 
 class Battlefield extends Component {
   constructor(props) {
