@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+
 import ImportDeckModal from './ImportDeckModal';
 import HostGameModal from './HostGameModal';
 import JoinGameModal from './JoinGameModal';
@@ -76,11 +77,13 @@ const LandingPage = () => {
         handleSubmit={handleImport}
       />
       <HostGameModal
+        user={user}
         isOpen={isHostModalOpen}
         toggle={toggle}
         handleSubmit={handleHost}
       />
       <JoinGameModal
+        user={user}
         isOpen={isJoinModalOpen}
         toggle={toggle}
         handleSubmit={handleJoin}

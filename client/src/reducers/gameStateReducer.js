@@ -1,6 +1,3 @@
-import CardInfo from '../models/cardInfo';
-import Player from '../models/player';
-
 export const GameActions = {
   UPDATE_PLAYER: 'UPDATE_PLAYER',
   LOAD_PLAYERS: 'LOAD_PLAYERS',
@@ -10,17 +7,15 @@ export const GameActions = {
 const gameStateReducer = (state, action) => {
   switch (action.type) {
     case GameActions.LOAD_PLAYERS: {
-      const newPlayers = action.payload.map((player) => new Player(player));
       return {
         ...state,
-        players: newPlayers,
+        players: action.payload,
       };
     }
     case GameActions.LOAD_CARDS: {
-      const newCards = action.payload.map((card) => new CardInfo(card));
       return {
         ...state,
-        cards: newCards,
+        cards: action.payload,
       };
     }
     case GameActions.UPDATE_CARD: {

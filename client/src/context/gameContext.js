@@ -3,12 +3,15 @@ import _ from 'lodash';
 
 import gameStateReducer, { GameActions } from '../reducers/gameStateReducer';
 import * as sdk from '../js-sdk/sdk';
+import CardInfo from '../models/cardInfo';
+import Player from '../models/player';
 
 export const GameContext = React.createContext();
 
 const GAME_ID = 'FtNnLrn6SugiK8C4naOx'; // hard-coded for debugging
 
 const initialGameState = {
+  gameId: GAME_ID,
   cards: [],
   players: [],
 };
@@ -16,7 +19,6 @@ const initialGameState = {
 export const GameProvider = ({ children }) => {
   const [gameState, dispatch] = useReducer(gameStateReducer, initialGameState);
 
-  // TODO move loadCards into gameStateReducer.js
   const loadCards = (data) => {
     const cards = _.map(_.keys(data), (cardId) => data[cardId]);
     const scryfallIds = _.map(cards, (card) => _.get(card, 'scryfall_id', null));
@@ -35,7 +37,8 @@ export const GameProvider = ({ children }) => {
 
     Promise.all(requests)
       .then((sData) => {
-        dispatch({ type: GameActions.LOAD_CARDS, payload: _.merge(cards, sData) });
+        const mergedCards = _.map(_.merge(cards, sData), (card) => new CardInfo(card));
+        dispatch({ type: GameActions.LOAD_CARDS, payload: mergedCards });
       });
   };
 
@@ -58,13 +61,13 @@ export const GameProvider = ({ children }) => {
         const { uid } = player;
         sdk.listenToPlayer(GAME_ID, uid, playerUpdate);
       });
-      dispatch({ type: GameActions.LOAD_PLAYERS, payload: playerData });
+      dispatch({ type: GameActions.LOAD_PLAYERS, payload: _.map(playerData, (player) => new Player(player)) });
 
-      loadCards(cardData);
       _.forEach(cardData, (card) => {
         const { id } = card;
         sdk.listenToCard(GAME_ID, id, cardUpdate);
       });
+      loadCards(cardData);
     };
 
     init();

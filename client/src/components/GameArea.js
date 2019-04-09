@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import {
   Jumbotron,
   Container,
@@ -10,7 +9,7 @@ import {
   ButtonGroup,
 } from 'reactstrap';
 
-import Card from './Card.js';
+import Battlefield from './Battlefield';
 import NavigationBar from './NavigationBar';
 import Sidebar from './Sidebar';
 import { GameContext } from '../context/gameContext';

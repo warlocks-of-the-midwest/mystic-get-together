@@ -12,7 +12,6 @@ class Card extends Component {
   constructor(props) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
     this.toggleCard = this.toggleCard.bind(this);
   }
 
