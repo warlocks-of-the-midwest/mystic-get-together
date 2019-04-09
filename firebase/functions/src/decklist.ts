@@ -9,6 +9,7 @@ import { URL } from 'url';
 
 // TODO not sure how to correctly convert this to an import
 const url = require('url');
+const cors = require('cors')({ origin: true });
 
 // We may wish to have a single method both parses the deck and 
 // populates the scryfall information for the deck editor in the
@@ -287,87 +288,91 @@ const importDeck = async function(uid: string, request: DecklistParseRequest): P
  * This Function parses a deck list from a deck list provider such as MTGGoldfish.
  */
 export const parseDeckFunction = functions.https.onRequest((request, response) => {
-    if (request.method !== 'POST') {
-        response.status(405)
-            .header('Allow', 'POST')
-            .send('Method Not Allowed');
-        return;
-    }
+    return cors(request, response, () => {
+        if (request.method !== 'POST') {
+            response.status(405)
+                .header('Allow', 'POST')
+                .send('Method Not Allowed');
+            return;
+        }
 
-    const uri = request.body.uri;
+        const uri = request.body.uri;
 
-    if (!uri) {
-        const body: Response.MissingRequiredParameterResponse = {
-            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
-            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
-            parameter: 'uri',
-            description: 'The uri of the deck to parse',
-        };
-        response
-            .status(400)
-            .send(body);
-        return;
-    }
+        if (!uri) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'uri',
+                description: 'The uri of the deck to parse',
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
 
-    parseDeck({ uri: uri })
-        .then((deck) => {
-            response.send(deck);
-        })
-        .catch((error) => {
-            Util.errorResponseMapper(error, response);
-        });
+        parseDeck({ uri: uri })
+            .then((deck) => {
+                response.send(deck);
+            })
+            .catch((error) => {
+                Util.errorResponseMapper(error, response);
+            });
+    });
 });
 
 /**
  * This Function provides batch scryfall data for a deck.
  */
 export const populateDeckFunction = functions.https.onRequest((request, response) => {
-    if (request.method !== 'POST') {
-        response.status(405)
-            .header('Allow', 'POST')
-            .send('Method Not Allowed');
-        return;
-    }
+    return cors(request, response, () => {
+        if (request.method !== 'POST') {
+            response.status(405)
+                .header('Allow', 'POST')
+                .send('Method Not Allowed');
+            return;
+        }
 
-    const { uid, deckId } = request.body;
-    let { include } = request.body;
+        const { uid, deckId } = request.body;
+        let { include } = request.body;
 
-    if (!uid) {
-        const body: Response.MissingRequiredParameterResponse = {
-            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
-            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
-            parameter: 'uid',
-            description: 'The uid of the player that owns the target deck.',
-        };
-        response
-            .status(400)
-            .send(body);
-        return;
-    }
-    if (!deckId) {
-        const body: Response.MissingRequiredParameterResponse = {
-            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
-            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
-            parameter: 'deckId',
-            description: 'The id of the deck to populate.',
-        };
-        response
-            .status(400)
-            .send(body);
-        return;
-    }
-    if (!include) {
-        // If not provided, don't filter
-        include = [];
-    }
+        if (!uid) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'uid',
+                description: 'The uid of the player that owns the target deck.',
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
+        if (!deckId) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'deckId',
+                description: 'The id of the deck to populate.',
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
+        if (!include) {
+            // If not provided, don't filter
+            include = [];
+        }
 
-    populateDeckForUser(uid, deckId, ...include)
-        .then((deck) => {
-            response.send(deck);
-        })
-        .catch((error) => {
-            Util.errorResponseMapper(error, response);
-        });
+        populateDeckForUser(uid, deckId, ...include)
+            .then((deck) => {
+                response.send(deck);
+            })
+            .catch((error) => {
+                Util.errorResponseMapper(error, response);
+            });
+    });
 });
 
 /**
@@ -378,51 +383,53 @@ export const populateDeckFunction = functions.https.onRequest((request, response
  * of edits to the deck prior to import, but for our MVP, this does the job.
  */
 export const importDeckFunction = functions.https.onRequest((request, response) => {
-    if (request.method !== 'POST') {
-        response.status(405)
-            .header('Allow', 'POST')
-            .send('Method Not Allowed');
-        return;
-    }
-    
-    const { uid, uri } = request.body;
+    return cors(request, response, () => {
+        if (request.method !== 'POST') {
+            response.status(405)
+                .header('Allow', 'POST')
+                .send('Method Not Allowed');
+            return;
+        }
+        
+        const { uid, uri } = request.body;
 
-    if (!uid) {
-        const body: Response.MissingRequiredParameterResponse = {
-            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
-            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
-            parameter: 'uid',
-            description: 'The uid of the player that will import the deck.',
-        };
-        response
-            .status(400)
-            .send(body);
-        return;
-    }
-    if (!uri) {
-        const body: Response.MissingRequiredParameterResponse = {
-            message: Response.Messages.MISSING_REQUIRED_PARAMETER,
-            error: Response.Errors.MISSING_REQUIRED_PARAMETER,
-            parameter: 'uri',
-            description: 'The uri of the deck to import.',
-        };
-        response
-            .status(400)
-            .send(body);
-        return;
-    }
-
-    importDeck(uid, { uri: uri })
-        .then((id) => {
-            const body: Response.DeckImportedResponse = {
-                message: Response.Messages.DECK_IMPORTED,
-                deckId: id,
+        if (!uid) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'uid',
+                description: 'The uid of the player that will import the deck.',
             };
             response
-                .status(201)
+                .status(400)
                 .send(body);
-        })
-        .catch((error) => {
-            Util.errorResponseMapper(error, response);
-        });
+            return;
+        }
+        if (!uri) {
+            const body: Response.MissingRequiredParameterResponse = {
+                message: Response.Messages.MISSING_REQUIRED_PARAMETER,
+                error: Response.Errors.MISSING_REQUIRED_PARAMETER,
+                parameter: 'uri',
+                description: 'The uri of the deck to import.',
+            };
+            response
+                .status(400)
+                .send(body);
+            return;
+        }
+
+        importDeck(uid, { uri: uri })
+            .then((id) => {
+                const body: Response.DeckImportedResponse = {
+                    message: Response.Messages.DECK_IMPORTED,
+                    deckId: id,
+                };
+                response
+                    .status(201)
+                    .send(body);
+            })
+            .catch((error) => {
+                Util.errorResponseMapper(error, response);
+            });
+    });
 });

@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "mystic-the-get-together-8e05e",
+    "default": "mystic-get-together",
     "test": "mystic-the-get-together-test"
   }
 }

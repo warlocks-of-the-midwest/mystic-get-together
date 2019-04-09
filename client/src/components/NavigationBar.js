@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import '../styles/NavigationBar.css';
-
 import {
   Container,
   Navbar,

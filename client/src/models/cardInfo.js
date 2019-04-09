@@ -43,6 +43,32 @@ class CardInfo {
     return this.type;
   }
 
+  getShortType() {
+    let shortType = '';
+    if (this.type.includes('Creature')) {
+      shortType += 'Creature ';
+    }
+    if (this.type.includes('Enchantment')) {
+      shortType += 'Enchantment ';
+    }
+    if (this.type.includes('Artifact')) {
+      shortType += 'Artifact ';
+    }
+    if (this.type.includes('Land')) {
+      shortType += 'Land ';
+    }
+    if (this.type.includes('Instant')) {
+      shortType += 'Instant ';
+    }
+    if (this.type.includes('Sorcery')) {
+      shortType += 'Sorcery ';
+    }
+    if (this.type.includes('Planeswalker')) {
+      shortType += 'Planeswalker ';
+    }
+    return shortType;
+  }
+
   getSetName() {
     return this.setName;
   }

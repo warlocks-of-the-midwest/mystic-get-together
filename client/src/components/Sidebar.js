@@ -10,9 +10,7 @@ import {
 import SideZoneModal from './SideZoneModal';
 import LibraryModal from './LibraryModal';
 import withZone from './withZone';
-import { Zones } from '../constants';
-
-import '../styles/Sidebar.css';
+import { Zones } from '../helpers';
 
 class Sidebar extends Component {
   render() {
