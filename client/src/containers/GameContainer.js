@@ -9,7 +9,7 @@ import * as sdk from '../js-sdk/sdk';
 import GameArea from '../components/GameArea';
 import gameStateActions from '../redux/actions/gameStateActions';
 
-const GAME_ID = 'pCc44llUV5JVRjfl0YqZ'; // hard-coded for debugging
+const GAME_ID = 'FtNnLrn6SugiK8C4naOx'; // hard-coded for debugging
 
 class GameContainer extends React.Component {
   constructor(props) {

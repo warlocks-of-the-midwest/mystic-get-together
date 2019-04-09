@@ -114,6 +114,7 @@ class SideZoneModal extends Component {
                 <Row>
                   <SideZoneContextMenu
                     name={name}
+                    currentCard={currentCard}
                   />
                 </Row>
               </Col>
