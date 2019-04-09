@@ -4,7 +4,7 @@ import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
 } from 'reactstrap';
 import '../js-sdk/sdk';
-import { Zones } from '../constants';
+import { Zones } from '../helpers';
 import { moveCardToZone } from '../js-sdk/sdk';
 
 class SideZoneContextMenu extends Component {
