@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import {
   Jumbotron,
   Container,
@@ -10,34 +9,23 @@ import {
   ButtonGroup,
 } from 'reactstrap';
 
+import Battlefield from './Battlefield';
 import NavigationBar from './NavigationBar';
 import Sidebar from './Sidebar';
-import Battlefield from './Battlefield';
+import { GameContext } from '../context/gameContext';
 
 import '../styles/Card.css';
 
 class GameArea extends Component {
   constructor(props) {
     super(props);
-
-    const { cards } = this.props;
     this.state = {
       life: 0,
-      cards,
-      top_row: [],
-      bottom_row: [],
       isToggleSidebarOn: false,
     };
 
     this.increment = this.increment.bind(this);
     this.decrement = this.decrement.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { cards } = nextProps;
-    this.setState({
-      cards,
-    });
   }
 
   increment(x) {
@@ -70,10 +58,13 @@ class GameArea extends Component {
   }
 
   render() {
-    const { cards, life, isToggleSidebarOn } = this.state;
+    const { life, isToggleSidebarOn } = this.state;
+    const { cards } = this.context.gameState;
     const FULL_LENGTH = 12;
     const SHORTER_LENGTH = 10;
     const battfieldFieldColumnLength = isToggleSidebarOn ? FULL_LENGTH : SHORTER_LENGTH;
+
+    console.log(this.context.gameState);
 
     return (
       <Container
@@ -191,6 +182,8 @@ class GameArea extends Component {
     );
   }
 }
+
+GameArea.contextType = GameContext;
 
 GameArea.propTypes = {
   cards: PropTypes.array.isRequired,

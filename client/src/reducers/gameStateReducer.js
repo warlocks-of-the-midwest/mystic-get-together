@@ -1,27 +1,24 @@
-import gameActions from '../actions/gameStateActions';
-
-const initialState = {
-  cards: [],
-  players: [],
+export const GameActions = {
+  UPDATE_PLAYER: 'UPDATE_PLAYER',
+  LOAD_PLAYERS: 'LOAD_PLAYERS',
+  LOAD_CARDS: 'LOAD_CARDS',
 };
 
-const gameStateReducer = (state = initialState, action) => {
+const gameStateReducer = (state, action) => {
   switch (action.type) {
-    case gameActions.types.LOAD_PLAYERS: {
-      const { players } = action.payload;
+    case GameActions.LOAD_PLAYERS: {
       return {
         ...state,
-        players,
+        players: action.payload,
       };
     }
-    case gameActions.types.LOAD_CARDS: {
-      const { cards } = action.payload;
+    case GameActions.LOAD_CARDS: {
       return {
         ...state,
-        cards,
+        cards: action.payload,
       };
     }
-    case gameActions.types.UPDATE_CARD: {
+    case GameActions.UPDATE_CARD: {
       const newCards = state.Cards;
       // TODO handling cards getting deleted/removed?
       newCards[action.payload.card.cardId] = action.payload.card;

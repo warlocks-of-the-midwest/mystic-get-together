@@ -243,12 +243,8 @@ export function drawGame() {
 }
 
 // Deck functions
-export function getAvailableDecks(user) {
-  let deckData;
-  return db.doc(`Users/${user}`).get().then((doc) => {
-    deckData = doc.data().decks;
-    return Object.keys(deckData);
-  });
+export function getAvailableDecks(userId) {
+  return db.doc(`Users/${userId}`).get().then((doc) => doc.data().decks);
 }
 
 
