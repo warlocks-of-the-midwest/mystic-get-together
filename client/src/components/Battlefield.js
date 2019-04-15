@@ -10,22 +10,67 @@ class Battlefield extends Component {
   constructor(props) {
     super(props);
 
-    const { cards } = this.props;
+    this.PlayerInfoBox = this.PlayerInfoBox.bind(this);
+
+    const { cards, player } = this.props;
     this.state = {
       cards,
+      player,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    const { cards } = nextProps;
+    const { cards, player } = nextProps;
     this.setState({
       cards,
+      player,
     });
   }
 
+  PlayerInfoBox(props) {
+    const { player, shouldRender } = props;
+
+    if (shouldRender && player) {
+      return (
+        <div
+          style={{
+            'border-style': 'solid',
+            'border-width': '0.1rem',
+            margin: '-4px',
+            width: '90%',
+            height: '0%',
+            minHeight: '100px',
+          }}
+        >
+          <div>Username:</div>
+          <div
+            style={{
+              'font-size': '0.7em',
+              'text-overflow': 'ellipsis',
+              overflow: 'hidden',
+            }}
+          >
+            {player.getUsername()}
+          </div>
+          <div>Life Total: <span
+            style={{
+              'font-size': '1.7em',
+              'text-overflow': 'ellipsis',
+              overflow: 'hidden',
+            }}
+            >{player.getLife()}
+            </span>
+          </div>
+        </div>
+      );
+    }
+
+    return (null);
+  }
+
   render() {
-    const { cards } = this.state;
-    const { useStubs, strongBorder } = this.props;
+    const { cards, player } = this.state;
+    const { isFullView, strongBorder } = this.props;
 
     return (
       <div
@@ -36,20 +81,26 @@ class Battlefield extends Component {
           border: strongBorder ? 'solid' : 'none',
         }}
       >
-        <div
-          style={{
-            display: 'grid',
-            'grid-template-columns': 'repeat(auto-fill, 150px)',
-            gap: '10px',
-            margin: '5px',
-          }}
-        >
-          {cards
-            .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
-            .map((card) => (
-              <Card isStub={useStubs} card={card} />
-            ))}
-        </div>
+        {/* if there is no player, just leave battlefield empty */}
+        { player ? (
+          <div
+            style={{
+              display: 'grid',
+              'grid-template-columns': 'repeat(auto-fill, 150px)',
+              gap: '10px',
+              margin: '5px',
+            }}
+          >
+            <this.PlayerInfoBox player={player} shouldRender={isFullView} />
+            {cards
+              .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
+              .map((card) => (
+                <Card isStub={isFullView} card={card} />
+              ))}
+          </div>
+        ) : (
+          null
+        )}
       </div>
     );
   }
@@ -57,7 +108,8 @@ class Battlefield extends Component {
 
 Battlefield.propTypes = {
   cards: PropTypes.array.isRequired,
-  useStubs: PropTypes.bool.isRequired,
+  player: PropTypes.object.isRequired,
+  isFullView: PropTypes.bool.isRequired,
   strongBorder: PropTypes.bool.isRequired,
 };
 
