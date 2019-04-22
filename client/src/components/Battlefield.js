@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import dragula from 'react-dragula';
 
 import Card from './Card.js';
 
@@ -11,6 +13,7 @@ class Battlefield extends Component {
     super(props);
 
     this.PlayerInfoBox = this.PlayerInfoBox.bind(this);
+    this.gridContainerRef = React.createRef();
 
     const { cards, player } = this.props;
     this.state = {
@@ -24,6 +27,14 @@ class Battlefield extends Component {
     this.setState({
       cards,
       player,
+    });
+  }
+
+  componentDidUpdate() {
+    dragula([this.gridContainerRef.current], {
+      moves: function(el, container, handle) {
+        return el.classList.contains('cardContainer');
+      }
     });
   }
 
@@ -90,6 +101,7 @@ class Battlefield extends Component {
               gap: '10px',
               margin: '5px',
             }}
+            ref={this.gridContainerRef}
           >
             <this.PlayerInfoBox player={player} shouldRender={isFullView} />
             {cards
