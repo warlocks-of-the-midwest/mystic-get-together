@@ -44,10 +44,12 @@ export const GameProvider = ({ children }) => {
 
   const cardUpdate = (data) => {
     // console.log('listening');
+    dispatch({ type: GameActions.UPDATE_CARD, payload: { card: data } });
   };
 
   const playerUpdate = (data) => {
     // console.log('listening');
+    dispatch({ type: GameActions.UPDATE_PLAYER, payload: { player: data } });
   };
 
   useEffect(() => {

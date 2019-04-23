@@ -100,6 +100,10 @@ class CardInfo {
   isTapped() {
     return this.state.tapped;
   }
+
+  setState(state) {
+    this.state = state;
+  }
 }
 
 export default CardInfo;
