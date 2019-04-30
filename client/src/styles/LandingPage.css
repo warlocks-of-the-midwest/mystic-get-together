@@ -39,9 +39,21 @@ html, body, #root {
 }
 
 .btn:hover {
-    color: #fff;
+  color: #fff;
 }
 
 .stacked {
   display: grid;
+}
+
+.modal-content {
+  max-height: 98vh !important;
+}
+
+.modal-body {
+  overflow: scroll;
+}
+
+.modal-dialog {
+  margin: 1vh auto !important;
 }
