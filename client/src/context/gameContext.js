@@ -8,17 +8,20 @@ import Player from '../models/player';
 
 export const GameContext = React.createContext();
 
-const GAME_ID = 'FtNnLrn6SugiK8C4naOx'; // hard-coded for debugging
-
 const initialGameState = {
-  gameId: GAME_ID,
+  gameId: null,
   cards: [],
   players: [],
 };
 
 export const GameProvider = (props) => {
   const { children } = props;
-  const { gameId } = props.match.params; // use this instead of GAME_ID
+  let { gameId } = props.match.params;
+
+  // for debugging
+  if (props.match.path === '/board') {
+    gameId = 'FtNnLrn6SugiK8C4naOx';
+  }
 
   const [gameState, dispatch] = useReducer(gameStateReducer, initialGameState);
 
@@ -55,20 +58,20 @@ export const GameProvider = (props) => {
 
   useEffect(() => {
     const init = async () => {
-      const playerPromise = sdk.loadPlayers(GAME_ID);
-      const cardPromise = sdk.loadCards(GAME_ID);
+      const playerPromise = sdk.loadPlayers(gameId);
+      const cardPromise = sdk.loadCards(gameId);
 
       const [playerData, cardData] = await Promise.all([playerPromise, cardPromise]);
 
       _.forEach(playerData, (player) => {
         const { uid } = player;
-        sdk.listenToPlayer(GAME_ID, uid, playerUpdate);
+        sdk.listenToPlayer(gameId, uid, playerUpdate);
       });
       dispatch({ type: GameActions.LOAD_PLAYERS, payload: _.map(playerData, (player) => new Player(player)) });
 
       _.forEach(cardData, (card) => {
         const { id } = card;
-        sdk.listenToCard(GAME_ID, id, cardUpdate);
+        sdk.listenToCard(gameId, id, cardUpdate);
       });
       loadCards(cardData);
     };

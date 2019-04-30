@@ -25,7 +25,7 @@ const app = (
       <Switch>
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/games/:gameId" render={(props) => <GameContainer {...props} />} />
-        <Route exact path="/board" component={withAuthentication(GameContainer)} />
+        <Route exact path="/board" render={(props) => <GameContainer {...props} />} />
       </Switch>
     </Router>
   </UserProvider>
