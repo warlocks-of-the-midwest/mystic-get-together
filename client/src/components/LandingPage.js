@@ -50,6 +50,8 @@ const LandingPage = () => {
     const { uid } = user;
     joinGame(uid, deckId, gameId);
     toggleJoinModal(false);
+    setGameId(gameId);
+    setRedirect(true);
   };
 
   const toggle = (e) => {
