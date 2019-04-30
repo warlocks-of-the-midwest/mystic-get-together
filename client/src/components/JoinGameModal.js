@@ -29,7 +29,7 @@ const JoinGameModal = ({ user, isOpen, toggle, handleSubmit }) => {
     };
 
     getGames();
-  });
+  }, []);
 
   useEffect(() => {
     const getDecks = async () => {

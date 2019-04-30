@@ -246,7 +246,6 @@ export async function getAvailableGames() {
   const querySnapshot = await db.collection('Games').get();
   const result = [];
   querySnapshot.forEach((doc) => {
-    console.log(doc.data());
     result.push(doc.data());
   });
   return result;

@@ -16,7 +16,10 @@ const initialGameState = {
   players: [],
 };
 
-export const GameProvider = ({ children }) => {
+export const GameProvider = (props) => {
+  const { children } = props;
+  const { gameId } = props.match.params; // use this instead of GAME_ID
+
   const [gameState, dispatch] = useReducer(gameStateReducer, initialGameState);
 
   const loadCards = (data) => {

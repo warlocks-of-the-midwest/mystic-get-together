@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { Redirect } from 'react-router-dom';
 
 import ImportDeckModal from './ImportDeckModal';
 import HostGameModal from './HostGameModal';
@@ -11,6 +12,8 @@ import '../styles/LandingPage.css';
 
 const LandingPage = () => {
   const { user, signIn, signOut } = useContext(UserContext);
+  const [redirect, setRedirect] = useState(false);
+  const [createdGameId, setGameId] = useState(null);
   const [isImportModalOpen, toggleImportModal] = useState(false);
   const [isHostModalOpen, toggleHostModal] = useState(false);
   const [isJoinModalOpen, toggleJoinModal] = useState(false);
@@ -34,10 +37,13 @@ const LandingPage = () => {
     toggleImportModal(false);
   };
 
-  const handleHost = (deckId) => {
+  const handleHost = async (deckId) => {
     const { uid } = user;
-    hostGame(uid, deckId);
+    const game = await hostGame(uid, deckId);
+    const { gameId } = game.data;
     toggleHostModal(false);
+    setGameId(gameId);
+    setRedirect(true);
   };
 
   const handleJoin = (deckId, gameId) => {
@@ -66,7 +72,7 @@ const LandingPage = () => {
     }
   };
 
-  return (
+  const content = (
     <div className="lotus">
       <div className="buttonsAndSelect">
         {user ? gameButtons : loginButton}
@@ -90,6 +96,8 @@ const LandingPage = () => {
       />
     </div>
   );
+
+  return redirect ? <Redirect to={`/games/${createdGameId}`} /> : content;
 };
 
 export default LandingPage;

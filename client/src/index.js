@@ -13,8 +13,8 @@ import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 
-const GameContainer = () => (
-  <GameProvider>
+const GameContainer = (props) => (
+  <GameProvider {...props}>
     <GameArea />
   </GameProvider>
 );
@@ -24,6 +24,7 @@ const app = (
     <Router>
       <Switch>
         <Route exact path="/" component={LandingPage} />
+        <Route exact path="/games/:gameId" render={(props) => <GameContainer {...props} />} />
         <Route exact path="/board" component={withAuthentication(GameContainer)} />
       </Switch>
     </Router>
