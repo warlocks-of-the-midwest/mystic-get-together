@@ -9,8 +9,6 @@ import {
   ButtonGroup,
 } from 'reactstrap';
 
-import withAuthentication from './withAuthentication';
-
 import Battlefield from './Battlefield';
 import NavigationBar from './NavigationBar';
 import Sidebar from './Sidebar';
@@ -191,4 +189,4 @@ GameArea.propTypes = {
   cards: PropTypes.array.isRequired,
 };
 
-export default withAuthentication(GameArea);
+export default GameArea;

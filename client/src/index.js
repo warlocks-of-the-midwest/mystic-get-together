@@ -13,10 +13,12 @@ import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 
+const AuthenticatedGameProvider = withAuthentication(GameProvider);
+
 const GameContainer = (props) => (
-  <GameProvider {...props}>
+  <AuthenticatedGameProvider {...props}>
     <GameArea />
-  </GameProvider>
+  </AuthenticatedGameProvider>
 );
 
 const app = (
