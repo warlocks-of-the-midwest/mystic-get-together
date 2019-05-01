@@ -64,7 +64,7 @@ class GameArea extends Component {
     const SHORTER_LENGTH = 10;
     const battfieldFieldColumnLength = isToggleSidebarOn ? FULL_LENGTH : SHORTER_LENGTH;
 
-    console.log(this.context.gameState);
+    // console.log(this.context.gameState);
 
     return (
       <Container
