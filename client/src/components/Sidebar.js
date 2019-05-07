@@ -13,7 +13,6 @@ import withZone from './withZone';
 import { Zones } from '../helpers';
 
 class Sidebar extends Component {
-
   constructor(props) {
     super(props);
 
@@ -32,9 +31,9 @@ class Sidebar extends Component {
 
   render() {
     const { cards } = this.state;
-    const exile = _.filter(cards, (card) => _.get(card, 'state.zone').toLowerCase() === Zones.EXILE);
-    const graveyard = _.filter(cards, (card) => _.get(card, 'state.zone').toLowerCase() === Zones.GRAVEYARD);
-    const library = _.filter(cards, (card) => _.get(card, 'state.zone').toLowerCase() === Zones.LIBRARY);
+    const exile = _.filter(cards, (card) => _.get(card, 'state.zone').toLowerCase() === Zones.EXILE.toLowerCase());
+    const graveyard = _.filter(cards, (card) => _.get(card, 'state.zone').toLowerCase() === Zones.GRAVEYARD.toLowerCase());
+    const library = _.filter(cards, (card) => _.get(card, 'state.zone').toLowerCase() === Zones.LIBRARY.toLowerCase());
 
     const GraveyardWithModal = withZone(SideZoneModal, 'Graveyard', graveyard);
     const ExileWithModal = withZone(SideZoneModal, 'Exile', exile);

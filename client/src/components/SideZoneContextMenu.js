@@ -37,7 +37,7 @@ class SideZoneContextMenu extends Component {
     const { currentCard } = this.state;
     const { gameId } = this.props;
 
-    if (currentCard !== null) {
+    if (currentCard !== null && gameId != null) {
       moveCardToZone(gameId, currentCard.id, target.innerText.toLowerCase());
     }
   }

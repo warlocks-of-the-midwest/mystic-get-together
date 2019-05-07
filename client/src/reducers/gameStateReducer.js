@@ -19,12 +19,23 @@ const gameStateReducer = (state, action) => {
       };
     }
     case GameActions.UPDATE_CARD: {
-      const newCards = state.Cards;
-      // TODO handling cards getting deleted/removed?
-      newCards[action.payload.card.cardId] = action.payload.card;
+      const updatedCards = state.cards;
+
+      const changedCardIndex = updatedCards.findIndex(
+        (element) => element.id === action.payload.card.id
+      );
+
+      if (changedCardIndex < 0) { return state; }
+
+      console.log(`Changing zone of card ${action.payload.card.id}`
+        + ` from ${updatedCards[changedCardIndex].state.zone} to`
+        + ` ${action.payload.card.state.zone}`);
+
+      updatedCards[changedCardIndex].state = action.payload.card.state;
+
       return {
         ...state,
-        Cards: newCards,
+        cards: updatedCards,
       };
     }
     default:

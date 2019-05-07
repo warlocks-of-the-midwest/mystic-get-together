@@ -49,7 +49,7 @@ export const GameProvider = (props) => {
   };
 
   const cardUpdate = (data) => {
-    // console.log('listening');
+    dispatch({ type: GameActions.UPDATE_CARD, payload: { card: data } });
   };
 
   const playerUpdate = (data) => {

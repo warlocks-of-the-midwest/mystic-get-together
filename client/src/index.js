@@ -17,7 +17,7 @@ const AuthenticatedGameProvider = withAuthentication(GameProvider);
 
 const GameContainer = (props) => (
   <AuthenticatedGameProvider {...props}>
-    <GameArea />
+    <GameArea cards={[]} />
   </AuthenticatedGameProvider>
 );
 
