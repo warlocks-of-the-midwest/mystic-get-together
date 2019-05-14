@@ -8,7 +8,7 @@
     "bootstrap": "^4.2.1",
     "firebase": "5.7.3",
     "jest-resolve": "^24.5.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.1",
     "lodash": "^4.17.11",
     "popper.js": "^1.14.6",
     "prop-types": "^15.6.2",

@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
 } from 'reactstrap';
-import '../js-sdk/sdk';
 import { Zones } from '../helpers';
 import { moveCardToZone } from '../js-sdk/sdk';
 
 class SideZoneContextMenu extends Component {
-  zoneList = ['Graveyard', 'Exile', 'Library', 'Hand', 'Battlefield'];
+  zoneList = Object.values(Zones);
 
   constructor(props) {
     super(props);
@@ -38,7 +37,7 @@ class SideZoneContextMenu extends Component {
     const { gameId } = this.props;
 
     if (currentCard !== null && gameId != null) {
-      moveCardToZone(gameId, currentCard.id, target.innerText.toLowerCase());
+      moveCardToZone(gameId, currentCard.id, target.innerText);
     }
   }
 

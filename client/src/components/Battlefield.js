@@ -45,7 +45,7 @@ class Battlefield extends Component {
           }}
         >
           {cards
-            .filter((card) => _.get(card, 'state.zone').toLowerCase() === Zones.BATTLEFIELD.toLowerCase())
+            .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
             .map((card) => (
               <Card isStub={useStubs} card={card} />
             ))}
