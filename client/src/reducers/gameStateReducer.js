@@ -1,5 +1,6 @@
 export const GameActions = {
   UPDATE_PLAYER: 'UPDATE_PLAYER',
+  UPDATE_CARD: 'UPDATE_CARD',
   LOAD_PLAYERS: 'LOAD_PLAYERS',
   LOAD_CARDS: 'LOAD_CARDS',
 };
@@ -19,23 +20,15 @@ const gameStateReducer = (state, action) => {
       };
     }
     case GameActions.UPDATE_CARD: {
-      const updatedCards = state.cards;
-
-      const changedCardIndex = updatedCards.findIndex(
-        (element) => element.id === action.payload.card.id
-      );
-
-      if (changedCardIndex < 0) { return state; }
-
-      console.log(`Changing zone of card ${action.payload.card.id}`
-        + ` from ${updatedCards[changedCardIndex].state.zone} to`
-        + ` ${action.payload.card.state.zone}`);
-
-      updatedCards[changedCardIndex].state = action.payload.card.state;
-
       return {
         ...state,
-        cards: updatedCards,
+        cards: action.payload,
+      };
+    }
+    case GameActions.UPDATE_PLAYER: {
+      return {
+        ...state,
+        players: action.payload,
       };
     }
     default:
