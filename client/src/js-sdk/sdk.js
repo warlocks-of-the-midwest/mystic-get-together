@@ -242,6 +242,15 @@ export function winGame(player) {
 export function drawGame() {
 }
 
+export async function getAvailableGames() {
+  const querySnapshot = await db.collection('Games').get();
+  const result = [];
+  querySnapshot.forEach((doc) => {
+    result.push(doc.data());
+  });
+  return result;
+}
+
 // Deck functions
 export function getAvailableDecks(userId) {
   return db.doc(`Users/${userId}`).get().then((doc) => doc.data().decks);

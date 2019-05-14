@@ -1,0 +1,27 @@
+.bottomleft {
+  position: absolute;
+  background-color: white;
+  bottom: 0;
+  left: 0;
+}
+
+.topleft {
+  position: absolute;
+  background-color: white;
+  top: 0;
+  left: 0;
+}
+
+.topright {
+  position: absolute;
+  background-color: white;
+  top: 0;
+  right: 0;
+}
+
+.bottomright {
+  position: absolute;
+  background-color: white;
+  bottom: 0;
+  right: 0;
+}

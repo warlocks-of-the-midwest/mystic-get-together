@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import dragula from 'react-dragula';
@@ -7,6 +6,8 @@ import dragula from 'react-dragula';
 import Card from './Card.js';
 
 import { Zones } from '../helpers';
+
+import '../styles/Battlefield.css';
 
 class Battlefield extends Component {
   constructor(props) {
@@ -39,18 +40,16 @@ class Battlefield extends Component {
   }
 
   PlayerInfoBox(props) {
-    const { player, shouldRender } = props;
+    const { player, shouldRender, positionClass } = props;
 
     if (shouldRender && player) {
       return (
         <div
+          className={(positionClass)}
           style={{
             'border-style': 'solid',
             'border-width': '0.1rem',
-            margin: '-4px',
-            width: '90%',
-            height: '0%',
-            minHeight: '100px',
+            padding: '1px',
           }}
         >
           <div>Username:</div>
@@ -81,7 +80,7 @@ class Battlefield extends Component {
 
   render() {
     const { cards, player } = this.state;
-    const { isFullView, strongBorder } = this.props;
+    const { isFullView, strongBorder, infoBoxPosition } = this.props;
 
     return (
       <div
@@ -90,6 +89,7 @@ class Battlefield extends Component {
         style={{
           height: '100%',
           border: strongBorder ? 'solid' : 'none',
+          position: 'relative',
         }}
       >
         {/* if there is no player, just leave battlefield empty */}
@@ -103,7 +103,16 @@ class Battlefield extends Component {
             }}
             ref={this.gridContainerRef}
           >
-            <this.PlayerInfoBox player={player} shouldRender={isFullView} />
+            <this.PlayerInfoBox
+              player={player}
+              shouldRender={isFullView}
+              positionClass={infoBoxPosition}
+              style={{
+                position: 'absolute',
+                bottom: '0',
+                right: '0',
+              }}
+            />
             {cards
               .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
               .map((card) => (
@@ -118,11 +127,16 @@ class Battlefield extends Component {
   }
 }
 
+Battlefield.defaultProps = {
+  infoBoxPosition: 'bottomright',
+};
+
 Battlefield.propTypes = {
   cards: PropTypes.array.isRequired,
   player: PropTypes.object.isRequired,
   isFullView: PropTypes.bool.isRequired,
   strongBorder: PropTypes.bool.isRequired,
+  infoBoxPosition: PropTypes.string,
 };
 
 export default Battlefield;
