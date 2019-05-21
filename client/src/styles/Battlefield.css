@@ -1,3 +1,7 @@
+.fullBattlefieldContainer {
+  display: flex;
+}
+
 .infoBar {
   flex: 1;
   border-style: solid;

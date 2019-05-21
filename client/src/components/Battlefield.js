@@ -135,9 +135,7 @@ class Battlefield extends Component {
         {/* if there is no player, just leave battlefield empty */}
         { player ? (
           <section
-            style={{
-              display: 'flex',
-            }}
+            className={isFullView ? 'fullBattlefieldContainer' : ''}
           >
             { infoBoxPosition === 'left' ? (
               <this.PlayerInfoBox
