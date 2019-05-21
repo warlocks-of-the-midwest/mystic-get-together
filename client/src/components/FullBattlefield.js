@@ -17,10 +17,10 @@ class FullBattlefield extends Component {
           height: '100%',
         }}
       >
-        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="bottomright" />
-        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="bottomleft" />
-        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="topright" />
-        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="topleft" />
+        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="right" />
+        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="left" />
+        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="right" />
+        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="left" />
       </div>
     );
   }

@@ -1,27 +1,26 @@
-.bottomleft {
-  position: absolute;
-  background-color: white;
-  bottom: 0;
-  left: 0;
+.infoBar {
+  flex: 1;
+  border-style: solid;
+  border-width: 0.1rem;
+  border-top: none;
+  border-bottom: none;
+  padding: 1px;
+  width: 15%;
 }
 
-.topleft {
-  position: absolute;
-  background-color: white;
-  top: 0;
-  left: 0;
+.leftInfoBar {
+  float: left;
 }
 
-.topright {
-  position: absolute;
-  background-color: white;
-  top: 0;
-  right: 0;
+.rightInfoBar {
+  margin-left: -5px;
+  float: right;
 }
 
-.bottomright {
-  position: absolute;
-  background-color: white;
-  bottom: 0;
-  right: 0;
+.leftBattlefield {
+  flex: 85% 0 0;
+}
+
+.rightBattlefield {
+  flex: 0 0 85%;
 }

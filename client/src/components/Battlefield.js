@@ -40,17 +40,17 @@ class Battlefield extends Component {
   }
 
   PlayerInfoBox(props) {
-    const { player, shouldRender, positionClass } = props;
+    const { player, shouldRender, position } = props;
+
+    let positionClass = 'leftInfoBar';
+    if (position === 'right') {
+      positionClass = 'rightInfoBar';
+    }
 
     if (shouldRender && player) {
       return (
         <div
-          className={(positionClass)}
-          style={{
-            'border-style': 'solid',
-            'border-width': '0.1rem',
-            padding: '1px',
-          }}
+          className={`infoBar ${positionClass}`}
         >
           <div>Username:</div>
           <div
@@ -71,6 +71,42 @@ class Battlefield extends Component {
             >{player.getLife()}
             </span>
           </div>
+          <div>Infect: <span
+            style={{
+              'font-size': '1.7em',
+              'text-overflow': 'ellipsis',
+              overflow: 'hidden',
+            }}
+            >0
+            </span>
+          </div>
+          <div>CMDR 1: <span
+            style={{
+              'font-size': '1.7em',
+              'text-overflow': 'ellipsis',
+              overflow: 'hidden',
+            }}
+            >3
+            </span>
+          </div>
+          <div>CMDR 2: <span
+            style={{
+              'font-size': '1.7em',
+              'text-overflow': 'ellipsis',
+              overflow: 'hidden',
+            }}
+            >0
+            </span>
+          </div>
+          <div>CMDR 3: <span
+            style={{
+              'font-size': '1.7em',
+              'text-overflow': 'ellipsis',
+              overflow: 'hidden',
+            }}
+            >8
+            </span>
+          </div>
         </div>
       );
     }
@@ -82,6 +118,11 @@ class Battlefield extends Component {
     const { cards, player } = this.state;
     const { isFullView, strongBorder, infoBoxPosition } = this.props;
 
+    let positionClass = 'rightBattlefield';
+    if (infoBoxPosition === 'right') {
+      positionClass = 'leftBattlefield';
+    }
+
     return (
       <div
         fluid
@@ -89,36 +130,48 @@ class Battlefield extends Component {
         style={{
           height: '100%',
           border: strongBorder ? 'solid' : 'none',
-          position: 'relative',
         }}
       >
         {/* if there is no player, just leave battlefield empty */}
         { player ? (
-          <div
+          <section
             style={{
-              display: 'grid',
-              'grid-template-columns': 'repeat(auto-fill, 150px)',
-              gap: '10px',
-              margin: '5px',
+              display: 'flex',
             }}
-            ref={this.gridContainerRef}
           >
-            <this.PlayerInfoBox
-              player={player}
-              shouldRender={isFullView}
-              positionClass={infoBoxPosition}
+            { infoBoxPosition === 'left' ? (
+              <this.PlayerInfoBox
+                player={player}
+                shouldRender={isFullView}
+              />
+            ) : (
+              null
+            )}
+            <div
+              className={isFullView ? positionClass : ''}
               style={{
-                position: 'absolute',
-                bottom: '0',
-                right: '0',
+                display: 'grid',
+                'grid-template-columns': 'repeat(auto-fill, 150px)',
+                gap: '10px',
+                margin: '5px',
               }}
-            />
-            {cards
-              .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
-              .map((card) => (
-                <Card isStub={isFullView} card={card} />
-              ))}
-          </div>
+              ref={this.gridContainerRef}
+            >
+              {cards
+                .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
+                .map((card) => (
+                  <Card isStub={isFullView} card={card} />
+                ))}
+            </div>
+            { infoBoxPosition === 'right' ? (
+              <this.PlayerInfoBox
+                player={player}
+                shouldRender={isFullView}
+              />
+            ) : (
+              null
+            )}
+          </section>
         ) : (
           null
         )}
@@ -128,7 +181,7 @@ class Battlefield extends Component {
 }
 
 Battlefield.defaultProps = {
-  infoBoxPosition: 'bottomright',
+  infoBoxPosition: 'left',
 };
 
 Battlefield.propTypes = {
