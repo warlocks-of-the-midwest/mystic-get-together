@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import dragula from 'react-dragula';
 
 import Card from './Card.js';
 
@@ -14,7 +13,6 @@ class Battlefield extends Component {
     super(props);
 
     this.PlayerInfoBox = this.PlayerInfoBox.bind(this);
-    this.gridContainerRef = React.createRef();
 
     const { cards, player } = this.props;
     this.state = {
@@ -28,14 +26,6 @@ class Battlefield extends Component {
     this.setState({
       cards,
       player,
-    });
-  }
-
-  componentDidUpdate() {
-    dragula([this.gridContainerRef.current], {
-      moves: function(el, container, handle) {
-        return el.classList.contains('cardContainer');
-      }
     });
   }
 
@@ -126,50 +116,44 @@ class Battlefield extends Component {
     return (
       <div
         fluid
-        className="cards-rows-container p-0 m-0"
+        className={`cards-rows-container p-0 m-0 ${isFullView ? 'fullBattlefieldContainer' : ''}`}
         style={{
           height: '100%',
           border: strongBorder ? 'solid' : 'none',
         }}
       >
         {/* if there is no player, just leave battlefield empty */}
+        { player && infoBoxPosition === 'left' ? (
+          <this.PlayerInfoBox
+            player={player}
+            shouldRender={isFullView}
+          />
+        ) : (
+          null
+        )}
         { player ? (
-          <section
-            className={isFullView ? 'fullBattlefieldContainer' : ''}
+          <div
+            className={isFullView ? positionClass : ''}
+            style={{
+              display: 'grid',
+              'grid-template-columns': 'repeat(auto-fill, 150px)',
+              gap: '10px',
+              margin: '5px',
+            }}
           >
-            { infoBoxPosition === 'left' ? (
-              <this.PlayerInfoBox
-                player={player}
-                shouldRender={isFullView}
-              />
-            ) : (
-              null
-            )}
-            <div
-              className={isFullView ? positionClass : ''}
-              style={{
-                display: 'grid',
-                'grid-template-columns': 'repeat(auto-fill, 150px)',
-                gap: '10px',
-                margin: '5px',
-              }}
-              ref={this.gridContainerRef}
-            >
-              {cards
-                .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
-                .map((card) => (
-                  <Card isStub={isFullView} card={card} />
-                ))}
-            </div>
-            { infoBoxPosition === 'right' ? (
-              <this.PlayerInfoBox
-                player={player}
-                shouldRender={isFullView}
-              />
-            ) : (
-              null
-            )}
-          </section>
+            {cards
+              .filter((card) => _.get(card, 'state.zone') === Zones.BATTLEFIELD)
+              .map((card) => (
+                <Card isStub={isFullView} card={card} />
+              ))}
+          </div>) : (
+          null
+        )}
+        { player && infoBoxPosition === 'right' ? (
+          <this.PlayerInfoBox
+            player={player}
+            shouldRender={isFullView}
+          />
         ) : (
           null
         )}
