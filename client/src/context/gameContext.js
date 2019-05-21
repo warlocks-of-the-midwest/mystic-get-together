@@ -55,7 +55,7 @@ export const GameProvider = (props) => {
   };
 
   const cardUpdate = (data) => {
-    const updatedCards = cardsRef.current;
+    const updatedCards = cardsRef.current.slice();
 
     const updatedIndex = updatedCards.findIndex(
       (element) => element.id === data.id
@@ -77,7 +77,7 @@ export const GameProvider = (props) => {
   };
 
   const playerUpdate = (data) => {
-    const updatedPlayers = playersRef.current;
+    const updatedPlayers = playersRef.current.slice();
 
     const updatedIndex = updatedPlayers.findIndex(
       (element) => element.id === data.id

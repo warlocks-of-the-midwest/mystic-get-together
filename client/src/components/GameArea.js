@@ -185,8 +185,6 @@ class GameArea extends Component {
 
 GameArea.contextType = GameContext;
 
-GameArea.propTypes = {
-  cards: PropTypes.array.isRequired,
-};
+GameArea.propTypes = {};
 
 export default GameArea;
