@@ -67,7 +67,25 @@ class Battlefield extends Component {
               'text-overflow': 'ellipsis',
               overflow: 'hidden',
             }}
-            >0
+            >{player.getCounters('poison')}
+            </span>
+          </div>
+          <div>Energy: <span
+            style={{
+              'font-size': '1.7em',
+              'text-overflow': 'ellipsis',
+              overflow: 'hidden',
+            }}
+            >{player.getCounters('energy')}
+            </span>
+          </div>
+          <div>Experience: <span
+            style={{
+              'font-size': '1.7em',
+              'text-overflow': 'ellipsis',
+              overflow: 'hidden',
+            }}
+            >{player.getCounters('experience')}
             </span>
           </div>
           <div>CMDR 1: <span
