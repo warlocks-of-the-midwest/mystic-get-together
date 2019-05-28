@@ -15,7 +15,7 @@ class CardList extends Component {
           .filter((card) => _.includes(card.getName().toLowerCase(), searchTerm))
           .map((card) => (
             <ListGroupItem
-              key={card.getName()}
+              key={card.getId()}
               onClick={listClickHandler}
               id={card.getId()}
             >
