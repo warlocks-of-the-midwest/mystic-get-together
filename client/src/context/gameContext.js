@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, useRef } from 'react';
 import _ from 'lodash';
 
 import gameStateReducer, { GameActions } from '../reducers/gameStateReducer';
@@ -25,6 +25,12 @@ export const GameProvider = (props) => {
 
   const [gameState, dispatch] = useReducer(gameStateReducer, initialGameState);
 
+  // cardUpdate()/playerUpdate() will only see the value of gameState and
+  // props as they are during the initial call of useEffect.init() -- so
+  // this reference allows these functions to access the current state
+  const cardsRef = useRef(gameState.cards);
+  const playersRef = useRef(gameState.players);
+
   const loadCards = (data) => {
     const cards = _.map(_.keys(data), (cardId) => data[cardId]);
     const scryfallIds = _.map(cards, (card) => _.get(card, 'scryfall_id', null));
@@ -49,11 +55,41 @@ export const GameProvider = (props) => {
   };
 
   const cardUpdate = (data) => {
-    // console.log('listening');
+    const updatedCards = cardsRef.current.slice();
+
+    const updatedIndex = updatedCards.findIndex(
+      (element) => element.id === data.id
+    );
+
+    if (updatedIndex < 0) {
+      return;
+    }
+
+    /*
+    console.log(`Changing zone of card ${data.id} from `
+    + `${updatedCards[updatedIndex].state.zone} to `
+    + `${data.state.zone}`);
+    */
+
+    updatedCards[updatedIndex].state = data.state;
+
+    dispatch({ type: GameActions.UPDATE_CARD, payload: updatedCards });
   };
 
   const playerUpdate = (data) => {
-    // console.log('listening');
+    const updatedPlayers = playersRef.current.slice();
+
+    const updatedIndex = updatedPlayers.findIndex(
+      (element) => element.id === data.id
+    );
+
+    if (updatedIndex < 0) {
+      return;
+    }
+
+    updatedPlayers[updatedIndex] = data;
+
+    dispatch({ type: GameActions.UPDATE_PLAYER, payload: updatedPlayers });
   };
 
   useEffect(() => {
@@ -78,6 +114,14 @@ export const GameProvider = (props) => {
 
     init();
   }, []);
+
+  // Make sure that cardsRef and playersRef stay up-to-date with game state
+  useEffect(
+    () => {
+      cardsRef.current = gameState.cards;
+      playersRef.current = gameState.players;
+    }, [gameState]
+  );
 
   return (
     <GameContext.Provider value={{ gameState }}>
