@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Button,
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
-  Row,
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import CardList from './CardList';
@@ -20,6 +19,7 @@ class LibraryManipulation extends Component {
     this.select = this.select.bind(this);
     this.manipulate = this.manipulate.bind(this);
     this.moveCards = this.moveCards.bind(this);
+    this.displayNumberDropdown = this.displayNumberDropdown.bind(this);
 
     this.state = {
       actionOpen: false,
@@ -50,6 +50,20 @@ class LibraryManipulation extends Component {
       [`${dropdownName}State`]: eventTarget.innerText,
       [`${dropdownName}Open`]: !prevState[`${dropdownName}Open`],
     }));
+  }
+
+  displayNumberDropdown() {
+    const listLength = this.props.cardList.length;
+    const dropdown = [];
+
+    for (let i = 0; i < listLength; i += 1) {
+      dropdown.push(
+        <DropdownItem onClick={this.select}>
+          {i + 1}
+        </DropdownItem>
+      );
+    }
+    return dropdown;
   }
 
   parameterEnd() {
@@ -171,15 +185,26 @@ class LibraryManipulation extends Component {
           id="number"
           isOpen={numberOpen}
           toggle={this.toggle}
+          modifiers={{
+            setMaxHeight: {
+              enabled: true,
+              fn: (data) => ({
+                ...data,
+                styles: {
+                  ...data.styles,
+                  overflow: 'auto',
+                  position: 'absolute',
+                  maxHeight: 100,
+                },
+              }),
+            },
+          }}
         >
           <DropdownToggle caret>
             {numberState}
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem onClick={this.select}>1</DropdownItem>
-            <DropdownItem onClick={this.select}>2</DropdownItem>
-            <DropdownItem onClick={this.select}>3</DropdownItem>
-            <DropdownItem onClick={this.select}>4</DropdownItem>
+            {this.displayNumberDropdown()}
           </DropdownMenu>
         </Dropdown>
         {this.parameterEnd()} <br />

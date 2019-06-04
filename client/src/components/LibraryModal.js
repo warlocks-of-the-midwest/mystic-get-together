@@ -89,6 +89,8 @@ class LibraryModal extends Component {
     let modalBody = null;
 
     if (modalFunction === 'search') {
+      cardList.sort((a, b) => a.name.localeCompare(b.name));
+
       modalBody = (
         <ModalBody className="library-modal-body">
           <Row>
@@ -111,7 +113,10 @@ class LibraryModal extends Component {
     } else if (modalFunction === 'manipulate') {
       modalBody = (
         <ModalBody className="library-modal-body">
-          <LibraryManipulation cardClickHandler={this.cardListClick} cardList={cardList} />
+          <LibraryManipulation
+            cardClickHandler={this.cardListClick}
+            cardList={cardList}
+          />
         </ModalBody>
       );
     }
