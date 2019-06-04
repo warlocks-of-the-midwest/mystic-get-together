@@ -9,6 +9,7 @@ import * as Decklist from '../src/decklist';
 import * as Game from '../src/game';
 
 import * as TestUtils from './test-utils';
+import { GameStatus } from '../src/game';
 
 // Firestore client
 const firestore = new Firestore.Firestore({
@@ -53,7 +54,7 @@ describe('Cloud Functions Test Suite', function() {
       });
 
       it(`The "Users/${createdUserUID}" document should exist and have uid and username populated`, async function() {
-        this.timeout(15000);
+        this.timeout(30000);
         const userDoc: Firestore.DocumentReference = await firestore.doc(`Users/${createdUserUID}`);
         const userDocExists: boolean = await TestUtils.attempt(async () => {
           const snapshot = await userDoc.get();
@@ -78,7 +79,7 @@ describe('Cloud Functions Test Suite', function() {
       });
 
       it(`The "Users/${createdUserUID}" document should not exist`, async function() {
-        this.timeout(15000);
+        this.timeout(30000);
         const userDoc: Firestore.DocumentReference = await firestore.doc(`Users/${createdUserUID}`);
         const userDocExists: boolean = await TestUtils.attempt(async () => {
           const snapshot = await userDoc.get();
@@ -100,7 +101,7 @@ describe('Cloud Functions Test Suite', function() {
     describe('Test importing a standard commander deck (1 commander, 99 other)', function() {
       describe('Import a standard commander deck for user1, via Cloud Function', function() {
         it('Make the HTTP call', async function() {
-          this.timeout(15000);
+          this.timeout(30000);
           await supertest(functionsConfig.baseURI)
           .post('/importDeckFunction')
           .send({
@@ -117,7 +118,7 @@ describe('Cloud Functions Test Suite', function() {
       describe('Validate the document in Firestore', function() {
         let deckDoc: Firestore.DocumentSnapshot;
         it(`"/Users/${functionsConfig.user1.uid}/Decks/<deckId>" exists in Firestore`, async function() {
-          this.timeout(5000);
+          this.timeout(30000);
           deckDoc = await firestore.doc(`Users/${functionsConfig.user1.uid}/Decks/${user1DeckId}`).get();
           expect(deckDoc.exists).to.be.true;
         });
@@ -150,7 +151,7 @@ describe('Cloud Functions Test Suite', function() {
     describe('Test importing a partner commander deck (2 commanders, 98 other)', function() {
       describe('Import a partner commander deck for user2, via Cloud Functions', function() {
         it('Make the HTTP call', async function() {
-          this.timeout(15000);
+          this.timeout(30000);
           await supertest(functionsConfig.baseURI)
           .post('/importDeckFunction')
           .send({
@@ -167,7 +168,7 @@ describe('Cloud Functions Test Suite', function() {
       describe('Validate the document in Firestore', function() {
         let deckDoc: Firestore.DocumentSnapshot;
         it(`"/Users/${functionsConfig.user2.uid}/Decks/<deckId>" exists in Firestore`, async function() {
-          this.timeout(5000);
+          this.timeout(30000);
           deckDoc = await firestore.doc(`Users/${functionsConfig.user2.uid}/Decks/${user2DeckId}`).get();
           expect(deckDoc.exists).to.be.true;
         });
@@ -203,7 +204,7 @@ describe('Cloud Functions Test Suite', function() {
     describe('Test importing a MTGGoldfish deck with an invalid or non-existent URI', function() {
       describe('Import a non-existent deck for user1, via Cloud Functions', function() {
         it('Make the HTTP call', async function() {
-          this.timeout(15000);
+          this.timeout(30000);
           await supertest(functionsConfig.baseURI)
           .post('/importDeckFunction')
           .send({
@@ -225,7 +226,7 @@ describe('Cloud Functions Test Suite', function() {
 
   describe('Tests for updateUserDocumentWithDeck', function() {
     it(`User ${functionsConfig.user1.uid} should list the DRAGONS deck`, async function() {
-      this.timeout(5000);
+      this.timeout(30000);
       const userDocRef = firestore.doc(`Users/${functionsConfig.user1.uid}`);
       const userDoc = await TestUtils.attempt(async () => {
         const tempDoc = await userDocRef.get();
@@ -246,7 +247,7 @@ describe('Cloud Functions Test Suite', function() {
       describe('Populate the partner commander deck, including only fields "name" and "id"', function() {
         let response: supertest.Response;
         it('Make the HTTP call', async function() {
-          this.timeout(15000);
+          this.timeout(30000);
           await supertest(functionsConfig.baseURI)
           .post('/populateDeckFunction')
           .send({
@@ -277,7 +278,7 @@ describe('Cloud Functions Test Suite', function() {
     describe('Test populating a deck that does not exist', function() {
       describe('Populate a deck with id "FAKEID"', function() {
         it('Make the HTTP call', async function() {
-          this.timeout(15000);
+          this.timeout(30000);
           await supertest(functionsConfig.baseURI)
           .post('/populateDeckFunction')
           .send({
@@ -296,7 +297,7 @@ describe('Cloud Functions Test Suite', function() {
     describe('Test starting a game', function() {
       describe('Host a game with the "DRAGONS" deck as user1', function() {
         it('Make the HTTP call', async function() {
-          this.timeout(15000);
+          this.timeout(30000);
           await supertest(functionsConfig.baseURI)
           .post('/hostGameFunction')
           .send({
@@ -342,6 +343,18 @@ describe('Cloud Functions Test Suite', function() {
           expect(commanderDoc.data().state.zone).to.equal(Game.Zone.COMMAND);
           expect(commanderDoc.data().state.owner).to.equal(functionsConfig.user1.uid);
         });
+
+        it('Valdiate game document', async function() {
+          const gameDoc: Firestore.DocumentSnapshot = await firestore.doc(`Games/${gameId}`).get();
+          expect(gameDoc.exists).to.be.true;
+
+          expect(gameDoc.data().host.uid).to.equal(functionsConfig.user1.uid);
+          expect(gameDoc.data().host.username).to.equal(functionsConfig.user1.uid);
+          expect(gameDoc.data().guests).to.exist;
+          expect(gameDoc.data().status).to.equal(GameStatus.PENDING);
+        });
+
+
       });
     });
   });
@@ -350,7 +363,7 @@ describe('Cloud Functions Test Suite', function() {
     describe('Test joining a game', function() {
       describe('Join the game with the partner commander deck as user2', function() {
         it('Make the HTTP call', async function() {
-          this.timeout(15000);
+          this.timeout(30000);
           await supertest(functionsConfig.baseURI)
           .post('/joinGameFunction')
           .send({
@@ -373,6 +386,16 @@ describe('Cloud Functions Test Suite', function() {
           expect(playerDoc.data().life).to.equal(40);
           expect(playerDoc.data().uid).to.equal(functionsConfig.user2.uid);
           expect(playerDoc.data().meta.deckId).to.equal(user2DeckId);
+        });
+
+        it('Valdiate game document', async function() {
+          const gameDoc: Firestore.DocumentSnapshot = await firestore.doc(`Games/${gameId}`).get();
+          expect(gameDoc.exists).to.be.true;
+
+          const guestEntry = gameDoc.data().guests[functionsConfig.user2.uid];
+          expect(guestEntry.uid).to.equal(functionsConfig.user2.uid);
+          expect(guestEntry.username).to.equal(functionsConfig.user2.uid);
+          expect(gameDoc.data().status).to.equal(GameStatus.PENDING);
         });
 
         it(`"Games/<gameId>/Cards" contains 200 documents`, async function() {
@@ -417,7 +440,7 @@ describe('Cloud Functions Test Suite', function() {
   describe('Tests for startGameFunction', function() {
     describe('Start the game', function() {
       it('As user1, start the game', async function() {
-        this.timeout(15000);
+        this.timeout(30000);
         await supertest(functionsConfig.baseURI)
         .post('/startGameFunction')
         .send({
@@ -437,6 +460,7 @@ describe('Cloud Functions Test Suite', function() {
 
         expect(data.turn_order).to.contain(functionsConfig.user1.uid);
         expect(data.turn_order).to.contain(functionsConfig.user2.uid);
+        expect(data.status).to.equal(GameStatus.IN_PROGRESS);
       });
     });
   });
