@@ -47,6 +47,7 @@ class Card extends Component {
           height: '100%',
           display: 'grid',
           'grid-template-rows': 'repeat(8, 1fr)',
+          'background-color': '#fff',
         }}
       >
         {/* Card name */}
@@ -103,6 +104,7 @@ class Card extends Component {
           display: 'grid',
           'grid-template-rows': 'repeat(11, 1fr)',
           'grid-template-columns': 'minmax(0, 1fr)',
+          'background-color': '#fff',
         }}
       >
         {/* Card name and mana cost */}

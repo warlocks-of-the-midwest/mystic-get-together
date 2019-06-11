@@ -12,6 +12,7 @@ import * as serviceWorker from './serviceWorker';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
+import DragArea from './components/DragArea';
 
 const AuthenticatedGameProvider = withAuthentication(GameProvider);
 
@@ -21,6 +22,12 @@ const GameContainer = (props) => (
   </AuthenticatedGameProvider>
 );
 
+const DragContainer = (props) => (
+  <GameProvider {...props}>
+    <DragArea {...props} />
+  </GameProvider>
+);
+
 const app = (
   <UserProvider>
     <Router>
@@ -28,6 +35,7 @@ const app = (
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/games/:gameId" render={(props) => <GameContainer {...props} />} />
         <Route exact path="/board" render={(props) => <GameContainer {...props} />} />
+        <Route exact path="/drag" render={(props) => <DragContainer {...props} />} />
       </Switch>
     </Router>
   </UserProvider>

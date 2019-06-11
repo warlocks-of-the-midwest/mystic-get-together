@@ -6,7 +6,11 @@ class CardInfo {
       type_line, icon_svg_uri, state } = cardJson;
 
     this.id = id;
-    this.imgUrl = image_uris.art_crop;
+    if (cardJson.imgUrl) {
+      this.imgUrl = cardJson.imgUrl;
+    } else {
+      this.imgUrl = image_uris.art_crop;
+    }
     this.manaCost = mana_cost;
     this.cardText = oracle_text;
     this.name = name;
@@ -45,6 +49,11 @@ class CardInfo {
 
   getShortType() {
     let shortType = '';
+
+    if (!this.type) {
+      return null;
+    }
+
     if (this.type.includes('Creature')) {
       shortType += 'Creature ';
     }

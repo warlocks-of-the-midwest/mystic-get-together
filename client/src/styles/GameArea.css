@@ -1,0 +1,17 @@
+.card-container {
+  width: 10vw;
+  height: 25vh;
+  margin-left: 1em;
+}
+
+.drag-container {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  height: 100%;
+}
+
+.card-row {
+  border: 1px solid gray;
+  padding: 1em;
+  display: inline-flex;
+}
