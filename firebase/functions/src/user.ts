@@ -21,7 +21,7 @@ export interface UserDocument {
     profile_picture?: string,
     // A summary of decks that the user has imported
     decks: {
-        [key: string]: DeckInfo,
+        [deckId: string]: DeckInfo,
     },
 }
 

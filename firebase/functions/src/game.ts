@@ -248,6 +248,41 @@ const createPlayerInFirestore = async function(gameRef: Firestore.DocumentRefere
     }
 
 /**
+ * Enumerates the valid status of a game.
+ */
+export enum GameStatus {
+    /**
+     * The host has started a lobby, but is waiting for players to join.
+     */
+    PENDING = 'Pending',
+
+    /**
+     * The host has started the game. Only spectators may join now.
+     */
+    IN_PROGRESS = 'In Progress',
+
+    /**
+     * The game has ended.
+     */
+    ENDED = 'Ended',
+}
+
+export interface GameDocument {
+    // The ID of the document as assigned by Firebase, which we can only add after the create
+    id?: string,
+    // The turn_order is set by the startGameFunction
+    turn_order?: string[],
+    host: {
+        uid: string,
+        username: string,
+    },
+    guests: {
+        [uid: string]: string,
+    },
+    status: GameStatus,
+}
+
+/**
  * Host a game by creating a new game document and adding the player and her
  * deck to the game.
  * 
@@ -257,9 +292,23 @@ const createPlayerInFirestore = async function(gameRef: Firestore.DocumentRefere
 const hostGameHelper = async function(uid: string, deckId: string): Promise<string> {
     const deckDoc = await Util.getDeck(uid, deckId);
     const deck = deckDoc.data();
-    const baseGameDoc = {};
+    const baseGameDoc: GameDocument = {
+        host: {
+            uid,
+            username: uid, // TODO: resolve the username
+        },
+        guests: {
+
+        },
+        status: GameStatus.PENDING,
+    };
     try {
         const gameDocRef = await firestore.collection('Games').add(baseGameDoc);
+        // Update it with the ID
+        await gameDocRef.update({
+            id: gameDocRef.id,
+        });
+
         console.info('Created new game at: ' + gameDocRef.path);
         await createPlayerInFirestore(gameDocRef, uid, deck, deckId);
         return Promise.resolve(gameDocRef.id);
@@ -287,6 +336,16 @@ const joinGameHelper = async function(gameId: string, uid: string, deckId: strin
     const deckDoc = await Util.getDeck(uid, deckId);
     const deck = deckDoc.data();
     const gameDocRef: Firestore.DocumentReference = firestore.collection('Games').doc(gameId);
+
+    await gameDocRef.set({
+        guests: {
+            [uid]: {
+                uid,
+                username: uid, // TODO: resolve the username
+            },
+        },
+    }, { merge: true });
+
     let gameDoc: Firestore.DocumentSnapshot;
     try {
         gameDoc = await gameDocRef.get();
@@ -323,7 +382,10 @@ const startGameHelper = async function(gameId: string): Promise<void> {
                 .map((doc) => doc.id)
                 .sort(() => uuidv4());
             
-            await gameDocRef.set({ turn_order: playerOrder }, { merge: true });
+            await gameDocRef.set({ 
+                turn_order: playerOrder,
+                status: GameStatus.IN_PROGRESS,
+            }, { merge: true });
             return;
         } else {
             throw new Response.FunctionError(
@@ -506,3 +568,43 @@ export const startGameFunction = functions.https.onRequest((request, response) =
             });
     });
 });
+
+const lastModifiedHelper = async function(
+    change: functions.Change<Firestore.DocumentSnapshot>, 
+    context: functions.EventContext) {
+        // Note: It's important that you check what the update was for
+        // if you plan to use this for the Game document, or else you will
+        // trigger an infinite series of invocations (don't update the
+        // timestamp due to a timestamp update)
+        // TODO: Do the above if you want to track modifications for the game doc
+        // TODO: Should we decide to purge older data, we need to make sure
+        // deleting the subcollection data doesn't cause the Game document to
+        // recreated
+        await firestore.doc(`Games/${context.params.gameId}`).update({
+            last_modified: context.timestamp,
+        });
+}
+
+/**
+ * This function updates the last_modified field on the Game document
+ * when a Game document is written to.
+ */
+export const lastModifiedGameDocumentFunction = functions.firestore
+    .document('Games/{gameId}')
+    .onWrite(lastModifiedHelper);
+
+/**
+ * This function updates the last_modified field on the Game document
+ * when a Player document is written to.
+ */
+export const lastModifiedPlayerDocumentFunction = functions.firestore
+    .document('Games/{gameId}/Players/{uid}')
+    .onWrite(lastModifiedHelper);
+
+/**
+ * This function updates the last_modified field on the Game document
+ * when a Card document is written to.
+ */
+export const lastModifiedCardDocumentFunction = functions.firestore
+    .document('Games/{gameId}/Cards/{cardId}')
+    .onWrite(lastModifiedHelper);
