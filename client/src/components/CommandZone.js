@@ -47,7 +47,7 @@ class CommandZone extends Component {
         >
           {cardList
             .map((card) => (
-              <Card isStub card={card} />
+              <Card card={card} />
             ))}
         </div>
       </Col>
