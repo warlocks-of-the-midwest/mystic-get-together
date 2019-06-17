@@ -3,26 +3,11 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import Battlefield from './Battlefield.js';
+import { GameContext } from '../context/gameContext';
 
 class FullBattlefield extends Component {
-  constructor(props) {
-    super(props);
-
-    const { cards } = this.props;
-    this.state = {
-      cards,
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { cards } = nextProps;
-    this.setState({
-      cards,
-    });
-  }
-
   render() {
-    const { cards } = this.state;
+    const { cards, players } = this.context.gameState;
 
     return (
       <div
@@ -32,17 +17,15 @@ class FullBattlefield extends Component {
           height: '100%',
         }}
       >
-        <Battlefield cards={cards} useStubs strongBorder />
-        <Battlefield cards={cards} useStubs strongBorder />
-        <Battlefield cards={cards} useStubs strongBorder />
-        <Battlefield cards={cards} useStubs strongBorder />
+        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="right" />
+        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="left" />
+        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="right" />
+        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="left" />
       </div>
     );
   }
 }
 
-FullBattlefield.propTypes = {
-  cards: PropTypes.array.isRequired,
-};
+FullBattlefield.contextType = GameContext;
 
 export default FullBattlefield;

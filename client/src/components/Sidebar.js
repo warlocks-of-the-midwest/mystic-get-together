@@ -9,12 +9,14 @@ import {
 
 import SideZone from './SideZone';
 import { Zones } from '../helpers';
+import CommandZone from './CommandZone';
 
 class Sidebar extends Component {
   render() {
     const { cards } = this.props;
     const exile = _.filter(cards, (card) => _.get(card, 'state.zone') === Zones.EXILE);
     const graveyard = _.filter(cards, (card) => _.get(card, 'state.zone') === Zones.GRAVEYARD);
+    const command = _.filter(cards, (card) => _.get(card, 'state.zone') === Zones.COMMAND);
 
     return (
       <Container
@@ -25,21 +27,9 @@ class Sidebar extends Component {
           className="justify-start sidebar-row mh-100 h-100 mw-100 w-100 p-0 m-0"
         >
           {/* Hand */}
-          <Col
-            xs="12"
-            className="border p-1"
-          >
-            <h6
-              className="font-weight-bold text-wrap"
-              style={
-                {
-                  'font-size': '50%',
-                }
-              }
-            >
-              Hand
-            </h6>
-          </Col>
+          <CommandZone
+            cardList={command}
+          />
           <SideZone
             name="Exile"
             cardList={exile}

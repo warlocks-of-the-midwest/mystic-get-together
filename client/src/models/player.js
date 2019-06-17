@@ -1,10 +1,11 @@
 class Player {
   constructor(playerJson) {
-    const { uid, username, life } = playerJson;
+    const { uid, username, life, counters } = playerJson;
 
     this.id = uid;
     this.username = username;
     this.life = life;
+    this.counters = counters;
   }
 
   getId() {
@@ -17,6 +18,10 @@ class Player {
 
   getLife() {
     return this.life;
+  }
+
+  getCounters(counterType) {
+    return this.counters[counterType];
   }
 }
 

@@ -19,7 +19,7 @@ export const GameProvider = (props) => {
   let { gameId } = props.match.params;
 
   // for debugging
-  if (props.match.path === '/board') {
+  if (props.match.path === '/board' || props.match.path === '/fullbattlefield') {
     gameId = 'FtNnLrn6SugiK8C4naOx';
   }
 

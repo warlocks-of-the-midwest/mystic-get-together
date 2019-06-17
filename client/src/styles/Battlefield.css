@@ -1,0 +1,30 @@
+.fullBattlefieldContainer {
+  display: flex;
+}
+
+.infoBar {
+  flex: 1;
+  border-style: solid;
+  border-width: 0.1rem;
+  border-top: none;
+  border-bottom: none;
+  padding: 1px;
+  width: 15%;
+}
+
+.leftInfoBar {
+  float: left;
+}
+
+.rightInfoBar {
+  margin-left: -5px;
+  float: right;
+}
+
+.leftBattlefield {
+  flex: 85% 0 0;
+}
+
+.rightBattlefield {
+  flex: 0 0 85%;
+}
