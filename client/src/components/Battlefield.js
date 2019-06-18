@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import Card from './Card.js';
+import PlayerInfoBox from './PlayerInfoBox.js';
 
 import { Zones } from '../helpers';
 
@@ -11,8 +12,6 @@ import '../styles/Battlefield.css';
 class Battlefield extends Component {
   constructor(props) {
     super(props);
-
-    this.PlayerInfoBox = this.PlayerInfoBox.bind(this);
 
     const { cards, player } = this.props;
     this.state = {
@@ -27,81 +26,6 @@ class Battlefield extends Component {
       cards,
       player,
     });
-  }
-
-  PlayerInfoBox(props) {
-    const { player, shouldRender, position } = props;
-
-    let positionClass = 'leftInfoBar';
-    if (position === 'right') {
-      positionClass = 'rightInfoBar';
-    }
-
-    if (shouldRender && player) {
-      return (
-        <div
-          className={`infoBar ${positionClass}`}
-        >
-          <div>Username:</div>
-          <div
-            style={{
-              'font-size': '0.7em',
-              'text-overflow': 'ellipsis',
-              overflow: 'hidden',
-            }}
-          >
-            {player.getUsername()}
-          </div>
-          <div>Life Total: <span
-            style={{
-              'font-size': '1.7em',
-              'text-overflow': 'ellipsis',
-              overflow: 'hidden',
-            }}
-            >{player.getLife()}
-            </span>
-          </div>
-          <div>Infect: <span
-            style={{
-              'font-size': '1.7em',
-              'text-overflow': 'ellipsis',
-              overflow: 'hidden',
-            }}
-            >0
-            </span>
-          </div>
-          <div>CMDR 1: <span
-            style={{
-              'font-size': '1.7em',
-              'text-overflow': 'ellipsis',
-              overflow: 'hidden',
-            }}
-            >3
-            </span>
-          </div>
-          <div>CMDR 2: <span
-            style={{
-              'font-size': '1.7em',
-              'text-overflow': 'ellipsis',
-              overflow: 'hidden',
-            }}
-            >0
-            </span>
-          </div>
-          <div>CMDR 3: <span
-            style={{
-              'font-size': '1.7em',
-              'text-overflow': 'ellipsis',
-              overflow: 'hidden',
-            }}
-            >8
-            </span>
-          </div>
-        </div>
-      );
-    }
-
-    return (null);
   }
 
   render() {
@@ -124,7 +48,7 @@ class Battlefield extends Component {
       >
         {/* if there is no player, just leave battlefield empty */}
         { player && infoBoxPosition === 'left' ? (
-          <this.PlayerInfoBox
+          <PlayerInfoBox
             player={player}
             shouldRender={isFullView}
           />
@@ -150,7 +74,7 @@ class Battlefield extends Component {
           null
         )}
         { player && infoBoxPosition === 'right' ? (
-          <this.PlayerInfoBox
+          <PlayerInfoBox
             player={player}
             shouldRender={isFullView}
           />

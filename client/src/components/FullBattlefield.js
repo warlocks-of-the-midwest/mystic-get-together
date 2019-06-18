@@ -18,9 +18,9 @@ class FullBattlefield extends Component {
         }}
       >
         <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="right" />
-        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="left" />
-        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="right" />
-        <Battlefield cards={cards} player={players[0]} isFullView strongBorder infoBoxPosition="left" />
+        <Battlefield cards={cards} player={players[1]} isFullView strongBorder infoBoxPosition="left" />
+        <Battlefield cards={cards} player={players[2]} isFullView strongBorder infoBoxPosition="right" />
+        <Battlefield cards={cards} player={players[3]} isFullView strongBorder infoBoxPosition="left" />
       </div>
     );
   }

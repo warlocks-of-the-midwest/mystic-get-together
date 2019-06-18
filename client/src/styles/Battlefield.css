@@ -28,3 +28,9 @@
 .rightBattlefield {
   flex: 0 0 85%;
 }
+
+.largeEllipsisText {
+  font-size: 1.7em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
