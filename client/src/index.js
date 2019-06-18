@@ -7,6 +7,7 @@ import { GameProvider } from './context/gameContext';
 import LandingPage from './components/LandingPage';
 import GameArea from './components/GameArea';
 import withAuthentication from './components/withAuthentication';
+import FullBattlefield from './components/FullBattlefield';
 
 import * as serviceWorker from './serviceWorker';
 
@@ -21,6 +22,12 @@ const GameContainer = (props) => (
   </AuthenticatedGameProvider>
 );
 
+const FullBattlefieldContainer = (props) => (
+  <AuthenticatedGameProvider {...props}>
+    <FullBattlefield />
+  </AuthenticatedGameProvider>
+);
+
 const app = (
   <UserProvider>
     <Router>
@@ -28,6 +35,7 @@ const app = (
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/games/:gameId" render={(props) => <GameContainer {...props} />} />
         <Route exact path="/board" render={(props) => <GameContainer {...props} />} />
+        <Route exact path="/fullbattlefield" render={(props) => <FullBattlefieldContainer {...props} />} />
       </Switch>
     </Router>
   </UserProvider>

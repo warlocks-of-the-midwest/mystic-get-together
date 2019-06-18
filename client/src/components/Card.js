@@ -41,6 +41,7 @@ class Card extends Component {
 
     return (
       <div
+        className="cardContainer"
         style={{
           'border-style': 'solid',
           'border-width': '0.1rem',
@@ -95,6 +96,7 @@ class Card extends Component {
     // Full card component
     return (
       <div
+        className="cardContainer"
         style={{
           'border-style': 'solid',
           'border-width': '0.1rem',

@@ -59,12 +59,10 @@ class GameArea extends Component {
 
   render() {
     const { life, isToggleSidebarOn } = this.state;
-    const { cards } = this.context.gameState;
+    const { cards, players } = this.context.gameState;
     const FULL_LENGTH = 12;
     const SHORTER_LENGTH = 10;
     const battfieldFieldColumnLength = isToggleSidebarOn ? FULL_LENGTH : SHORTER_LENGTH;
-
-    // console.log(this.context.gameState);
 
     return (
       <Container
@@ -158,6 +156,7 @@ class GameArea extends Component {
             <Battlefield
               useStubs={false}
               cards={cards}
+              player={players[0]}
             />
           </Col>
           {/* Sidebar for exile,graveyard,hand,library  */}
