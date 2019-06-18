@@ -1,5 +1,6 @@
 export const GameActions = {
   UPDATE_PLAYER: 'UPDATE_PLAYER',
+  UPDATE_CARD: 'UPDATE_CARD',
   LOAD_PLAYERS: 'LOAD_PLAYERS',
   LOAD_CARDS: 'LOAD_CARDS',
 };
@@ -19,12 +20,15 @@ const gameStateReducer = (state, action) => {
       };
     }
     case GameActions.UPDATE_CARD: {
-      const newCards = state.Cards;
-      // TODO handling cards getting deleted/removed?
-      newCards[action.payload.card.cardId] = action.payload.card;
       return {
         ...state,
-        Cards: newCards,
+        cards: action.payload,
+      };
+    }
+    case GameActions.UPDATE_PLAYER: {
+      return {
+        ...state,
+        players: action.payload,
       };
     }
     default:
